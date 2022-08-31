@@ -6,6 +6,7 @@ import { EmailValidator,
   AddAccountModel,
   AccountModel
 } from "./SignUpProtocols";
+import * as Http from "http";
 
 type SutTypes = {
   sut: SignUpController
@@ -28,7 +29,7 @@ const makeAddAccount = (): AddAccount => {
       return {
         id: 'valid_id',
         name: 'valid_name',
-        email: 'valid_email@email.com',
+        email: 'valid_email@mail.com',
         password: 'valid_password'
       }
     }
@@ -205,4 +206,24 @@ describe('/src/presentation/controllers/SignUp', () => {
       password: httpRequest.body.password
     })
   });
+
+  test('Should returns 200 if valid data is provided', () => {
+    const { sut } = makeSut();
+    const httpRequest = {
+      body: {
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: "valid_password",
+        passwordConfirmation: "valid_password"
+      }
+    };
+    const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(200);
+    expect(httpResponse.body).toStrictEqual({
+      id: 'valid_id',
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      password: 'valid_password'
+    })
+  })
 });
