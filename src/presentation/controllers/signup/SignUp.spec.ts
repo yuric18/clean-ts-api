@@ -6,7 +6,6 @@ import { EmailValidator,
   AddAccountModel,
   AccountModel
 } from "./SignUpProtocols";
-import * as Http from "http";
 
 type SutTypes = {
   sut: SignUpController
