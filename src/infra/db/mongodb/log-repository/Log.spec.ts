@@ -1,5 +1,10 @@
 import { MongoHelper } from '../helpers/MongoHelper';
-import {LogMongoRepository} from "./Log";
+import { LogMongoRepository } from "./Log";
+
+
+const makeSut = (): LogMongoRepository => {
+  return new LogMongoRepository();
+};
 
 describe('Log Mongo Repository', () => {
 
@@ -15,10 +20,6 @@ describe('Log Mongo Repository', () => {
     await MongoHelper.getCollection('errors')
     await MongoHelper.collection.deleteMany({});
   });
-
-  const makeSut = (): LogMongoRepository => {
-    return new LogMongoRepository();
-  };
 
   test('Should create an error log on success', async () => {
     const sut = makeSut();
