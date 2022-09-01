@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "husky install",
-    "start": "sucrase-node src/main/Server.ts",
+    "start": "sucrase-node src/main/server.ts",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
@@ -22,6 +22,7 @@
     "@types/express": "^4.17.13",
     "@types/jest": "^28.1.8",
     "@types/node": "^18.7.13",
+    "@types/supertest": "^2.0.12",
     "@types/validator": "^13.7.6",
     "@typescript-eslint/eslint-plugin": "^5.35.1",
     "eslint": "8.22.0",
@@ -35,6 +36,7 @@
     "jest": "^29.0.1",
     "lint-staged": "^13.0.3",
     "sucrase": "^3.25.0",
+    "supertest": "^6.2.4",
     "ts-jest": "^28.0.8",
     "typescript": "^4.8.2"
   },
