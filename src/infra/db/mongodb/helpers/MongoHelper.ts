@@ -19,6 +19,9 @@ export const MongoHelper = {
       { $setOnInsert: data },
       options
     );
+    return this.map(document);
+  },
+  map<T>(document: T & { _id: string }): T & { id: string } {
     return { ...document, id: document._id };
   }
 };
