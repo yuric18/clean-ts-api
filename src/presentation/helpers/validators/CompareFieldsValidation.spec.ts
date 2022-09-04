@@ -6,7 +6,7 @@ type SutTypes = {
 };
 
 const makeSut = (): SutTypes => {
-  const sut = new CompareFieldsValidation('password', 'passwordValidation');
+  const sut = new CompareFieldsValidation('password', 'passwordConfirmation');
   return {
     sut
   }
@@ -20,5 +20,14 @@ describe('CompareFields Validation', () => {
       passwordConfirmation: 'any_other_value'
     });
     expect(error).toBeInstanceOf(InvalidParamError);
+  });
+
+  test('should return undefined if validation passes', () => {
+    const { sut } = makeSut();
+    const error = sut.validate({
+      password: 'any_value',
+      passwordConfirmation: 'any_value'
+    });
+    expect(error).toBeUndefined();
   });
 });
