@@ -4,7 +4,7 @@ import {
 import {
   RequiredFieldValidation
 } from "../../../presentation/helpers/validators/RequiredFieldValidation";
-import {Validation} from "../../../presentation/helpers/validators/Validation";
+import {Validation} from "../../../presentation/protocols/Validation";
 import {EmailValidation} from "../../../presentation/helpers/validators/EmailValidation";
 import {EmailValidatorAdapter} from "../../../utils/EmailValidatorAdapter";
 
