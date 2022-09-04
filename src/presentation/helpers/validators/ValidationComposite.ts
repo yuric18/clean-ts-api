@@ -12,5 +12,4 @@ export class ValidationComposite implements Validation {
       }
     }
   }
-
 }
