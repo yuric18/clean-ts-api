@@ -7,7 +7,7 @@ import {
   AccountModel, HttpRequest,
   Validation
 } from "./SignUpProtocols";
-import { ok, serverError, badRequest } from "../../helpers/HttpHelper";
+import { ok, serverError, badRequest } from "../../helpers/http/HttpHelper";
 
 type SutTypes = {
   sut: SignUpController
