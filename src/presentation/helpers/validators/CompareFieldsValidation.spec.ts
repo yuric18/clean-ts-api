@@ -6,7 +6,7 @@ type SutTypes = {
 };
 
 const makeSut = (): SutTypes => {
-  const sut = new CompareFieldsValidation('password', 'passwordConfirmation');
+  const sut = new CompareFieldsValidation('field', 'fieldToCompare');
   return {
     sut
   }
@@ -16,8 +16,8 @@ describe('CompareFields Validation', () => {
   test('should return InvalidParamError if validation fails', () => {
     const { sut } = makeSut();
     const error = sut.validate({
-      password: 'any_value',
-      passwordConfirmation: 'any_other_value'
+      field: 'any_value',
+      fieldToCompare: 'any_other_value'
     });
     expect(error).toBeInstanceOf(InvalidParamError);
   });
@@ -25,8 +25,8 @@ describe('CompareFields Validation', () => {
   test('should return undefined if validation passes', () => {
     const { sut } = makeSut();
     const error = sut.validate({
-      password: 'any_value',
-      passwordConfirmation: 'any_value'
+      field: 'any_value',
+      fieldToCompare: 'any_value'
     });
     expect(error).toBeUndefined();
   });
