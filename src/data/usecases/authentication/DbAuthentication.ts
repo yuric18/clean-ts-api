@@ -7,13 +7,13 @@ export class DbAuthentication implements Authentication {
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
     private readonly hashComparer: HashComparer
   ) {}
-  
+
   async auth(authentication: AuthenticationModel): Promise<string> {
     const { email, password } = authentication;
     const account = await this.loadAccountByEmailRepository.load(email);
 
     if (account) {
-      this.hashComparer.compare(password, account.password);
+      await this.hashComparer.compare(password, account.password);
     }
     return null;
   }

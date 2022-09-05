@@ -21,7 +21,7 @@ const makeHashComparerStub = (): HashComparer => {
     async compare(hash: string, otherHash: string): Promise<boolean> {
       return Promise.resolve(true);
     }
-  }; 
+  };
   return new HashComparerStub();
 };
 
@@ -59,7 +59,7 @@ describe('DbAuthentication UseCase', () => {
     expect(loadSpy).toHaveBeenCalledWith('any_email@mail.com');
   });
 
-  test('Should throw if LoadAccountByEmailRepository throws', async () => {
+  test('Should throw if LoadAccountByEmailRepository throws', () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut();
     jest.spyOn(loadAccountByEmailRepositoryStub, 'load')
       .mockRejectedValueOnce(new Error());
