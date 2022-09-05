@@ -23,7 +23,7 @@ const makeFakeAccount = (): AccountModel => ({
 
 const makeHashComparerStub = (): HashComparer => {
   class HashComparerStub implements HashComparer {
-    async compare(hash: string, otherHash: string): Promise<boolean> {
+    async compare(value: string, hash: string): Promise<boolean> {
       return Promise.resolve(true);
     }
   };
