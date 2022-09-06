@@ -16,7 +16,7 @@ describe('Account Mongo Repository', () => {
   });
 
   beforeEach(async () => {
-    await MongoHelper.getCollection('accounts')
+    await MongoHelper.getCollection('accounts');
     await MongoHelper.collection.deleteMany({});
   });
 
@@ -25,22 +25,22 @@ describe('Account Mongo Repository', () => {
     const account = await sut.add({
       name: 'any_name',
       email: 'any_email@mail.com',
-      password: 'any_password'
+      password: 'any_password',
     });
     expect(account).toBeTruthy();
     expect(account.id).toBeTruthy();
     expect(account.name).toBe('any_name');
     expect(account.email).toBe('any_email@mail.com');
     expect(account.password).toBe('any_password');
-  })
+  });
 
   test('Should return an Account on loadByEmail success', async () => {
     const sut = makeSut();
     await MongoHelper.collection.insertOne({
       name: 'any_name',
       email: 'any_email@mail.com',
-      password: 'any_password'
-    })
+      password: 'any_password',
+    });
     const account = await sut.loadByEmail('any_email@mail.com');
     expect(account).toBeTruthy();
     expect(account.id).toBeTruthy();
@@ -60,7 +60,7 @@ describe('Account Mongo Repository', () => {
     const fakeAccount = await MongoHelper.insert({
       name: 'any_name',
       email: 'any_email@mail.com',
-      password: 'any_password'
+      password: 'any_password',
     });
     const newAccount = MongoHelper.map(fakeAccount);
     expect(newAccount.accessToken).toBeFalsy();

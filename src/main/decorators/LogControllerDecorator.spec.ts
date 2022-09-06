@@ -1,8 +1,30 @@
-import { LogControllerDecorator } from "./LogControllerDecorator";
-import { Controller, HttpRequest, HttpResponse } from "../../presentation/protocols";
-import { serverError, ok } from "../../presentation/helpers/http/HttpHelper";
-import { LogErrorRepository } from "../../data/protocols/db/log/LogErrorRepository";
-import { AccountModel } from "../../domain/entities/Account";
+import { LogControllerDecorator } from './LogControllerDecorator';
+import { Controller, HttpRequest, HttpResponse } from '../../presentation/protocols';
+import { serverError, ok } from '../../presentation/helpers/http/HttpHelper';
+import { LogErrorRepository } from '../../data/protocols/db/log/LogErrorRepository';
+import { AccountModel } from '../../domain/entities/Account';
+
+const makeFakeAccount = (): AccountModel => ({
+  id: 'valid_id',
+  name: 'valid_name',
+  email: 'valid_email@mail.com',
+  password: 'valid_password',
+});
+
+const makeFakeRequest = (): HttpRequest => ({
+  body: {
+    name: 'any_name',
+    email: 'any_email@mail.com',
+    password: 'any_password',
+    passwordConfirmation: 'any_password',
+  },
+});
+
+const makeFakeServerError = (): HttpResponse => {
+  const fakeError = new Error();
+  fakeError.stack = 'any_stack';
+  return serverError(fakeError);
+};
 
 const makeLogErrorRepository = (): LogErrorRepository => {
   class LogErrorRepositoryStub implements LogErrorRepository {
@@ -18,37 +40,15 @@ const makeController = (): Controller => {
     handle(httpRequest: HttpRequest): Promise<HttpResponse> {
       return Promise.resolve(ok(makeFakeAccount()));
     }
-  };
-  return new ControllerStub();
-}
-
-const makeFakeAccount = (): AccountModel => ({
-  id: 'valid_id',
-  name: 'valid_name',
-  email: 'valid_email@mail.com',
-  password: 'valid_password'
-});
-
-const makeFakeRequest = (): HttpRequest => ({
-  body: {
-    name: 'any_name',
-    email: "any_email@mail.com",
-    password: "any_password",
-    passwordConfirmation: "any_password"
   }
-});
-
-const makeFakeServerError = (): HttpResponse => {
-  const fakeError = new Error();
-  fakeError.stack = 'any_stack';
-  return serverError(fakeError);
-}
+  return new ControllerStub();
+};
 
 type LogControllerSutTypes = {
   sut: LogControllerDecorator,
   controllerStub: Controller,
   logErrorRepositoryStub: LogErrorRepository
-}
+};
 
 const makeSut = (): LogControllerSutTypes => {
   const controllerStub = makeController();
@@ -57,8 +57,8 @@ const makeSut = (): LogControllerSutTypes => {
   return {
     sut,
     controllerStub,
-    logErrorRepositoryStub
-  }
+    logErrorRepositoryStub,
+  };
 };
 
 describe('LogController Decorator', () => {

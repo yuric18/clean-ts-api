@@ -1,6 +1,6 @@
 import request from 'supertest';
-import app from "../config/app";
-import { MongoHelper } from "../../infra/db/mongodb/helpers/MongoHelper";
+import app from '../config/app';
+import { MongoHelper } from '../../infra/db/mongodb/helpers/MongoHelper';
 import { hash } from 'bcrypt';
 
 describe('Login Routes', () => {
@@ -14,7 +14,7 @@ describe('Login Routes', () => {
   });
 
   beforeEach(async () => {
-    await MongoHelper.getCollection('accounts')
+    await MongoHelper.getCollection('accounts');
     await MongoHelper.collection.deleteMany({});
   });
 
@@ -26,11 +26,11 @@ describe('Login Routes', () => {
           name: 'Yuri',
           email: 'y.cabral18@hotmail.com',
           password: '123',
-          passwordConfirmation: '123'
+          passwordConfirmation: '123',
         })
         .expect(200);
-    })
-  })
+    });
+  });
 
   describe('POST /login', () => {
     test('Should return 200 on login', async () => {
@@ -38,7 +38,7 @@ describe('Login Routes', () => {
       await MongoHelper.insert({
         name: 'Yuri',
         email: 'y.cabral18@mail.com',
-        password: password
+        password: password,
       });
       await request(app)
         .post('/api/login')
@@ -68,5 +68,5 @@ describe('Login Routes', () => {
         })
         .expect(401);
     });
-  })
-})
+  });
+});

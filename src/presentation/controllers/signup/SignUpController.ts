@@ -3,15 +3,15 @@ import {
   HttpResponse,
   Controller,
   AddAccount,
-  Validation
-} from "./SignUpControllerProtocols";
-import { badRequest, serverError, ok } from "../../helpers/http/HttpHelper";
+  Validation,
+} from './SignUpControllerProtocols';
+import { badRequest, serverError, ok } from '../../helpers/http/HttpHelper';
 
 export class SignUpController implements Controller {
 
   constructor(
     private readonly addAccount: AddAccount,
-    private readonly validation: Validation
+    private readonly validation: Validation,
   ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -24,7 +24,7 @@ export class SignUpController implements Controller {
       const account = await this.addAccount.add({
         name,
         email,
-        password
+        password,
       });
 
       return ok(account);
@@ -32,4 +32,4 @@ export class SignUpController implements Controller {
       return serverError(e);
     }
   }
-};
+}

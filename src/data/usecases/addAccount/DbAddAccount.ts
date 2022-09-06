@@ -3,13 +3,13 @@ import {
   AccountModel,
   AddAccount,
   Hasher,
-  AddAccountRepository
+  AddAccountRepository,
 } from './DbAddAccountProtocols';
 
 export class DbAddAccount implements AddAccount {
   constructor(
     private readonly hasher: Hasher,
-    private readonly addAccountRepository: AddAccountRepository
+    private readonly addAccountRepository: AddAccountRepository,
   ) {}
 
   async add(account: AddAccountModel): Promise<AccountModel> {

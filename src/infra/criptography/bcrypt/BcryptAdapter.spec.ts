@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { BcryptAdapter } from "./BcryptAdapter";
+import { BcryptAdapter } from './BcryptAdapter';
 
 jest.mock('bcrypt', () => ({
   async hash(): Promise<string> {
@@ -7,8 +7,8 @@ jest.mock('bcrypt', () => ({
   },
   async compare(): Promise<boolean> {
     return Promise.resolve(true);
-  }
-}))
+  },
+}));
 
 const salt = 12;
 const makeSut = (): BcryptAdapter => {
@@ -33,12 +33,12 @@ describe('Bcrypt Adapter', () => {
     test('Should throw if bcrypt throws', async () => {
       const sut = makeSut();
       jest.spyOn(bcrypt, 'hash').mockImplementationOnce(() => {
-        throw new Error()
+        throw new Error();
       });
       const promise = sut.hash('any_value');
       await expect(promise).rejects.toThrow();
     });
-  })
+  });
 
   describe('Compare', () => {
     test('Should call bcrypt with correct value', async () => {
@@ -66,7 +66,7 @@ describe('Bcrypt Adapter', () => {
     test('Should throw if bcrypt throws', async () => {
       const sut = makeSut();
       jest.spyOn(bcrypt, 'compare').mockImplementationOnce(() => {
-        throw new Error()
+        throw new Error();
       });
       const promise = sut.compare('any_value', 'any_other_value');
       await expect(promise).rejects.toThrow();

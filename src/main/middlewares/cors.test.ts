@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from "../config/app";
+import app from '../config/app';
 
 describe('CORS Middleware', () => {
   test('Should enable CORS', async () => {
@@ -11,5 +11,5 @@ describe('CORS Middleware', () => {
       .expect('access-control-allow-origin', '*')
       .expect('access-control-allow-headers', '*')
       .expect('access-control-allow-methods', '*');
-  })
-})
+  });
+});

@@ -1,7 +1,7 @@
-import { LoginController } from "./LoginController";
-import { badRequest, ok, serverError, unauthorized } from "../../helpers/http/HttpHelper";
-import { MissingParamError } from "../../errors";
-import { HttpRequest, Authentication, Validation, AuthenticationModel } from "./LoginControllerProtocols";
+import { LoginController } from './LoginController';
+import { badRequest, ok, serverError, unauthorized } from '../../helpers/http/HttpHelper';
+import { MissingParamError } from '../../errors';
+import { HttpRequest, Authentication, Validation, AuthenticationModel } from './LoginControllerProtocols';
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
@@ -16,16 +16,16 @@ const makeValidation = (): Validation => {
   class ValidationStub implements Validation {
     validate(input: any): Error {
       return null;
-    };
+    }
   }
   return new ValidationStub();
-}
+};
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
     email: 'any_email@mail.com',
-    password: 'any_password'
-  }
+    password: 'any_password',
+  },
 });
 
 type SutTypes = {
@@ -41,8 +41,8 @@ const makeSut = (): SutTypes => {
   return {
     sut,
     authenticationStub,
-    validationStub
-  }
+    validationStub,
+  };
 };
 
 describe('Login Controller', () => {
@@ -52,7 +52,7 @@ describe('Login Controller', () => {
     await sut.handle(makeFakeRequest());
     expect(authSpy).toHaveBeenCalledWith({
       email: 'any_email@mail.com',
-      password: 'any_password'
+      password: 'any_password',
     });
   });
 
@@ -67,7 +67,7 @@ describe('Login Controller', () => {
   test('Should return 500 if Authentication throws', async () => {
     const { sut, authenticationStub } = makeSut();
     jest.spyOn(authenticationStub, 'auth')
-      .mockImplementationOnce(() => { throw new Error() });
+      .mockImplementationOnce(() => { throw new Error(); });
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(serverError(new Error()));
   });
@@ -93,4 +93,4 @@ describe('Login Controller', () => {
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')));
   });
-})
+});

@@ -1,15 +1,15 @@
-import { MissingParamError } from "../../errors";
-import { RequiredFieldValidation } from "./RequiredFieldValidation";
+import { MissingParamError } from '../../errors';
+import { RequiredFieldValidation } from './RequiredFieldValidation';
 
 type SutTypes = {
   sut: RequiredFieldValidation
-}
+};
 
 const makeSut = (): SutTypes => {
-  const sut = new RequiredFieldValidation('email')
+  const sut = new RequiredFieldValidation('email');
   return {
-    sut
-  }
+    sut,
+  };
 };
 
 describe('RequiredField Validation', () => {

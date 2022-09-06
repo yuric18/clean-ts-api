@@ -1,5 +1,5 @@
 import { MongoHelper } from '../helpers/MongoHelper';
-import { LogMongoRepository } from "./LogMongoRepository";
+import { LogMongoRepository } from './LogMongoRepository';
 
 
 const makeSut = (): LogMongoRepository => {
@@ -17,7 +17,7 @@ describe('Log Mongo Repository', () => {
   });
 
   beforeEach(async () => {
-    await MongoHelper.getCollection('errors')
+    await MongoHelper.getCollection('errors');
     await MongoHelper.collection.deleteMany({});
   });
 
@@ -26,5 +26,5 @@ describe('Log Mongo Repository', () => {
     await sut.logError('any_error');
     const count = await MongoHelper.collection.countDocuments();
     expect(count).toBe(1);
-  })
+  });
 });

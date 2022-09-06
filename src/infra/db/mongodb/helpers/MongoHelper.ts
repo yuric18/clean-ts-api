@@ -1,10 +1,10 @@
-import { Collection, MongoClient, ObjectId } from "mongodb";
+import { Collection, MongoClient, ObjectId } from 'mongodb';
 
 export const MongoHelper = {
   client: null as MongoClient,
   collection: null as Collection,
   uri: null as string,
-  async connect (uri: string): Promise<void> {
+  async connect(uri: string): Promise<void> {
     this.uri = uri;
     this.client = await MongoClient.connect(this.uri);
   },
@@ -21,12 +21,12 @@ export const MongoHelper = {
     const { value: document } = await this.collection.findOneAndUpdate(
       { _id: new ObjectId() },
       { $setOnInsert: data },
-      options
+      options,
     );
     return document;
   },
   map(document) {
-    const { _id, ...rest } = document;
-    return { ...rest, id: _id };
-  }
+    const { _id: id, ...rest } = document;
+    return { ...rest, id };
+  },
 };

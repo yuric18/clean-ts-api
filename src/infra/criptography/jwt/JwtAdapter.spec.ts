@@ -1,21 +1,21 @@
 import jwt from 'jsonwebtoken';
-import {JwtAdapter} from "./JwtAdapter";
+import { JwtAdapter } from './JwtAdapter';
 
 jest.mock('jsonwebtoken', () => ({
   sign(): Promise<string> {
     return Promise.resolve('any_token');
-  }
-}))
+  },
+}));
 
 type SutTypes = {
   sut: JwtAdapter
-}
+};
 
 const makeSut = (): SutTypes => {
   const sut = new JwtAdapter('secret');
   return {
-    sut
-  }
+    sut,
+  };
 };
 
 describe('JWT Adapter', () => {
@@ -35,8 +35,8 @@ describe('JWT Adapter', () => {
   test('Should throw if sign throws', () => {
     const { sut } = makeSut();
     jest.spyOn(jwt, 'sign')
-      .mockImplementationOnce(() => { throw new Error() });
+      .mockImplementationOnce(() => { throw new Error(); });
     const promise = sut.encrypt('any_id');
     expect(promise).rejects.toThrow();
-  })
+  });
 });

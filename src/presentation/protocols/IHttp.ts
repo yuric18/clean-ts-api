@@ -5,4 +5,4 @@ export type HttpResponse = {
 
 export type HttpRequest = {
   body?: any
-}
+};

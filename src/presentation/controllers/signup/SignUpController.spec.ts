@@ -1,34 +1,34 @@
-import { MissingParamError, ServerError } from "../../errors";
-import { SignUpController } from "./SignUpController";
+import { MissingParamError, ServerError } from '../../errors';
+import { SignUpController } from './SignUpController';
 import {
   HttpResponse,
   AddAccount,
   AddAccountModel,
   AccountModel, HttpRequest,
-  Validation
-} from "./SignUpControllerProtocols";
-import { ok, serverError, badRequest } from "../../helpers/http/HttpHelper";
+  Validation,
+} from './SignUpControllerProtocols';
+import { ok, serverError, badRequest } from '../../helpers/http/HttpHelper';
 
 type SutTypes = {
   sut: SignUpController
   addAccountStub: AddAccount
   validationStub: Validation
-}
+};
 
 const makeValidation = (): Validation => {
   class ValidationStub implements Validation {
     validate(input: any): Error {
       return null;
-    };
+    }
   }
   return new ValidationStub();
-}
+};
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
   name: 'valid_name',
   email: 'valid_email@mail.com',
-  password: 'valid_password'
+  password: 'valid_password',
 });
 
 const makeAddAccount = (): AddAccount => {
@@ -38,15 +38,15 @@ const makeAddAccount = (): AddAccount => {
     }
   }
   return new AddAccountStub();
-}
+};
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
     name: 'any_name',
-    email: "any_email@mail.com",
-    password: "any_password",
-    passwordConfirmation: "any_password"
-  }
+    email: 'any_email@mail.com',
+    password: 'any_password',
+    passwordConfirmation: 'any_password',
+  },
 });
 
 const makeSut = (): SutTypes => {
@@ -56,9 +56,9 @@ const makeSut = (): SutTypes => {
   return {
     sut,
     addAccountStub,
-    validationStub
-  }
-}
+    validationStub,
+  };
+};
 
 describe('SignUp Controller', () => {
   test('Should return 500 if AddAccount throws', async () => {
@@ -77,8 +77,8 @@ describe('SignUp Controller', () => {
     expect(addSpy).toHaveBeenCalledWith({
       name: httpRequest.body.name,
       email: httpRequest.body.email,
-      password: httpRequest.body.password
-    })
+      password: httpRequest.body.password,
+    });
   });
 
   test('Should returns 200 if valid data is provided', async () => {
