@@ -1,11 +1,13 @@
 {
   "name": "clean-node-api",
   "version": "1.1.0",
-  "description": "",
-  "main": "index.js",
+  "description": "NodeJS Rest API using TDD, Clean Architecture and TypeScript",
+  "main": "dist/index.js",
   "scripts": {
     "postinstall": "husky install",
-    "start": "sucrase-node src/main/server.ts",
+    "build": "tsc",
+    "dev": "sucrase-node src/main/server.ts",
+    "start": "node dist/src/main/server.js",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
