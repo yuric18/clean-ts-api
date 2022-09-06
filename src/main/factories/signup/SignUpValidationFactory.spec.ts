@@ -1,4 +1,4 @@
-import { makeSignUpValidation } from "./SignUpValidation";
+import { makeSignUpValidation } from "./SignUpValidationFactory";
 import {
   ValidationComposite,
   CompareFieldsValidation,

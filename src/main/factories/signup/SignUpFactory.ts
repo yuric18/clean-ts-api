@@ -5,8 +5,8 @@ import { AccountMongoRepository } from "../../../infra/db/mongodb/account/Accoun
 import { LogMongoRepository } from "../../../infra/db/mongodb/log/LogMongoRepository";
 import { Controller } from "../../../presentation/protocols";
 
-import { LogControllerDecorator } from "../../decorators/Log";
-import {makeSignUpValidation} from "./SignUpValidation";
+import { LogControllerDecorator } from "../../decorators/LogControllerDecorator";
+import {makeSignUpValidation} from "./SignUpValidationFactory";
 
 
 export const makeSignUpController = (): Controller => {

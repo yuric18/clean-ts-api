@@ -1,4 +1,4 @@
-import { makeLoginValidation } from "./LoginValidation";
+import { makeLoginValidation } from "./LoginValidationFactory";
 import {
   ValidationComposite,
   EmailValidation,

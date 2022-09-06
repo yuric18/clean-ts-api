@@ -1,4 +1,4 @@
-import { LogControllerDecorator } from "./Log";
+import { LogControllerDecorator } from "./LogControllerDecorator";
 import { Controller, HttpRequest, HttpResponse } from "../../presentation/protocols";
 import { serverError, ok } from "../../presentation/helpers/http/HttpHelper";
 import { LogErrorRepository } from "../../data/protocols/db/log/LogErrorRepository";
