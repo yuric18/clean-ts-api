@@ -20,7 +20,7 @@ describe('Account Mongo Repository', () => {
     await MongoHelper.collection.deleteMany({});
   });
 
-  test('Should return an account on success', async () => {
+  test('Should return an account on add success', async () => {
     const sut = makeSut();
     const account = await sut.add({
       name: 'any_name',
@@ -33,4 +33,19 @@ describe('Account Mongo Repository', () => {
     expect(account.email).toBe('any_email@mail.com');
     expect(account.password).toBe('any_password');
   })
+
+  test('Should return an Account on loadByEmail success', async () => {
+    const sut = makeSut();
+    await MongoHelper.collection.insertOne({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password'
+    })
+    const account = await sut.loadByEmail('any_email@mail.com');
+    expect(account).toBeTruthy();
+    expect(account.id).toBeTruthy();
+    expect(account.name).toBe('any_name');
+    expect(account.email).toBe('any_email@mail.com');
+    expect(account.password).toBe('any_password');
+  });
 });
