@@ -16,7 +16,7 @@ export const MongoHelper = {
     if (!this.client?.isConnected) await this.connect(this.uri);
     this.collection = this.client.db().collection(name);
   },
-  async insert<T>(data: T): Promise<T & { id: string }> {
+  async insert(data) {
     const options = { upsert: true, returnDocument: 'after' };
     const { value: document } = await this.collection.findOneAndUpdate(
       { _id: new ObjectId() },
