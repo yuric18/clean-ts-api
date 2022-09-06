@@ -6,10 +6,10 @@ import {
 import { MongoHelper } from '../helpers/MongoHelper';
 import {
   LoadAccountByEmailRepository
-} from "../../../../data/protocols/db/LoadAccountByEmailRepository";
+} from "../../../../data/protocols/db/account/LoadAccountByEmailRepository";
 import {
   UpdateAccessTokenRepository
-} from "../../../../data/protocols/db/UpdateAccessTokenRepository";
+} from "../../../../data/protocols/db/account/UpdateAccessTokenRepository";
 
 export class AccountMongoRepository implements
   AddAccountRepository,
