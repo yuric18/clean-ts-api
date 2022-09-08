@@ -1,4 +1,4 @@
-import { MissingParamError, ServerError } from '../../errors';
+import {EmailAlreadyExists, MissingParamError, ServerError} from '../../errors';
 import { SignUpController } from './SignUpController';
 import {
   HttpResponse,
@@ -7,7 +7,7 @@ import {
   AccountModel, HttpRequest,
   Validation,
 } from './SignUpControllerProtocols';
-import { ok, serverError, badRequest } from '../../helpers/http/HttpHelper';
+import {ok, serverError, badRequest, forbidden} from '../../helpers/http/HttpHelper';
 import {
   Authentication,
   AuthenticationModel
@@ -130,6 +130,13 @@ describe('SignUp Controller', () => {
       .mockRejectedValueOnce(new Error());
     const httpResponse: HttpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
+  });
+
+  test('Should returns 403 if AddAccount returns null', async () => {
+    const { sut, addAccountStub } = makeSut();
+    jest.spyOn(addAccountStub, 'add').mockResolvedValueOnce(null);
+    const httpResponse: HttpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(forbidden(new EmailAlreadyExists()));
   });
 
   test('Should returns 200 if valid data is provided', async () => {
