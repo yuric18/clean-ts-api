@@ -78,32 +78,6 @@ const makeSut = (): SutTypes => {
 };
 
 describe('SignUp Controller', () => {
-  test('Should return 500 if AddAccount throws', async () => {
-    const { sut, addAccountStub } = makeSut();
-    jest.spyOn(addAccountStub, 'add')
-      .mockRejectedValueOnce(new Error());
-    const httpResponse: HttpResponse = await sut.handle(makeFakeRequest());
-    expect(httpResponse).toEqual(serverError(new ServerError(null)));
-  });
-
-  test('Should call AddAccount with correct values', async () => {
-    const { sut, addAccountStub } = makeSut();
-    const addSpy = jest.spyOn(addAccountStub, 'add');
-    const httpRequest = makeFakeRequest();
-    await sut.handle(httpRequest);
-    expect(addSpy).toHaveBeenCalledWith({
-      name: httpRequest.body.name,
-      email: httpRequest.body.email,
-      password: httpRequest.body.password,
-    });
-  });
-
-  test('Should returns 200 if valid data is provided', async () => {
-    const { sut } = makeSut();
-    const httpResponse: HttpResponse = await sut.handle(makeFakeRequest());
-    expect(httpResponse).toEqual(ok(makeFakeAccount()));
-  });
-
   test('Should call Validation with correct values', async () => {
     const { sut, validationStub } = makeSut();
     const validateSpy = jest.spyOn(validationStub, 'validate');
@@ -129,4 +103,39 @@ describe('SignUp Controller', () => {
       password: 'any_password',
     });
   });
+
+  test('Should return 500 if Authentication throws', async () => {
+    const { sut, authenticationStub } = makeSut();
+    jest.spyOn(authenticationStub, 'auth')
+      .mockImplementationOnce(() => { throw new Error(); });
+    const httpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(serverError(new Error()));
+  });
+
+  test('Should call AddAccount with correct values', async () => {
+    const { sut, addAccountStub } = makeSut();
+    const addSpy = jest.spyOn(addAccountStub, 'add');
+    const httpRequest = makeFakeRequest();
+    await sut.handle(httpRequest);
+    expect(addSpy).toHaveBeenCalledWith({
+      name: httpRequest.body.name,
+      email: httpRequest.body.email,
+      password: httpRequest.body.password,
+    });
+  });
+
+  test('Should return 500 if AddAccount throws', async () => {
+    const { sut, addAccountStub } = makeSut();
+    jest.spyOn(addAccountStub, 'add')
+      .mockRejectedValueOnce(new Error());
+    const httpResponse: HttpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(serverError(new ServerError(null)));
+  });
+
+  test('Should returns 200 if valid data is provided', async () => {
+    const { sut } = makeSut();
+    const httpResponse: HttpResponse = await sut.handle(makeFakeRequest());
+    expect(httpResponse).toEqual(ok(makeFakeAccount()));
+  });
+
 });
