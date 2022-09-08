@@ -10,11 +10,16 @@ services:
       - ./data:/data/db
   api:
     container_name: api
+    image: node:12
+    working_dir: /app
     restart: always
-    build: .
-    image: clean
+    command: bash -c "npm install --only=prod && npm run start"
+    volumes:
+      - ./dist:/app/dist
+      - ./package.json:/app/package.json
     ports:
       - '3000:3000'
+      - '9222:9222'
     links:
       - mongo
     environment:
