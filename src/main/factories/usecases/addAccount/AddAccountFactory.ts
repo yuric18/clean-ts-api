@@ -9,5 +9,5 @@ import {DbAddAccount} from "../../../../data/usecases/addAccount/DbAddAccount";
 export const makeAddAccount = (): AddAccount => {
   const hasher = new BcryptAdapter(parseInt(env.salt));
   const addAccountRepository = new AccountMongoRepository();
-  return new DbAddAccount(hasher, addAccountRepository)
+  return new DbAddAccount(hasher, addAccountRepository, addAccountRepository);
 };
