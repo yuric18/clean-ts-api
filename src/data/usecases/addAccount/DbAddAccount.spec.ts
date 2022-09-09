@@ -4,7 +4,7 @@ import {
   AddAccountModel,
   AddAccountRepository,
   Hasher,
-  LoadAccountByEmailRepository
+  LoadAccountByEmailRepository,
 } from './DbAddAccountProtocols';
 
 type SutTypes = {
@@ -63,7 +63,7 @@ const makeSut = (): SutTypes => {
     sut,
     hasherStub,
     addAccountRepositoryStub,
-    loadAccountByEmailRepositoryStub
+    loadAccountByEmailRepositoryStub,
   };
 };
 

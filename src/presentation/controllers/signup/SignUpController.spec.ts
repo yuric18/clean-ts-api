@@ -1,4 +1,4 @@
-import {EmailAlreadyExists, MissingParamError, ServerError} from '../../errors';
+import { EmailAlreadyExists, MissingParamError, ServerError } from '../../errors';
 import { SignUpController } from './SignUpController';
 import {
   HttpResponse,
@@ -7,11 +7,11 @@ import {
   AccountModel, HttpRequest,
   Validation,
 } from './SignUpControllerProtocols';
-import {ok, serverError, badRequest, forbidden} from '../../helpers/http/HttpHelper';
+import { ok, serverError, badRequest, forbidden } from '../../helpers/http/HttpHelper';
 import {
   Authentication,
-  AuthenticationModel
-} from "../../../domain/usecases/Authentication";
+  AuthenticationModel,
+} from '../../../domain/usecases/Authentication';
 
 type SutTypes = {
   sut: SignUpController
@@ -73,7 +73,7 @@ const makeSut = (): SutTypes => {
     sut,
     addAccountStub,
     validationStub,
-    authenticationStub
+    authenticationStub,
   };
 };
 
