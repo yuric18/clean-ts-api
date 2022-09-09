@@ -5,9 +5,9 @@ import {
   AddAccount,
   Validation,
 } from './SignUpControllerProtocols';
-import { badRequest, serverError, ok, forbidden } from '../../helpers/http/HttpHelper';
-import { Authentication } from '../../../domain/usecases/Authentication';
-import { EmailAlreadyExists } from '../../errors';
+import { badRequest, serverError, ok, forbidden } from '../../../helpers/http/HttpHelper';
+import { Authentication } from '../../../../domain/usecases/Authentication';
+import { EmailAlreadyExists } from '../../../errors';
 
 export class SignUpController implements Controller {
 
