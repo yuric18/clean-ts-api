@@ -33,8 +33,10 @@ describe('Account Mongo Repository', () => {
 
   test('Should return null on add success', async () => {
     const sut = makeSut();
-    const survey = await sut.add(makeFakeSurvey());
-    expect(survey).toBeNull();
+    const addResult = await sut.add(makeFakeSurvey());
+    const survey = await MongoHelper.collection.findOne({ question: 'any_question' });
+    expect(addResult).toBeNull();
+    expect(survey).toBeTruthy();
   });
 
 });
