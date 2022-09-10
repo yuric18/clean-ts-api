@@ -1,3 +1,4 @@
+import env from '../config/env';
 import request from 'supertest';
 import app from '../config/app';
 import { MongoHelper } from '../../infra/db/mongodb/helpers/MongoHelper';
@@ -6,7 +7,7 @@ import { hash } from 'bcrypt';
 describe('Login Routes', () => {
 
   beforeAll(async () => {
-    await MongoHelper.connect(process.env.MONGO_URL);
+    await MongoHelper.connect(env.mongoUrl);
   });
 
   afterAll(async () => {
