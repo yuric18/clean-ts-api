@@ -29,7 +29,7 @@ describe('DbLoadAccountByToken Usecase', () => {
   test('Should call Decrypter with correct values', async () => {
     const { sut, decrypterStub } = makeSut();
     const decryptSpy = jest.spyOn(decrypterStub, 'decrypt');
-    await sut.loadByToken('any_token');
+    await sut.loadByToken('any_token', 'any_role');
     expect(decryptSpy).toHaveBeenCalledWith('any_token');
   });
 
@@ -37,7 +37,7 @@ describe('DbLoadAccountByToken Usecase', () => {
     const { sut, decrypterStub } = makeSut();
     jest.spyOn(decrypterStub, 'decrypt')
       .mockResolvedValueOnce(null);
-    const account = await sut.loadByToken('any_token');
+    const account = await sut.loadByToken('any_token', 'any_role');
     expect(account).toBe(null);
   });
 });
