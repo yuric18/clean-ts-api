@@ -1,10 +1,10 @@
-import { HttpRequest, HttpResponse, Middleware, LoadAccountByTokenRepository } from './AuthMiddlewareProtocols';
+import { HttpRequest, HttpResponse, Middleware, LoadAccountByToken } from './AuthMiddlewareProtocols';
 import { AccessDeniedError } from '../errors';
 import { forbidden, ok, serverError } from '../helpers/http/HttpHelper';
 
 export class AuthMiddleware implements Middleware {
   constructor(
-    private readonly loadAccountByToken: LoadAccountByTokenRepository,
+    private readonly loadAccountByToken: LoadAccountByToken,
     private readonly role?: string,
   ) {}
 
@@ -12,7 +12,7 @@ export class AuthMiddleware implements Middleware {
     try {
       if (!httpRequest.headers?.['x-access-token']) return forbidden(new AccessDeniedError());
   
-      const account = await this.loadAccountByToken.loadByToken(httpRequest.headers['x-access-token'], this.role);
+      const account = await this.loadAccountByToken.load(httpRequest.headers['x-access-token'], this.role);
       if (!account) return forbidden(new AccessDeniedError());
   
       return ok({ accountId: account.id });
