@@ -5,10 +5,14 @@ import { AccountModel } from '../addAccount/DbAddAccountProtocols';
 export class DbLoadAccountByToken implements LoadAccountByTokenRepository {
   constructor(
     private readonly decrypter: Decrypter,
+    private readonly loadAccountByTokenRepository: LoadAccountByTokenRepository,
   ) {}
 
-  async loadByToken(token: string, role?: string): Promise<AccountModel> {
-    await this.decrypter.decrypt(token);
+  async loadByToken(accessToken: string, role?: string): Promise<AccountModel> {
+    const token = await this.decrypter.decrypt(accessToken);
+    if (token) {
+      await this.loadAccountByTokenRepository.loadByToken(accessToken, role);
+    }
     return null;
   }
 
