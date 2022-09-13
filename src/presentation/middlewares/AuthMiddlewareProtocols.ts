@@ -1,2 +1,3 @@
 export * from '../protocols';
-export * from '../../data/usecases/addAccount/DbAddAccountProtocols';
+export * from '../../data/protocols/db/account/LoadAccountByTokenRepository';
+export * from '../../domain/entities/Account';
