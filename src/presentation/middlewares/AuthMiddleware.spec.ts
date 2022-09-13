@@ -1,9 +1,7 @@
 import { AccessDeniedError } from '../errors';
 import { forbidden, ok, serverError } from '../helpers/http/HttpHelper';
 import { AuthMiddleware } from './AuthMiddleware';
-import { AccountModel } from '../../data/usecases/addAccount/DbAddAccountProtocols';
-import { LoadAccountByTokenRepository } from '../../data/protocols/db/account/LoadAccountByTokenRepository';
-import { HttpRequest } from '../protocols';
+import { AccountModel, LoadAccountByTokenRepository, HttpRequest } from './AuthMiddlewareProtocols';
 
 const makeFakeHttpRequest = (): HttpRequest => ({
   headers: {
