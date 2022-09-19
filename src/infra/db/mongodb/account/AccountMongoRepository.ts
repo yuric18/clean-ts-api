@@ -10,20 +10,30 @@ import {
 import {
   UpdateAccessTokenRepository,
 } from '../../../../data/protocols/db/account/UpdateAccessTokenRepository';
+import { LoadAccountByTokenRepository } from '../../../../presentation/middlewares/AuthMiddlewareProtocols';
 
 export class AccountMongoRepository implements
   AddAccountRepository,
   LoadAccountByEmailRepository,
-  UpdateAccessTokenRepository {
+  UpdateAccessTokenRepository,
+  LoadAccountByTokenRepository {
+
+    
   async add(accountData: AddAccountModel): Promise<AccountModel> {
     await MongoHelper.getCollection('accounts');
     const account = await MongoHelper.insert(accountData);
     return MongoHelper.map(account);
   }
-
+    
   async loadByEmail(email: string): Promise<AccountModel> {
     await MongoHelper.getCollection('accounts');
     const account = await MongoHelper.collection.findOne({ email });
+    return account && MongoHelper.map(account);
+  }
+    
+  async loadByToken(accessToken: string, role?: string): Promise<AccountModel> {
+    await MongoHelper.getCollection('accounts');
+    const account = await MongoHelper.collection.findOne({ accessToken, role });
     return account && MongoHelper.map(account);
   }
 
