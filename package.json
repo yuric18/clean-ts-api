@@ -16,6 +16,7 @@
     "test:integration": "npm test -- --watch -c jest-integration-config.js",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
+    "test:coveralls": "npm run test:ci -- && coveralls < coverage/lcov.info",
     "lint": "eslint 'src/**'",
     "lint:fix": "eslint 'src/**' --fix"
   },
@@ -33,6 +34,7 @@
     "@types/validator": "^13.7.6",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "coveralls": "^3.1.1",
     "eslint": "^8.2.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
