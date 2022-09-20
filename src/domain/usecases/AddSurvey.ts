@@ -1,11 +1,8 @@
-type SurveyAnswer = {
-  answer: string
-  image?: string
-};
+import { SurveyAnswerModel } from '../entities/Survey';
 
 export type AddSurveyModel = {
   question: string
-  answers: SurveyAnswer[]
+  answers: SurveyAnswerModel[]
   date: Date
 };
 
