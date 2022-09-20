@@ -10,6 +10,7 @@ const makeFakeSurvey = (): AddSurveyModel => ({
     answer: 'other_answer',
   }],
   question: 'any_question',
+  date: new Date(),
 });
 
 const makeSut = (): SurveyMongoRepository => {
