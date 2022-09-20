@@ -73,7 +73,7 @@ describe('Auth Middleware', () => {
 
   test('should return 200 if LoadAccountByToken returns an account', async () => {
     const { sut, loadAccountByTokenStub } = makeSut();
-    jest.spyOn(loadAccountByTokenStub, 'load')
+    jest.spyOn(loadAccountByTokenStub, 'load');
     const httpResponse = await sut.handle(makeFakeHttpRequest());
     expect(httpResponse).toEqual(ok({ accountId: 'any_id' }));
   });
