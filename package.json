@@ -4,7 +4,7 @@
   "description": "NodeJS Rest API using TDD, Clean Architecture and TypeScript",
   "main": "dist/main/server.js",
   "scripts": {
-    "postinstall": "husky install",
+    "prepare": "husky install",
     "build": "rimraf dist && tsc",
     "dev": "nodemon --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
     "up": "npm run build && docker-compose up -d",
