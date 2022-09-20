@@ -50,7 +50,7 @@ describe('DbLoadAccountByToken Usecase', () => {
   test('Should call Decrypter with correct values', async () => {
     const { sut, decrypterStub } = makeSut();
     const decryptSpy = jest.spyOn(decrypterStub, 'decrypt');
-    await sut.loadByToken('any_token', 'any_role');
+    await sut.load('any_token', 'any_role');
     expect(decryptSpy).toHaveBeenCalledWith('any_token');
   });
 
@@ -58,14 +58,14 @@ describe('DbLoadAccountByToken Usecase', () => {
     const { sut, decrypterStub } = makeSut();
     jest.spyOn(decrypterStub, 'decrypt')
       .mockResolvedValueOnce(null);
-    const account = await sut.loadByToken('any_token', 'any_role');
+    const account = await sut.load('any_token', 'any_role');
     expect(account).toBe(null);
   });
 
   test('Should call LoadAccountByTokenRepository with correct values', async () => {
     const { sut, loadAccountByTokenRepositoryStub } = makeSut();
     const decryptSpy = jest.spyOn(loadAccountByTokenRepositoryStub, 'loadByToken');
-    await sut.loadByToken('any_token', 'any_role');
+    await sut.load('any_token', 'any_role');
     expect(decryptSpy).toHaveBeenCalledWith('any_token', 'any_role');
   });
 
@@ -73,7 +73,7 @@ describe('DbLoadAccountByToken Usecase', () => {
     const { sut, loadAccountByTokenRepositoryStub } = makeSut();
     jest.spyOn(loadAccountByTokenRepositoryStub, 'loadByToken')
       .mockResolvedValueOnce(null);
-    const account = await sut.loadByToken('any_token', 'any_role');
+    const account = await sut.load('any_token', 'any_role');
     expect(account).toBe(null);
   });
 
@@ -81,13 +81,13 @@ describe('DbLoadAccountByToken Usecase', () => {
     const { sut, loadAccountByTokenRepositoryStub } = makeSut();
     jest.spyOn(loadAccountByTokenRepositoryStub, 'loadByToken')
       .mockRejectedValueOnce(new Error());
-    const promise = sut.loadByToken('any_token', 'any_role');
+    const promise = sut.load('any_token', 'any_role');
     expect(promise).rejects.toThrow();
   });
 
   test('Should return an account on success', async () => {
     const { sut } = makeSut();
-    const account = await sut.loadByToken('any_token', 'any_role');
+    const account = await sut.load('any_token', 'any_role');
     expect(account).toEqual(makeFakeAccount());
   });
 
