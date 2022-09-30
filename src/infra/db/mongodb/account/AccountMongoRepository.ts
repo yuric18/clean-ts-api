@@ -2,15 +2,15 @@ import {
   AccountModel,
   AddAccountModel,
   AddAccountRepository,
-} from '../../../../data/usecases/addAccount/DbAddAccountProtocols';
+} from '@/data/usecases/addAccount/DbAddAccountProtocols';
 import { MongoHelper } from '../helpers/MongoHelper';
 import {
   LoadAccountByEmailRepository,
-} from '../../../../data/protocols/db/account/LoadAccountByEmailRepository';
+} from '@/data/protocols/db/account/LoadAccountByEmailRepository';
 import {
   UpdateAccessTokenRepository,
-} from '../../../../data/protocols/db/account/UpdateAccessTokenRepository';
-import { LoadAccountByTokenRepository } from '../../../../presentation/middlewares/AuthMiddlewareProtocols';
+} from '@/data/protocols/db/account/UpdateAccessTokenRepository';
+import { LoadAccountByTokenRepository } from '@/presentation/middlewares/AuthMiddlewareProtocols';
 
 export class AccountMongoRepository implements
   AddAccountRepository,

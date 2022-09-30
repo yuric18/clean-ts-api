@@ -1,7 +1,7 @@
 import {
   SignUpController,
-} from '../../../../presentation/controllers/auth/signup/SignUpController';
-import { Controller } from '../../../../presentation/protocols';
+} from '@/presentation/controllers/auth/signup/SignUpController';
+import { Controller } from '@/presentation/protocols';
 import { makeSignUpValidation } from './SignUpValidationFactory';
 import { makeAuthentication } from '../../usecases/authentication/AuthenticationFactory';
 import { makeAddAccount } from '../../usecases/addAccount/AddAccountFactory';
