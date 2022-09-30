@@ -1,3 +1,4 @@
+import MockDate from 'mockdate';
 import { AddSurveyModel } from '../../../../domain/usecases/AddSurvey';
 import { MongoHelper } from '../helpers/MongoHelper';
 import { SurveyMongoRepository } from './SurveyMongoRepository';
@@ -20,18 +21,20 @@ const makeSut = (): SurveyMongoRepository => {
 describe('Account Mongo Repository', () => {
 
   beforeAll(async () => {
+    MockDate.set(new Date());
     await MongoHelper.connect(process.env.MONGO_URL);
   });
 
   afterAll(async () => {
+    MockDate.reset();
     await MongoHelper.disconnect();
   });
 
   beforeEach(async () => {
-    await MongoHelper.getCollection('survey');
+    await MongoHelper.getCollection('surveys');
     await MongoHelper.collection.deleteMany({});
   });
-
+  
   describe('add()', () => {
     test('Should return null on add success', async () => {
       const sut = makeSut();
@@ -44,13 +47,19 @@ describe('Account Mongo Repository', () => {
 
   describe('loadAll()', () => {
     test('should load all surveys on success', async () => {
-      console.log(await MongoHelper.collection.find().toArray());
       await MongoHelper.collection.insertMany([
+        makeFakeSurvey(),
         makeFakeSurvey(),
       ]);
       const sut = makeSut();
       const surveys = await sut.loadAll();
-      expect(surveys.length).toBe(1);
+      expect(surveys.length).toBe(2);
+    });
+
+    test('should return empty list when no content', async () => {
+      const sut = makeSut();
+      const surveys = await sut.loadAll();
+      expect(surveys.length).toBe(0);
     });
   });
 });
