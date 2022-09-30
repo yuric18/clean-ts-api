@@ -42,7 +42,6 @@ const makeLoadSurveyById = (): LoadSurveyById => {
   return new LoadSurveyByIdStub();
 };
 
-
 const makeFakeSurveyResult = (): SurveyResultModel => ({
   accountId: 'any_account_id',
   answer: 'any_answer',
@@ -77,7 +76,6 @@ const makeSut = (): SutTypes => {
     saveSurveyResultStub,
   };
 };
-
 
 describe('Save Survey Result Controller', () => {
 
@@ -140,5 +138,12 @@ describe('Save Survey Result Controller', () => {
     jest.spyOn(saveSurveyResultStub, 'save').mockRejectedValueOnce(new Error());
     const response = await sut.handle(makeFakeHttpRequest());
     expect(response).toEqual(serverError(new Error()));
+  });
+
+  
+  test('should return 200 on success', async () => {
+    const { sut } = makeSut();
+    const response = await sut.handle(makeFakeHttpRequest());
+    expect(response).toEqual(ok(makeFakeSurveyResult()));
   });
 });

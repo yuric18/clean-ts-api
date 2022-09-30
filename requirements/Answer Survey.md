@@ -7,7 +7,7 @@
 4. ✅ Valida se o campo **answer** é uma resposta válida
 5. ✅ **Cria** um resultado de enquete com os dados fornecidos caso não tenha um registro
 6. ✅ **Atualiza** um resultado de enquete com os dados fornecidos caso já tenha um registro
-7. ⛔️ Retorna 200 com os dados do resultado da enquete
+7. ✅ Retorna 200 com os dados do resultado da enquete
 
 >  ## Exceções
 1. ⛔️ Retorna erro 404 se a API não existir
