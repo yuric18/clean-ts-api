@@ -2,6 +2,7 @@ import MockDate from 'mockdate';
 import { AddSurveyModel } from '@/domain/usecases/survey/AddSurvey';
 import { MongoHelper } from '../helpers/MongoHelper';
 import { SurveyMongoRepository } from './SurveyMongoRepository';
+import { ObjectId } from 'mongodb';
 
 const makeFakeSurvey = (): AddSurveyModel => ({
   answers: [{
@@ -76,7 +77,7 @@ describe('Survey Mongo Repository', () => {
 
     test('should return empty list when no content', async () => {
       const sut = makeSut();
-      const survey = await sut.loadById('any_id');
+      const survey = await sut.loadById('6336e1f27292da6d2d9fc718');
       expect(survey).toBeNull();
     });
   });
