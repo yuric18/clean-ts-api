@@ -2,7 +2,7 @@ import MockDate from 'mockdate';
 import { HttpRequest, LoadSurveyById, SurveyModel } from './SaveSurveyResultControllerProtocols';
 import { SaveSurveyResultController } from './SaveSurveyResultController';
 import { InvalidParamError } from '@/presentation/errors';
-import { forbidden } from '@/presentation/helpers/http/HttpHelper';
+import { forbidden, serverError } from '@/presentation/helpers/http/HttpHelper';
 
 const makeFakeHttpRequest = (): HttpRequest => ({
   params: {
@@ -67,5 +67,12 @@ describe('Save Survey Result Controller', () => {
     jest.spyOn(loadSurveyByIdStub, 'loadById').mockResolvedValueOnce(null);
     const response = await sut.handle(makeFakeHttpRequest());
     expect(response).toEqual(forbidden(new InvalidParamError('surveyId')));
+  });
+
+  test('should return 500 if LoadSurveyById throws', async () => {
+    const { sut, loadSurveyByIdStub } = makeSut();
+    jest.spyOn(loadSurveyByIdStub, 'loadById').mockRejectedValueOnce(new Error());
+    const response = await sut.handle(makeFakeHttpRequest());
+    expect(response).toEqual(serverError(new Error()));
   });
 });
