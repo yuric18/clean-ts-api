@@ -62,4 +62,20 @@ describe('Account Mongo Repository', () => {
       expect(surveys.length).toBe(0);
     });
   });
+
+  describe('loadById()', () => {
+    test('should load survey by id on success', async () => {
+      const res = await MongoHelper.insert(makeFakeSurvey());
+      const { id } = await MongoHelper.map(res);
+      const sut = makeSut();
+      const survey = await sut.loadById(id);
+      expect(survey).toBeTruthy();
+    });
+
+    test('should return empty list when no content', async () => {
+      const sut = makeSut();
+      const survey = await sut.loadById('any_id');
+      expect(survey).toBeNull();
+    });
+  });
 });
