@@ -8,6 +8,7 @@ import {
   serverError,
   SaveSurveyResult,
   SurveyResultModel,
+  ok,
 } from './SaveSurveyResultControllerProtocols';
 import { SaveSurveyResultController } from './SaveSurveyResultController';
 
@@ -130,6 +131,13 @@ describe('Save Survey Result Controller', () => {
   test('should return 500 if LoadSurveyById throws', async () => {
     const { sut, loadSurveyByIdStub } = makeSut();
     jest.spyOn(loadSurveyByIdStub, 'loadById').mockRejectedValueOnce(new Error());
+    const response = await sut.handle(makeFakeHttpRequest());
+    expect(response).toEqual(serverError(new Error()));
+  });
+
+  test('should return 500 if SaveSurveyResult throws', async () => {
+    const { sut, saveSurveyResultStub } = makeSut();
+    jest.spyOn(saveSurveyResultStub, 'save').mockRejectedValueOnce(new Error());
     const response = await sut.handle(makeFakeHttpRequest());
     expect(response).toEqual(serverError(new Error()));
   });
