@@ -54,6 +54,7 @@ describe('Survey Mongo Repository', () => {
       const sut = makeSut();
       const surveys = await sut.loadAll();
       expect(surveys.length).toBe(2);
+      expect(surveys[0].id).toBeTruthy();
     });
 
     test('should return empty list when no content', async () => {
@@ -70,6 +71,7 @@ describe('Survey Mongo Repository', () => {
       const sut = makeSut();
       const survey = await sut.loadById(id);
       expect(survey).toBeTruthy();
+      expect(survey.id).toBeTruthy();
     });
 
     test('should return empty list when no content', async () => {

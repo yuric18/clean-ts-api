@@ -29,4 +29,7 @@ export const MongoHelper = {
     const { _id: id, ...rest } = document;
     return { ...rest, id };
   },
+  mapArray(documentList) {
+    return documentList.map(d => MongoHelper.map(d));
+  },
 };
