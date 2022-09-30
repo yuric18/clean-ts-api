@@ -32,12 +32,25 @@ describe('Account Mongo Repository', () => {
     await MongoHelper.collection.deleteMany({});
   });
 
-  test('Should return null on add success', async () => {
-    const sut = makeSut();
-    const addResult = await sut.add(makeFakeSurvey());
-    const survey = await MongoHelper.collection.findOne({ question: 'any_question' });
-    expect(addResult).toBeNull();
-    expect(survey).toBeTruthy();
+  describe('add()', () => {
+    test('Should return null on add success', async () => {
+      const sut = makeSut();
+      const addResult = await sut.add(makeFakeSurvey());
+      const survey = await MongoHelper.collection.findOne({ question: 'any_question' });
+      expect(addResult).toBeNull();
+      expect(survey).toBeTruthy();
+    });
   });
 
+  describe('loadAll()', () => {
+    test('should load all surveys on success', async () => {
+      console.log(await MongoHelper.collection.find().toArray());
+      await MongoHelper.collection.insertMany([
+        makeFakeSurvey(),
+      ]);
+      const sut = makeSut();
+      const surveys = await sut.loadAll();
+      expect(surveys.length).toBe(1);
+    });
+  });
 });
