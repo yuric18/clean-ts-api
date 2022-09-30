@@ -1,8 +1,8 @@
 import { MongoHelper } from '../helpers/MongoHelper';
-import { AddSurveyModel, AddSurveyRepository } from '@/data/usecases/addSurvey/DbAddSurveyProtocols';
+import { AddSurveyModel, AddSurveyRepository } from '@/data/usecases/survey/addSurvey/DbAddSurveyProtocols';
 import { LoadSurveysRepository } from '@/data/protocols/db/survey/LoadSurveysRepository';
 import { SurveyModel } from '@/domain/entities/Survey';
-import { LoadSurveyByIdRepository } from '@/data/usecases/loadSurveyById/DbLoadSurveyByIdProtocols';
+import { LoadSurveyByIdRepository } from '@/data/usecases/survey/loadSurveyById/DbLoadSurveyByIdProtocols';
 
 export class SurveyMongoRepository implements AddSurveyRepository,
   LoadSurveysRepository,

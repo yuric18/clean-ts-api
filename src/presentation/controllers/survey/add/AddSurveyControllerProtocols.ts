@@ -1,3 +1,3 @@
-export * from '@/domain/usecases/Authentication';
-export * from '@/domain/usecases/AddSurvey';
+export * from '@/domain/usecases/account/Authentication';
+export * from '@/domain/usecases/survey/AddSurvey';
 export * from '@/presentation/protocols';

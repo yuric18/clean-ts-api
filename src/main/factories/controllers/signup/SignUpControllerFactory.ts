@@ -3,8 +3,8 @@ import {
 } from '@/presentation/controllers/auth/signup/SignUpController';
 import { Controller } from '@/presentation/protocols';
 import { makeSignUpValidation } from './SignUpValidationFactory';
-import { makeAuthentication } from '../../usecases/authentication/AuthenticationFactory';
-import { makeAddAccount } from '../../usecases/addAccount/AddAccountFactory';
+import { makeAuthentication } from '../../usecases/account/authentication/AuthenticationFactory';
+import { makeAddAccount } from '../../usecases/account/addAccount/AddAccountFactory';
 import { makeLogControllerDecorator } from '../../decorators/LogControllerDecoratorFactory';
 
 

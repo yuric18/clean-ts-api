@@ -2,7 +2,7 @@ import {
   AccountModel,
   AddAccountModel,
   AddAccountRepository,
-} from '@/data/usecases/addAccount/DbAddAccountProtocols';
+} from '@/data/usecases/account/addAccount/DbAddAccountProtocols';
 import { MongoHelper } from '../helpers/MongoHelper';
 import {
   LoadAccountByEmailRepository,
