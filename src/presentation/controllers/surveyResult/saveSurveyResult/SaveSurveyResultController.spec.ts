@@ -1,8 +1,15 @@
 import MockDate from 'mockdate';
-import { HttpRequest, LoadSurveyById, SurveyModel } from './SaveSurveyResultControllerProtocols';
+import {
+  HttpRequest,
+  LoadSurveyById,
+  SurveyModel,
+  InvalidParamError,
+  forbidden,
+  serverError,
+  SaveSurveyResult,
+  SurveyResultModel,
+} from './SaveSurveyResultControllerProtocols';
 import { SaveSurveyResultController } from './SaveSurveyResultController';
-import { InvalidParamError } from '@/presentation/errors';
-import { forbidden, serverError } from '@/presentation/helpers/http/HttpHelper';
 
 const makeFakeHttpRequest = (): HttpRequest => ({
   params: {
@@ -11,6 +18,7 @@ const makeFakeHttpRequest = (): HttpRequest => ({
   body: {
     answer: 'any_answer',
   },
+  accountId: 'any_account_id',
 });
 
 const makeFakeSurvey = (): SurveyModel => ({
@@ -33,17 +41,39 @@ const makeLoadSurveyById = (): LoadSurveyById => {
   return new LoadSurveyByIdStub();
 };
 
+
+const makeFakeSurveyResult = (): SurveyResultModel => ({
+  accountId: 'any_account_id',
+  answer: 'any_answer',
+  date: new Date(),
+  id: 'any_id',
+  surveyId: 'any_surveyId',
+});
+
+const makeSaveSurveyResult = (): SaveSurveyResult => {
+  class SaveSurveyResultStub implements SaveSurveyResult {
+    async save(): Promise<SurveyResultModel> {
+      return Promise.resolve(makeFakeSurveyResult());
+    }
+  }
+
+  return new SaveSurveyResultStub();
+};
+
 type SutTypes = {
   sut: SaveSurveyResultController
   loadSurveyByIdStub: LoadSurveyById
+  saveSurveyResultStub: SaveSurveyResult
 };
 
 const makeSut = (): SutTypes => {
   const loadSurveyByIdStub = makeLoadSurveyById();
-  const sut = new SaveSurveyResultController(loadSurveyByIdStub);
+  const saveSurveyResultStub = makeSaveSurveyResult();
+  const sut = new SaveSurveyResultController(loadSurveyByIdStub, saveSurveyResultStub);
   return {
     sut,
     loadSurveyByIdStub,
+    saveSurveyResultStub,
   };
 };
 
@@ -63,6 +93,18 @@ describe('Save Survey Result Controller', () => {
     const validateSpy = jest.spyOn(loadSurveyByIdStub, 'loadById');
     await sut.handle(makeFakeHttpRequest());
     expect(validateSpy).toHaveBeenCalledWith('any_survey_id');
+  });
+
+  test('should call SaveSurveyResult with correct values', async () => {
+    const { sut, saveSurveyResultStub } = makeSut();
+    const validateSpy = jest.spyOn(saveSurveyResultStub, 'save');
+    await sut.handle(makeFakeHttpRequest());
+    expect(validateSpy).toHaveBeenCalledWith({
+      surveyId: 'any_survey_id',
+      accountId: 'any_account_id',
+      date: new Date(),
+      answer: 'any_answer',
+    });
   });
 
   test('should return 403 if LoadSurveyById returns null', async () => {
