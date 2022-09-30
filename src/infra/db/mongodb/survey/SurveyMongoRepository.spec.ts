@@ -1,10 +1,10 @@
 import MockDate from 'mockdate';
-import { AddSurveyModel } from '@/domain/usecases/survey/AddSurvey';
+import { AddSurveyParams } from '@/domain/usecases/survey/AddSurvey';
 import { MongoHelper } from '../helpers/MongoHelper';
 import { SurveyMongoRepository } from './SurveyMongoRepository';
 import { ObjectId } from 'mongodb';
 
-const makeFakeSurvey = (): AddSurveyModel => ({
+const makeFakeSurvey = (): AddSurveyParams => ({
   answers: [{
     answer: 'any_answer',
     image: 'any_image',

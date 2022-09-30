@@ -3,11 +3,11 @@ import { SignUpController } from './SignUpController';
 import {
   HttpResponse,
   AddAccount,
-  AddAccountModel,
+  AddAccountParams,
   AccountModel, HttpRequest,
   Validation,
   Authentication,
-  AuthenticationModel,
+  AuthenticationParams,
 } from './SignUpControllerProtocols';
 import { ok, serverError, badRequest, forbidden } from '@/presentation/helpers/http/HttpHelper';
 
@@ -20,7 +20,7 @@ type SutTypes = {
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth(authentication: AuthenticationModel): Promise<string> {
+    async auth(authentication: AuthenticationParams): Promise<string> {
       return Promise.resolve('any_token');
     }
   }
@@ -46,7 +46,7 @@ const makeFakeAccount = (): AccountModel => ({
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
-    async add(account: AddAccountModel): Promise<AccountModel> {
+    async add(account: AddAccountParams): Promise<AccountModel> {
       return Promise.resolve(makeFakeAccount());
     }
   }

@@ -1,5 +1,5 @@
 import { MongoHelper } from '../helpers/MongoHelper';
-import { AddSurveyModel, AddSurveyRepository } from '@/data/usecases/survey/addSurvey/DbAddSurveyProtocols';
+import { AddSurveyParams, AddSurveyRepository } from '@/data/usecases/survey/addSurvey/DbAddSurveyProtocols';
 import { LoadSurveysRepository } from '@/data/protocols/db/survey/LoadSurveysRepository';
 import { SurveyModel } from '@/domain/entities/Survey';
 import { LoadSurveyByIdRepository } from '@/data/usecases/survey/loadSurveyById/DbLoadSurveyByIdProtocols';
@@ -9,7 +9,7 @@ export class SurveyMongoRepository implements AddSurveyRepository,
   LoadSurveysRepository,
   LoadSurveyByIdRepository {
 
-  async add(survey: AddSurveyModel): Promise<void> {
+  async add(survey: AddSurveyParams): Promise<void> {
     await MongoHelper.getCollection('surveys');
     await MongoHelper.insert(survey);
     return null;

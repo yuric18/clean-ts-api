@@ -1,6 +1,6 @@
 import {
   AccountModel,
-  AddAccountModel,
+  AddAccountParams,
   AddAccountRepository,
 } from '@/data/usecases/account/addAccount/DbAddAccountProtocols';
 import { MongoHelper } from '../helpers/MongoHelper';
@@ -19,7 +19,7 @@ export class AccountMongoRepository implements
   LoadAccountByTokenRepository {
 
     
-  async add(accountData: AddAccountModel): Promise<AccountModel> {
+  async add(accountData: AddAccountParams): Promise<AccountModel> {
     await MongoHelper.getCollection('accounts');
     const account = await MongoHelper.insert(accountData);
     return MongoHelper.map(account);
