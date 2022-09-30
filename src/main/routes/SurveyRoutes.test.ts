@@ -72,5 +72,24 @@ describe('Survey Routes', () => {
         .get('/api/surveys')
         .expect(403);
     });
+
+    test('Should return 204 on load surveys with an valid accessToken', async () => {
+      await MongoHelper.getCollection('accounts');
+      const { id } = MongoHelper.map(await MongoHelper.insert({
+        name: 'Yuri',
+        email: 'yuri.cabral@gmail.com',
+        password: '123',
+        role: 'admin',
+      }));
+      const accessToken = sign({ id }, env.jwtSecret);
+      await MongoHelper.collection.updateOne({ _id: id }, {
+        $set: { accessToken },
+      });
+
+      await request(app)
+        .get('/api/surveys')
+        .set('x-access-token', accessToken)
+        .expect(204);
+    });
   });
 });
