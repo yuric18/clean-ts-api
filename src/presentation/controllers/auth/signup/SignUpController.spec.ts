@@ -10,6 +10,7 @@ import {
   AuthenticationParams,
 } from './SignUpControllerProtocols';
 import { ok, serverError, badRequest, forbidden } from '@/presentation/helpers/http/HttpHelper';
+import { mockAccountModel } from '@/domain/tests';
 
 type SutTypes = {
   sut: SignUpController
@@ -37,17 +38,10 @@ const makeValidation = (): Validation => {
   return new ValidationStub();
 };
 
-const makeFakeAccount = (): AccountModel => ({
-  id: 'valid_id',
-  name: 'valid_name',
-  email: 'valid_email@mail.com',
-  password: 'valid_password',
-});
-
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
     async add(account: AddAccountParams): Promise<AccountModel> {
-      return Promise.resolve(makeFakeAccount());
+      return Promise.resolve(mockAccountModel());
     }
   }
   return new AddAccountStub();

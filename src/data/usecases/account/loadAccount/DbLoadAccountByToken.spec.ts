@@ -1,31 +1,7 @@
-import { AccountModel, LoadAccountByTokenRepository, Decrypter } from './DbLoadAccountByTokenProtocols';
+import { LoadAccountByTokenRepository, Decrypter } from './DbLoadAccountByTokenProtocols';
 import { DbLoadAccountByToken } from './DbLoadAccountByToken';
-
-const makeFakeAccount = (): AccountModel => ({
-  email: 'any_email@mail.com',
-  id: 'any_id',
-  name: 'any_name',
-  password: 'any_password',
-});
-
-const makeLoadAccountByTokenRepository = (): LoadAccountByTokenRepository => {
-  class LoadAccountByTokenRepositoryStub implements LoadAccountByTokenRepository {
-    async loadByToken(token: string, role?: string | undefined): Promise<AccountModel> {
-      return Promise.resolve(makeFakeAccount());
-    }
-  }
-  return new LoadAccountByTokenRepositoryStub();
-};
-
-
-const makeDecrypter = (): Decrypter => {
-  class DecrypterStub implements Decrypter {
-    decrypt(token: string): Promise<string> {
-      return Promise.resolve('any_token');
-    }
-  }
-  return new DecrypterStub();
-};
+import { mockAccountModel } from '@/domain/tests';
+import { mockDecrypter, mockLoadAccountByTokenRepository } from '@/data/test';
 
 type SutTypes = {
   sut: DbLoadAccountByToken,
@@ -34,8 +10,8 @@ type SutTypes = {
 };
 
 const makeSut = (): SutTypes => {
-  const loadAccountByTokenRepositoryStub = makeLoadAccountByTokenRepository();
-  const decrypterStub = makeDecrypter();
+  const loadAccountByTokenRepositoryStub = mockLoadAccountByTokenRepository();
+  const decrypterStub = mockDecrypter();
   const sut = new DbLoadAccountByToken(decrypterStub, loadAccountByTokenRepositoryStub);
   return {
     sut,
@@ -86,7 +62,7 @@ describe('DbLoadAccountByToken Usecase', () => {
   test('Should return an account on success', async () => {
     const { sut } = makeSut();
     const account = await sut.load('any_token', 'any_role');
-    expect(account).toEqual(makeFakeAccount());
+    expect(account).toEqual(mockAccountModel());
   });
 
 });
