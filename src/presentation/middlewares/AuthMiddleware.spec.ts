@@ -1,3 +1,4 @@
+import { mockAccountModel } from '@/domain/tests';
 import { AccessDeniedError } from '../errors';
 import { forbidden, ok, serverError } from '../helpers/http/HttpHelper';
 import { AuthMiddleware } from './AuthMiddleware';
@@ -9,18 +10,10 @@ const makeFakeHttpRequest = (): HttpRequest => ({
   },
 });
 
-const makeFakeAccount = (): AccountModel => ({
-  email: 'any_email@mail.com',
-  id: 'any_id',
-  name: 'any_name',
-  password: 'any_password',
-});
-
-
 const makeLoadAccountByToken = (): LoadAccountByToken => {
   class LoadAccountByTokenStub implements LoadAccountByToken {
     load(token: string): Promise<AccountModel> {
-      return Promise.resolve(makeFakeAccount());
+      return Promise.resolve(mockAccountModel());
     }
   }
   return new LoadAccountByTokenStub();
