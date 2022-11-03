@@ -3,24 +3,15 @@ import { LoadSurveysController } from './LoadSurveysController';
 import { LoadSurveys, SurveyModel } from './LoadSurveysControllerProtocols';
 import { noContent, ok, serverError } from '@/presentation/helpers/http/HttpHelper';
 import { mockSurveys } from '@/domain/tests/MockSurvey';
+import { mockLoadSurveys } from '@/presentation/test';
 
-const makeLoadSurveys = (): LoadSurveys => {
-  class LoadSurveysStub implements LoadSurveys {
-    async load(): Promise<SurveyModel[]> {
-      return Promise.resolve(mockSurveys());
-    }
-  }
-  return new LoadSurveysStub();
-};
 type SutTypes = {
   sut: LoadSurveysController,
   loadSurveysStub: LoadSurveys
 };
 
-
-
 const makeSut = (): SutTypes => {
-  const loadSurveysStub = makeLoadSurveys();
+  const loadSurveysStub = mockLoadSurveys();
   const sut = new LoadSurveysController(loadSurveysStub);
   return {
     sut,

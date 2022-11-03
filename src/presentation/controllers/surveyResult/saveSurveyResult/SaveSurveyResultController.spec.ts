@@ -2,16 +2,15 @@ import MockDate from 'mockdate';
 import {
   HttpRequest,
   LoadSurveyById,
-  SurveyModel,
   InvalidParamError,
   forbidden,
   serverError,
   SaveSurveyResult,
-  SurveyResultModel,
   ok,
 } from './SaveSurveyResultControllerProtocols';
 import { SaveSurveyResultController } from './SaveSurveyResultController';
-import { mockSurvey } from '@/domain/tests/MockSurvey';
+import { mockSaveSurveyResult, mockLoadSurveyById } from '@/presentation/test';
+import { mockSurveyResult } from '@/domain/tests/MockSurveyResult';
 
 const makeFakeHttpRequest = (): HttpRequest => ({
   params: {
@@ -23,33 +22,6 @@ const makeFakeHttpRequest = (): HttpRequest => ({
   accountId: 'any_account_id',
 });
 
-const makeLoadSurveyById = (): LoadSurveyById => {
-  class LoadSurveyByIdStub implements LoadSurveyById {
-    async loadById(): Promise<SurveyModel> {
-      return Promise.resolve(mockSurvey());
-    }
-  }
-
-  return new LoadSurveyByIdStub();
-};
-
-const makeFakeSurveyResult = (): SurveyResultModel => ({
-  accountId: 'any_account_id',
-  answer: 'any_answer',
-  date: new Date(),
-  id: 'any_id',
-  surveyId: 'any_surveyId',
-});
-
-const makeSaveSurveyResult = (): SaveSurveyResult => {
-  class SaveSurveyResultStub implements SaveSurveyResult {
-    async save(): Promise<SurveyResultModel> {
-      return Promise.resolve(makeFakeSurveyResult());
-    }
-  }
-
-  return new SaveSurveyResultStub();
-};
 
 type SutTypes = {
   sut: SaveSurveyResultController
@@ -58,8 +30,8 @@ type SutTypes = {
 };
 
 const makeSut = (): SutTypes => {
-  const loadSurveyByIdStub = makeLoadSurveyById();
-  const saveSurveyResultStub = makeSaveSurveyResult();
+  const loadSurveyByIdStub = mockLoadSurveyById();
+  const saveSurveyResultStub = mockSaveSurveyResult();
   const sut = new SaveSurveyResultController(loadSurveyByIdStub, saveSurveyResultStub);
   return {
     sut,
@@ -135,6 +107,6 @@ describe('Save Survey Result Controller', () => {
   test('should return 200 on success', async () => {
     const { sut } = makeSut();
     const response = await sut.handle(makeFakeHttpRequest());
-    expect(response).toEqual(ok(makeFakeSurveyResult()));
+    expect(response).toEqual(ok(mockSurveyResult()));
   });
 });
