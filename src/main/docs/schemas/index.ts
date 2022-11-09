@@ -8,3 +8,4 @@ export * from './signUp';
 export * from './addSurvey';
 export * from './saveSurveyResult';
 export * from './surveyResult';
+export * from './surveyResultAnswer';

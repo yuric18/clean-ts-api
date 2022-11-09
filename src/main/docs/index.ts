@@ -1,6 +1,6 @@
 import { badRequest, forbidden, notFound, serverError, unauthorized } from './components';
 import { loginPath, surveysPath, signUpPath, surveyResultPath } from './paths';
-import { loginSchema, accountSchema, errorSchema, surveyAnswersSchema, surveySchema, apiKeyAuthSchema, signUpSchema, addSurveySchema, saveSurveyResultSchema, surveyResultSchema } from './schemas';
+import { loginSchema, accountSchema, errorSchema, surveyAnswersSchema, surveySchema, apiKeyAuthSchema, signUpSchema, addSurveySchema, saveSurveyResultSchema, surveyResultSchema, surveyResultAnswerSchema } from './schemas';
 
 export default {
   openapi: '3.0.0',
@@ -36,6 +36,7 @@ export default {
     addSurvey: addSurveySchema,
     saveSurveyResult: saveSurveyResultSchema,
     surveyResult: surveyResultSchema,
+    surveyResultAnswer: surveyResultAnswerSchema,
   },
   components: {
     securitySchemes: {
