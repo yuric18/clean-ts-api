@@ -1,4 +1,4 @@
 import { ExpressMiddlewareAdapter } from '../adapters/ExpressMiddlewareAdapter';
-import { makeAuthMiddlware } from '../factories/middleware/AuthMiddleware';
+import { makeAuthMiddleware } from '../factories/middleware/AuthMiddleware';
 
-export const adminAuth = ExpressMiddlewareAdapter(makeAuthMiddlware('admin'));
+export const adminAuth = ExpressMiddlewareAdapter(makeAuthMiddleware('admin'));

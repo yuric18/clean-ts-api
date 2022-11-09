@@ -22,12 +22,13 @@ export class SignUpController implements Controller {
       const validationError = this.validation.validate(httpRequest.body);
       if (validationError) return badRequest(validationError);
 
-      const { name, email, password } = httpRequest.body;
+      const { name, email, password, role } = httpRequest.body;
 
       const account = await this.addAccount.add({
         name,
         email,
         password,
+        role,
       });
 
       if (!account) return forbidden(new EmailAlreadyExists());

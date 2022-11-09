@@ -6,5 +6,5 @@ import { makeLoadSurveysController } from '../factories/controllers/survey/LoadS
 
 export default (router: Router): void => {
   router.post('/surveys', adminAuth, ExpressRouteAdapter(makeAddSurveyController()));
-  router.get('/surveys', auth, ExpressRouteAdapter(makeLoadSurveysController()));
+  router.get('/surveys', adminAuth, ExpressRouteAdapter(makeLoadSurveysController()));
 };

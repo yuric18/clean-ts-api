@@ -10,6 +10,7 @@ const makeAccessToken = async (): Promise<string> => {
     name: 'Yuri',
     email: 'yuri.cabral@gmail.com',
     password: '123',
+    role: 'admin',
   }));
   const accessToken = sign({ id }, env.jwtSecret);
   await MongoHelper.collection.updateOne({ _id: id }, {
@@ -57,7 +58,7 @@ describe('Survey Result Routes', () => {
         date: new Date(),
       });
       const survey = MongoHelper.map(data);
-
+      
       const accessToken = await makeAccessToken();
       await request(app)
         .put(`/api/surveys/${survey.id}/results`)
