@@ -71,7 +71,6 @@ describe('Survey Result Mongo Repository', () => {
 
       const survey = await makeSurvey();
       const { id: accountId } = await makeAccount();
-      const { id: secondAccountId } = await makeAccount();
 
       await MongoHelper.getCollection('surveyResults');
       await MongoHelper.insert({
@@ -81,27 +80,19 @@ describe('Survey Result Mongo Repository', () => {
         date: new Date(),
       });
 
-      await MongoHelper.insert({
-        surveyId: new ObjectId(survey.id),
-        accountId: new ObjectId(secondAccountId),
-        answer: survey.answers[1].answer,
-        date: new Date(),
-      });
-
       const surveyResult = await sut.save({
         surveyId: survey.id,
         accountId,
-        answer: survey.answers[0].answer,
+        answer: survey.answers[1].answer,
         date: new Date(),
       });
 
       expect(surveyResult).toBeTruthy();
       expect(surveyResult.answers[0].answer).toBe(survey.answers[1].answer);
       expect(surveyResult.answers[0].count).toBe(1);
-      expect(surveyResult.answers[0].percent).toBe(50);
-      expect(surveyResult.answers[1].answer).toBe(survey.answers[0].answer);
-      expect(surveyResult.answers[1].count).toBe(1);
-      expect(surveyResult.answers[1].percent).toBe(50);
+      expect(surveyResult.answers[0].percent).toBe(100);
+      expect(surveyResult.answers[1].count).toBe(0);
+      expect(surveyResult.answers[1].percent).toBe(0);
     });
   });
 });
