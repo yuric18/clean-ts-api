@@ -1,8 +1,12 @@
+import { LoadSurveyResultRepository } from '@/data/protocols/db/surveyResult/LoadSurveyResultRepository';
 import { SaveSurveyResultModel, SaveSurveyResultRepository, SurveyResultModel } from '@/data/usecases/surveyResult/saveSurveyResult/DbSaveSurveyResultProtocols';
 import { ObjectId } from 'mongodb';
 import { MongoHelper, QueryBuilder } from '../helpers';
 
-export class SurveyResultMongoRepository implements SaveSurveyResultRepository {
+export class SurveyResultMongoRepository implements
+  SaveSurveyResultRepository,
+  LoadSurveyResultRepository {
+
   async save(data: SaveSurveyResultModel): Promise<SurveyResultModel> {
     await MongoHelper.getCollection('surveyResults');
     await MongoHelper.collection.findOneAndUpdate({
@@ -17,7 +21,7 @@ export class SurveyResultMongoRepository implements SaveSurveyResultRepository {
     return surveyResult;
   }
 
-  private async loadBySurveyId(surveyId: string): Promise<SurveyResultModel> {
+  async loadBySurveyId(surveyId: string): Promise<SurveyResultModel> {
     await MongoHelper.getCollection('surveyResults');
 
     const aggregate = new QueryBuilder()
