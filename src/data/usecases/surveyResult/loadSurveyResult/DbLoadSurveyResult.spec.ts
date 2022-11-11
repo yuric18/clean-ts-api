@@ -1,3 +1,4 @@
+import MockDate from 'mockdate';
 import { LoadSurveyResultRepository } from '@/data/protocols/db/surveyResult/LoadSurveyResultRepository';
 import { mockLoadSurveyResultRepository } from '@/data/test';
 import { mockSurveyResult } from '@/domain/tests/MockSurveyResult';
@@ -18,6 +19,15 @@ const makeSut = (): SutTypes => {
 };
 
 describe('Db Load Survey Result', () => {
+
+  beforeAll(() => {
+    MockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    MockDate.reset();
+  });
+
   test('should call LoadSurveyResultRepository with correct values', async () => {
     const { sut, loadSurveyResultRepositoryStub } = makeSut();
     const loadSpy = jest.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId');
