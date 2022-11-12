@@ -1,5 +1,9 @@
 import { LoadSurveyResult } from '@/domain/usecases/surveyResult/LoadSurveyResult';
-import { forbidden, ok } from '@/presentation/helpers/http/HttpHelper';
+import {
+  forbidden,
+  ok,
+  serverError,
+} from '@/presentation/helpers/http/HttpHelper';
 import {
   Controller,
   HttpRequest,
@@ -11,11 +15,15 @@ export class LoadSurveyResultController implements Controller {
   constructor(private readonly loadSurveyResult: LoadSurveyResult) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    const { surveyId } = httpRequest.params;
+    try {
+      const { surveyId } = httpRequest.params;
 
-    const surveyResult = await this.loadSurveyResult.load(surveyId);
+      const surveyResult = await this.loadSurveyResult.load(surveyId);
 
-    if (!surveyResult) return forbidden(new InvalidParamError('surveyId'));
-    return ok(surveyResult);
+      if (!surveyResult) return forbidden(new InvalidParamError('surveyId'));
+      return ok(surveyResult);
+    } catch (e) {
+      return serverError(e);
+    }
   }
 }
