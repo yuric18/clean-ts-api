@@ -1,20 +1,27 @@
 import MockDate from 'mockdate';
 import { LoadSurveyResultRepository } from '@/data/protocols/db/surveyResult/LoadSurveyResultRepository';
-import { mockLoadSurveyResultRepository } from '@/data/test';
+import { mockLoadSurveyByIdRepository, mockLoadSurveyResultRepository } from '@/data/test';
 import { mockSurveyResult } from '@/domain/tests/MockSurveyResult';
 import { DbLoadSurveyResult } from './DbLoadSurveyResult';
+import { LoadSurveyByIdRepository } from '../../survey/loadSurveyById/DbLoadSurveyByIdProtocols';
 
 type SutTypes = {
-  sut: DbLoadSurveyResult,
-  loadSurveyResultRepositoryStub: LoadSurveyResultRepository,
+  sut: DbLoadSurveyResult
+  loadSurveyResultRepositoryStub: LoadSurveyResultRepository
+  loadSurveyByIdRepositoryStub: LoadSurveyByIdRepository
 };
 
 const makeSut = (): SutTypes => {
   const loadSurveyResultRepositoryStub = mockLoadSurveyResultRepository();
-  const sut = new DbLoadSurveyResult(loadSurveyResultRepositoryStub);
+  const loadSurveyByIdRepositoryStub = mockLoadSurveyByIdRepository();
+  const sut = new DbLoadSurveyResult(
+    loadSurveyResultRepositoryStub,
+    loadSurveyByIdRepositoryStub,
+  );
   return {
     sut,
     loadSurveyResultRepositoryStub,
+    loadSurveyByIdRepositoryStub,
   };
 };
 
@@ -41,6 +48,20 @@ describe('Db Load Survey Result', () => {
       .mockRejectedValueOnce(new Error());
     const promise = sut.load('any_survey_id');
     expect(promise).rejects.toThrow();
+  });
+
+  test('should call LoadSurveyByIdRepository with correct values if LoadSurveyResultRepository returns null', async () => {
+    const {
+      sut,
+      loadSurveyResultRepositoryStub,
+      loadSurveyByIdRepositoryStub,
+    } = makeSut();
+    jest.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId')
+      .mockResolvedValueOnce(null);
+
+    const loadSpy = jest.spyOn(loadSurveyByIdRepositoryStub, 'loadById');
+    await sut.load('any_survey_id');
+    expect(loadSpy).toHaveBeenCalledWith('any_survey_id');
   });
 
   test('Should return SurveyResult on success', async () => {
