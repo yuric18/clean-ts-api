@@ -38,15 +38,15 @@ describe('Db Load Survey Result', () => {
   test('should call LoadSurveyResultRepository with correct values', async () => {
     const { sut, loadSurveyResultRepositoryStub } = makeSut();
     const loadSpy = jest.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId');
-    await sut.load('any_survey_id');
-    expect(loadSpy).toHaveBeenCalledWith('any_survey_id');
+    await sut.load('any_surveyId');
+    expect(loadSpy).toHaveBeenCalledWith('any_surveyId');
   });
 
   test('Should throw if LoadSurveyResultRepository throws', () => {
     const { sut, loadSurveyResultRepositoryStub } = makeSut();
     jest.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId')
       .mockRejectedValueOnce(new Error());
-    const promise = sut.load('any_survey_id');
+    const promise = sut.load('any_surveyId');
     expect(promise).rejects.toThrow();
   });
 
@@ -60,13 +60,25 @@ describe('Db Load Survey Result', () => {
       .mockResolvedValueOnce(null);
 
     const loadSpy = jest.spyOn(loadSurveyByIdRepositoryStub, 'loadById');
-    await sut.load('any_survey_id');
-    expect(loadSpy).toHaveBeenCalledWith('any_survey_id');
+    await sut.load('any_surveyId');
+    expect(loadSpy).toHaveBeenCalledWith('any_surveyId');
+  });
+
+  test('should return SurveyResultModel with all answers with count 0 if LoadSurveyResultRepository returns null', async () => {
+    const {
+      sut,
+      loadSurveyResultRepositoryStub,
+    } = makeSut();
+    jest.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId')
+      .mockResolvedValueOnce(null);
+
+    const result = await sut.load('any_surveyId');
+    expect(result).toEqual(mockSurveyResult());
   });
 
   test('Should return SurveyResult on success', async () => {
     const { sut } = makeSut();
-    const result = await sut.load('any_survey_id');
+    const result = await sut.load('any_surveyId');
     expect(result).toEqual(mockSurveyResult());
   });
 

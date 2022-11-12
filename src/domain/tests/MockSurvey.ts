@@ -7,6 +7,8 @@ export const mockSurvey = (): SurveyModel => ({
   answers: [{
     answer: 'any_answer',
     image: 'any_image',
+  }, {
+    answer: 'other_answer',
   }],
   date: new Date(),
 });
