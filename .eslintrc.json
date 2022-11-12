@@ -2,9 +2,8 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "extends": [
-    "airbnb-typescript/base"
-  ],
+  "extends": ["airbnb-typescript/base", "prettier"],
+  "plugins": ["prettier"],
   "rules": {
     "import/extensions": "off",
     "import/no-extraneous-dependencies": "off",
