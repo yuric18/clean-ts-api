@@ -1,5 +1,5 @@
 import { LoadSurveyResult } from '@/domain/usecases/surveyResult/LoadSurveyResult';
-import { forbidden } from '@/presentation/helpers/http/HttpHelper';
+import { forbidden, ok } from '@/presentation/helpers/http/HttpHelper';
 import {
   Controller,
   HttpRequest,
@@ -16,6 +16,6 @@ export class LoadSurveyResultController implements Controller {
     const surveyResult = await this.loadSurveyResult.load(surveyId);
 
     if (!surveyResult) return forbidden(new InvalidParamError('surveyId'));
-    return null;
+    return ok(surveyResult);
   }
 }
