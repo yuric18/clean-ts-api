@@ -19,7 +19,9 @@
     "test:coveralls": "npm run test:ci -- && coveralls < coverage/lcov.info",
     "lint": "eslint 'src/**'",
     "lint:staged": "lint-staged",
-    "lint:fix": "eslint 'src/**' --fix"
+    "lint:fix": "eslint 'src/**' --fix",
+    "prettier:check": "prettier --check .",
+    "prettier:fix": "prettier --write ."
   },
   "keywords": [],
   "author": "",
