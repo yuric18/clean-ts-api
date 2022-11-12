@@ -1,9 +1,6 @@
-import { mockSurveyResult } from '@/domain/tests/MockSurveyResult';
 import { LoadSurveyResult } from '@/domain/usecases/surveyResult/LoadSurveyResult';
-import {
-  HttpRequest,
-  SurveyResultModel,
-} from '../saveSurveyResult/SaveSurveyResultControllerProtocols';
+import { mockLoadSurveyResult } from '@/presentation/test';
+import { HttpRequest } from '../saveSurveyResult/SaveSurveyResultControllerProtocols';
 import { LoadSurveyResultController } from './LoadSurveyResultController';
 
 const makeFakeRequest = (): HttpRequest => ({
@@ -11,15 +8,6 @@ const makeFakeRequest = (): HttpRequest => ({
     surveyId: 'any_id',
   },
 });
-
-const mockLoadSurveyResult = () => {
-  class LoadSurveyResultStub implements LoadSurveyResult {
-    load(surveyId: string): Promise<SurveyResultModel> {
-      return Promise.resolve(mockSurveyResult());
-    }
-  }
-  return new LoadSurveyResultStub();
-};
 
 type SutTypes = {
   sut: LoadSurveyResultController;
