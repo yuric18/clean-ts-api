@@ -1,7 +1,5 @@
 import { Authentication } from '@/domain/usecases/account/Authentication';
-import {
-  AccountMongoRepository,
-} from '@/infra/db/mongodb/account/AccountMongoRepository';
+import { AccountMongoRepository } from '@/infra/db/mongodb/account/AccountMongoRepository';
 import { BcryptAdapter } from '@/infra/criptography/bcrypt/BcryptAdapter';
 import { JwtAdapter } from '@/infra/criptography/jwt/JwtAdapter';
 import env from '@/main/config/env';
@@ -15,6 +13,6 @@ export const makeAuthentication = (): Authentication => {
     accountMongoRepository,
     bcryptAdapter,
     jwtAdapter,
-    accountMongoRepository,
+    accountMongoRepository
   );
 };

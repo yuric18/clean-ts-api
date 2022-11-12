@@ -11,8 +11,7 @@ describe('AddSurveyValidation Factory', () => {
   test('Should call ValidationComposite with all validations', async () => {
     makeAddSurveyValidation();
     const validations: Validation[] = [
-      ...['answers', 'question']
-        .map(f => new RequiredFieldValidation(f)),
+      ...['answers', 'question'].map((f) => new RequiredFieldValidation(f)),
     ];
 
     expect(ValidationComposite).toHaveBeenCalledWith(validations);

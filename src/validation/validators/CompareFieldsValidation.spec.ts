@@ -2,7 +2,7 @@ import { InvalidParamError } from '../../presentation/errors';
 import { CompareFieldsValidation } from './CompareFieldsValidation';
 
 type SutTypes = {
-  sut: CompareFieldsValidation
+  sut: CompareFieldsValidation;
 };
 
 const makeSut = (): SutTypes => {

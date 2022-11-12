@@ -22,17 +22,19 @@ const makeFakeHttpRequest = (): HttpRequest => ({
   accountId: 'any_account_id',
 });
 
-
 type SutTypes = {
-  sut: SaveSurveyResultController
-  loadSurveyByIdStub: LoadSurveyById
-  saveSurveyResultStub: SaveSurveyResult
+  sut: SaveSurveyResultController;
+  loadSurveyByIdStub: LoadSurveyById;
+  saveSurveyResultStub: SaveSurveyResult;
 };
 
 const makeSut = (): SutTypes => {
   const loadSurveyByIdStub = mockLoadSurveyById();
   const saveSurveyResultStub = mockSaveSurveyResult();
-  const sut = new SaveSurveyResultController(loadSurveyByIdStub, saveSurveyResultStub);
+  const sut = new SaveSurveyResultController(
+    loadSurveyByIdStub,
+    saveSurveyResultStub
+  );
   return {
     sut,
     loadSurveyByIdStub,
@@ -41,7 +43,6 @@ const makeSut = (): SutTypes => {
 };
 
 describe('Save Survey Result Controller', () => {
-
   beforeAll(() => {
     MockDate.set(new Date());
   });
@@ -91,7 +92,9 @@ describe('Save Survey Result Controller', () => {
 
   test('should return 500 if LoadSurveyById throws', async () => {
     const { sut, loadSurveyByIdStub } = makeSut();
-    jest.spyOn(loadSurveyByIdStub, 'loadById').mockRejectedValueOnce(new Error());
+    jest
+      .spyOn(loadSurveyByIdStub, 'loadById')
+      .mockRejectedValueOnce(new Error());
     const response = await sut.handle(makeFakeHttpRequest());
     expect(response).toEqual(serverError(new Error()));
   });
@@ -103,7 +106,6 @@ describe('Save Survey Result Controller', () => {
     expect(response).toEqual(serverError(new Error()));
   });
 
-  
   test('should return 200 on success', async () => {
     const { sut } = makeSut();
     const response = await sut.handle(makeFakeHttpRequest());

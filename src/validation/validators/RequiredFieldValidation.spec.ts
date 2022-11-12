@@ -2,7 +2,7 @@ import { MissingParamError } from '../../presentation/errors';
 import { RequiredFieldValidation } from './RequiredFieldValidation';
 
 type SutTypes = {
-  sut: RequiredFieldValidation
+  sut: RequiredFieldValidation;
 };
 
 const makeSut = (): SutTypes => {

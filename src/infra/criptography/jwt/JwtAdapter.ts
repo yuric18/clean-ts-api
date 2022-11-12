@@ -3,9 +3,8 @@ import { Decrypter } from '@/data/protocols/criptography/Decrypter';
 import { Encrypter } from '@/data/protocols/criptography/Encrypter';
 
 export class JwtAdapter implements Encrypter, Decrypter {
-
   constructor(private readonly secret: string) {}
-  
+
   async encrypt(value: string): Promise<string> {
     return jwt.sign({ id: value }, this.secret);
   }
@@ -14,5 +13,4 @@ export class JwtAdapter implements Encrypter, Decrypter {
     const value: any = await jwt.verify(token, this.secret);
     return value;
   }
-
 }

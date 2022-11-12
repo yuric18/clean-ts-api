@@ -9,13 +9,14 @@ import {
 export class DbSaveSurveyResult implements SaveSurveyResult {
   constructor(
     private readonly saveSurveyResultRepository: SaveSurveyResultRepository,
-    private readonly loadSurveyResultRepository: LoadSurveyResultRepository,
-  ) { }
+    private readonly loadSurveyResultRepository: LoadSurveyResultRepository
+  ) {}
 
   async save(survey: SaveSurveyResultModel): Promise<SurveyResultModel> {
     await this.saveSurveyResultRepository.save(survey);
-    const dbSurvey = await this.loadSurveyResultRepository.loadBySurveyId(survey.surveyId);
+    const dbSurvey = await this.loadSurveyResultRepository.loadBySurveyId(
+      survey.surveyId
+    );
     return dbSurvey;
   }
-
 }

@@ -13,7 +13,7 @@ import {
 export class SaveSurveyResultController implements Controller {
   constructor(
     private readonly loadSurveyById: LoadSurveyById,
-    private readonly saveSurveyResult: SaveSurveyResult,
+    private readonly saveSurveyResult: SaveSurveyResult
   ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -22,12 +22,12 @@ export class SaveSurveyResultController implements Controller {
       const { surveyId } = httpRequest.params;
       const { answer } = httpRequest.body;
       const survey = await this.loadSurveyById.loadById(surveyId);
-  
+
       if (!survey) {
         return forbidden(new InvalidParamError('surveyId'));
       }
 
-      const answers = survey.answers.map(a => a.answer);
+      const answers = survey.answers.map((a) => a.answer);
       if (!answers.includes(answer)) {
         return forbidden(new InvalidParamError('answer'));
       }
@@ -38,7 +38,7 @@ export class SaveSurveyResultController implements Controller {
         answer,
         date: new Date(),
       });
-  
+
       return ok(result);
     } catch (e) {
       return serverError(e);

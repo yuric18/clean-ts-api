@@ -1,13 +1,17 @@
 import MockDate from 'mockdate';
 import { LoadSurveysController } from './LoadSurveysController';
 import { LoadSurveys, SurveyModel } from './LoadSurveysControllerProtocols';
-import { noContent, ok, serverError } from '@/presentation/helpers/http/HttpHelper';
+import {
+  noContent,
+  ok,
+  serverError,
+} from '@/presentation/helpers/http/HttpHelper';
 import { mockSurveys } from '@/domain/tests/MockSurvey';
 import { mockLoadSurveys } from '@/presentation/test';
 
 type SutTypes = {
-  sut: LoadSurveysController,
-  loadSurveysStub: LoadSurveys
+  sut: LoadSurveysController;
+  loadSurveysStub: LoadSurveys;
 };
 
 const makeSut = (): SutTypes => {
@@ -17,11 +21,9 @@ const makeSut = (): SutTypes => {
     sut,
     loadSurveysStub,
   };
-
 };
 
 describe('Load Surveys Controller', () => {
-  
   beforeAll(() => {
     MockDate.set(new Date());
   });
@@ -45,16 +47,16 @@ describe('Load Surveys Controller', () => {
 
   test('Should return 204 if LoadSurveys returns empty', async () => {
     const { sut, loadSurveysStub } = makeSut();
-    jest.spyOn(loadSurveysStub, 'load')
-      .mockResolvedValue([]);
+    jest.spyOn(loadSurveysStub, 'load').mockResolvedValue([]);
     const httpResponse = await sut.handle({});
     expect(httpResponse).toEqual(noContent());
   });
 
   test('should return 500 if LoadSurveys use case throws', async () => {
     const { sut, loadSurveysStub } = makeSut();
-    jest.spyOn(loadSurveysStub, 'load')
-      .mockImplementationOnce(() => { throw new Error(); });
+    jest.spyOn(loadSurveysStub, 'load').mockImplementationOnce(() => {
+      throw new Error();
+    });
     const httpResponse = await sut.handle({});
     expect(httpResponse).toEqual(serverError(new Error()));
   });

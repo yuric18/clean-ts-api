@@ -8,7 +8,6 @@ const makeSut = (): SurveyMongoRepository => {
 };
 
 describe('Survey Mongo Repository', () => {
-
   beforeAll(async () => {
     MockDate.set(new Date());
     await MongoHelper.connect(process.env.MONGO_URL);
@@ -23,12 +22,14 @@ describe('Survey Mongo Repository', () => {
     await MongoHelper.getCollection('surveys');
     await MongoHelper.collection.deleteMany({});
   });
-  
+
   describe('add()', () => {
     test('Should return null on add success', async () => {
       const sut = makeSut();
       const addResult = await sut.add(mockSurvey());
-      const survey = await MongoHelper.collection.findOne({ question: 'any_question' });
+      const survey = await MongoHelper.collection.findOne({
+        question: 'any_question',
+      });
       expect(addResult).toBeNull();
       expect(survey).toBeTruthy();
     });
@@ -36,10 +37,7 @@ describe('Survey Mongo Repository', () => {
 
   describe('loadAll()', () => {
     test('should load all surveys on success', async () => {
-      await MongoHelper.collection.insertMany([
-        mockSurvey(),
-        mockSurvey(),
-      ]);
+      await MongoHelper.collection.insertMany([mockSurvey(), mockSurvey()]);
       const sut = makeSut();
       const surveys = await sut.loadAll();
       expect(surveys.length).toBe(2);

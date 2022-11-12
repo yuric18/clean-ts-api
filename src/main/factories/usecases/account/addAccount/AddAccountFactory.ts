@@ -1,6 +1,4 @@
-import {
-  AccountMongoRepository,
-} from '@/infra/db/mongodb/account/AccountMongoRepository';
+import { AccountMongoRepository } from '@/infra/db/mongodb/account/AccountMongoRepository';
 import { BcryptAdapter } from '@/infra/criptography/bcrypt/BcryptAdapter';
 import env from '@/main/config/env';
 import { AddAccount } from '@/domain/usecases/account/AddAccount';

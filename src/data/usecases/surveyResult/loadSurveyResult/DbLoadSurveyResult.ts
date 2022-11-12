@@ -6,11 +6,12 @@ import { LoadSurveyByIdRepository } from '../../survey/loadSurveyById/DbLoadSurv
 export class DbLoadSurveyResult implements LoadSurveyResult {
   constructor(
     private readonly loadSurveyResultRepository: LoadSurveyResultRepository,
-    private readonly loadSurveyByIdRepository: LoadSurveyByIdRepository,
-  ) { }
+    private readonly loadSurveyByIdRepository: LoadSurveyByIdRepository
+  ) {}
 
   async load(surveyId: string): Promise<SurveyResultModel> {
-    const surveyResultFound = await this.loadSurveyResultRepository.loadBySurveyId(surveyId);
+    const surveyResultFound =
+      await this.loadSurveyResultRepository.loadBySurveyId(surveyId);
 
     if (!surveyResultFound) {
       const survey = await this.loadSurveyByIdRepository.loadById(surveyId);
@@ -18,10 +19,12 @@ export class DbLoadSurveyResult implements LoadSurveyResult {
         surveyId,
         question: survey.question,
         date: survey.date,
-        answers: survey.answers.map(a => Object.assign({}, a, {
-          count: 0,
-          percent: 0,
-        })),
+        answers: survey.answers.map((a) =>
+          Object.assign({}, a, {
+            count: 0,
+            percent: 0,
+          })
+        ),
       };
     }
 

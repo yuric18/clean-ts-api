@@ -1,6 +1,24 @@
-import { badRequest, forbidden, notFound, serverError, unauthorized } from './components';
+import {
+  badRequest,
+  forbidden,
+  notFound,
+  serverError,
+  unauthorized,
+} from './components';
 import { loginPath, surveysPath, signUpPath, surveyResultPath } from './paths';
-import { loginSchema, accountSchema, errorSchema, surveyAnswersSchema, surveySchema, apiKeyAuthSchema, signUpSchema, addSurveySchema, saveSurveyResultSchema, surveyResultSchema, surveyResultAnswerSchema } from './schemas';
+import {
+  loginSchema,
+  accountSchema,
+  errorSchema,
+  surveyAnswersSchema,
+  surveySchema,
+  apiKeyAuthSchema,
+  signUpSchema,
+  addSurveySchema,
+  saveSurveyResultSchema,
+  surveyResultSchema,
+  surveyResultAnswerSchema,
+} from './schemas';
 
 export default {
   openapi: '3.0.0',
@@ -13,13 +31,8 @@ export default {
       url: 'http://opensource.org/licenses/GPL-3.0',
     },
   },
-  servers: [
-    { url: '/api' },
-  ],
-  tags: [
-    { name: 'Login' },
-    { name: 'Enquete' },
-  ],
+  servers: [{ url: '/api' }],
+  tags: [{ name: 'Login' }, { name: 'Enquete' }],
   paths: {
     '/login': loginPath,
     '/signup': signUpPath,

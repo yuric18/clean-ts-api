@@ -1,22 +1,29 @@
 import { LoadSurveyResultRepository } from '@/data/protocols/db/surveyResult/LoadSurveyResultRepository';
-import { SaveSurveyResultModel, SaveSurveyResultRepository, SurveyResultModel } from '@/data/usecases/surveyResult/saveSurveyResult/DbSaveSurveyResultProtocols';
+import {
+  SaveSurveyResultModel,
+  SaveSurveyResultRepository,
+  SurveyResultModel,
+} from '@/data/usecases/surveyResult/saveSurveyResult/DbSaveSurveyResultProtocols';
 import { ObjectId } from 'mongodb';
 import { MongoHelper, QueryBuilder } from '../helpers';
 
-export class SurveyResultMongoRepository implements
-  SaveSurveyResultRepository,
-  LoadSurveyResultRepository {
-
+export class SurveyResultMongoRepository
+  implements SaveSurveyResultRepository, LoadSurveyResultRepository
+{
   async save(data: SaveSurveyResultModel): Promise<void> {
     await MongoHelper.getCollection('surveyResults');
-    await MongoHelper.collection.findOneAndUpdate({
-      surveyId: new ObjectId(data.surveyId),
-      accountId: new ObjectId(data.accountId),
-    }, {
-      $set: { answer: data.answer, date: data.date },
-    }, {
-      upsert: true,
-    });
+    await MongoHelper.collection.findOneAndUpdate(
+      {
+        surveyId: new ObjectId(data.surveyId),
+        accountId: new ObjectId(data.accountId),
+      },
+      {
+        $set: { answer: data.answer, date: data.date },
+      },
+      {
+        upsert: true,
+      }
+    );
   }
 
   async loadBySurveyId(surveyId: string): Promise<SurveyResultModel> {
@@ -64,31 +71,31 @@ export class SurveyResultMongoRepository implements
             input: '$_id.answers',
             as: 'item',
             in: {
-              $mergeObjects: ['$$item', {
-                count: {
-                  $cond: {
-                    if: {
-                      $eq: ['$$item.answer', '$_id.answer'],
+              $mergeObjects: [
+                '$$item',
+                {
+                  count: {
+                    $cond: {
+                      if: {
+                        $eq: ['$$item.answer', '$_id.answer'],
+                      },
+                      then: '$count',
+                      else: 0,
                     },
-                    then: '$count',
-                    else: 0,
+                  },
+                  percent: {
+                    $cond: {
+                      if: {
+                        $eq: ['$$item.answer', '$_id.answer'],
+                      },
+                      then: {
+                        $multiply: [{ $divide: ['$count', '$_id.total'] }, 100],
+                      },
+                      else: 0,
+                    },
                   },
                 },
-                percent: {
-                  $cond: {
-                    if: {
-                      $eq: ['$$item.answer', '$_id.answer'],
-                    },
-                    then: {
-                      $multiply: [
-                        { $divide: ['$count', '$_id.total'] },
-                        100,
-                      ],
-                    },
-                    else: 0,
-                  },
-                },
-              }],
+              ],
             },
           },
         },
@@ -107,7 +114,7 @@ export class SurveyResultMongoRepository implements
         },
       })
       .project({
-        '_id': 0,
+        _id: 0,
         surveyId: '$_id.surveyId',
         question: '$_id.question',
         date: '$_id.date',
@@ -169,8 +176,9 @@ export class SurveyResultMongoRepository implements
       })
       .build();
 
-    const surveyResult = await MongoHelper.collection.aggregate(aggregate).toArray();
+    const surveyResult = await MongoHelper.collection
+      .aggregate(aggregate)
+      .toArray();
     return surveyResult.length && MongoHelper.map(surveyResult[0]);
   }
-
 }

@@ -1,11 +1,11 @@
 export interface SurveyModel {
-  id: string
-  question: string
-  answers: SurveyAnswerModel[]
-  date: Date
+  id: string;
+  question: string;
+  answers: SurveyAnswerModel[];
+  date: Date;
 }
 
 export interface SurveyAnswerModel {
-  image?: string
-  answer: string
+  image?: string;
+  answer: string;
 }

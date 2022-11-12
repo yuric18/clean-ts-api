@@ -1,14 +1,17 @@
 import MockDate from 'mockdate';
 import { LoadSurveyResultRepository } from '@/data/protocols/db/surveyResult/LoadSurveyResultRepository';
-import { mockLoadSurveyByIdRepository, mockLoadSurveyResultRepository } from '@/data/test';
+import {
+  mockLoadSurveyByIdRepository,
+  mockLoadSurveyResultRepository,
+} from '@/data/test';
 import { mockSurveyResult } from '@/domain/tests/MockSurveyResult';
 import { DbLoadSurveyResult } from './DbLoadSurveyResult';
 import { LoadSurveyByIdRepository } from '../../survey/loadSurveyById/DbLoadSurveyByIdProtocols';
 
 type SutTypes = {
-  sut: DbLoadSurveyResult
-  loadSurveyResultRepositoryStub: LoadSurveyResultRepository
-  loadSurveyByIdRepositoryStub: LoadSurveyByIdRepository
+  sut: DbLoadSurveyResult;
+  loadSurveyResultRepositoryStub: LoadSurveyResultRepository;
+  loadSurveyByIdRepositoryStub: LoadSurveyByIdRepository;
 };
 
 const makeSut = (): SutTypes => {
@@ -16,7 +19,7 @@ const makeSut = (): SutTypes => {
   const loadSurveyByIdRepositoryStub = mockLoadSurveyByIdRepository();
   const sut = new DbLoadSurveyResult(
     loadSurveyResultRepositoryStub,
-    loadSurveyByIdRepositoryStub,
+    loadSurveyByIdRepositoryStub
   );
   return {
     sut,
@@ -26,7 +29,6 @@ const makeSut = (): SutTypes => {
 };
 
 describe('Db Load Survey Result', () => {
-
   beforeAll(() => {
     MockDate.set(new Date());
   });
@@ -37,14 +39,18 @@ describe('Db Load Survey Result', () => {
 
   test('should call LoadSurveyResultRepository with correct values', async () => {
     const { sut, loadSurveyResultRepositoryStub } = makeSut();
-    const loadSpy = jest.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId');
+    const loadSpy = jest.spyOn(
+      loadSurveyResultRepositoryStub,
+      'loadBySurveyId'
+    );
     await sut.load('any_surveyId');
     expect(loadSpy).toHaveBeenCalledWith('any_surveyId');
   });
 
   test('Should throw if LoadSurveyResultRepository throws', () => {
     const { sut, loadSurveyResultRepositoryStub } = makeSut();
-    jest.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId')
+    jest
+      .spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId')
       .mockRejectedValueOnce(new Error());
     const promise = sut.load('any_surveyId');
     expect(promise).rejects.toThrow();
@@ -56,7 +62,8 @@ describe('Db Load Survey Result', () => {
       loadSurveyResultRepositoryStub,
       loadSurveyByIdRepositoryStub,
     } = makeSut();
-    jest.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId')
+    jest
+      .spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId')
       .mockResolvedValueOnce(null);
 
     const loadSpy = jest.spyOn(loadSurveyByIdRepositoryStub, 'loadById');
@@ -65,11 +72,9 @@ describe('Db Load Survey Result', () => {
   });
 
   test('should return SurveyResultModel with all answers with count 0 if LoadSurveyResultRepository returns null', async () => {
-    const {
-      sut,
-      loadSurveyResultRepositoryStub,
-    } = makeSut();
-    jest.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId')
+    const { sut, loadSurveyResultRepositoryStub } = makeSut();
+    jest
+      .spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId')
       .mockResolvedValueOnce(null);
 
     const result = await sut.load('any_surveyId');
@@ -81,5 +86,4 @@ describe('Db Load Survey Result', () => {
     const result = await sut.load('any_surveyId');
     expect(result).toEqual(mockSurveyResult());
   });
-
 });

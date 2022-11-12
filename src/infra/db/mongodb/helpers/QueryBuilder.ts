@@ -46,5 +46,4 @@ export class QueryBuilder {
   build(): object[] {
     return this.query;
   }
-
 }

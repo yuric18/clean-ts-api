@@ -5,8 +5,8 @@ import { mockLoadSurveyByIdRepository } from '@/data/test';
 import { mockSurvey } from '@/domain/tests/MockSurvey';
 
 type SutTypes = {
-  sut: DbLoadSurveyById,
-  loadSurveyByIdRepositoryStub: LoadSurveyByIdRepository
+  sut: DbLoadSurveyById;
+  loadSurveyByIdRepositoryStub: LoadSurveyByIdRepository;
 };
 
 const makeSut = (): SutTypes => {
@@ -19,7 +19,6 @@ const makeSut = (): SutTypes => {
 };
 
 describe('Db Load Surveys', () => {
-
   beforeAll(() => {
     MockDate.set(new Date());
   });
@@ -43,7 +42,8 @@ describe('Db Load Surveys', () => {
 
   test('Should throw if LoadSurveyByIdRepository throws', () => {
     const { sut, loadSurveyByIdRepositoryStub } = makeSut();
-    jest.spyOn(loadSurveyByIdRepositoryStub, 'loadById')
+    jest
+      .spyOn(loadSurveyByIdRepositoryStub, 'loadById')
       .mockRejectedValueOnce(new Error());
     const promise = sut.loadById('any_id');
     expect(promise).rejects.toThrow();

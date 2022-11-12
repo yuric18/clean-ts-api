@@ -6,15 +6,19 @@ import {
   Validation,
   Authentication,
 } from './SignUpControllerProtocols';
-import { badRequest, serverError, ok, forbidden } from '@/presentation/helpers/http/HttpHelper';
+import {
+  badRequest,
+  serverError,
+  ok,
+  forbidden,
+} from '@/presentation/helpers/http/HttpHelper';
 import { EmailAlreadyExists } from '@/presentation/errors';
 
 export class SignUpController implements Controller {
-
   constructor(
     private readonly addAccount: AddAccount,
     private readonly validation: Validation,
-    private readonly authentication: Authentication,
+    private readonly authentication: Authentication
   ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {

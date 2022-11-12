@@ -8,8 +8,7 @@ import { Validation } from '@/presentation/protocols/Validation';
 
 export const makeLoginValidation = (): ValidationComposite => {
   const validations: Validation[] = [
-    ...['email', 'password']
-      .map(f => new RequiredFieldValidation(f)),
+    ...['email', 'password'].map((f) => new RequiredFieldValidation(f)),
     new EmailValidation('email', new EmailValidatorAdapter()),
   ];
   return new ValidationComposite(validations);

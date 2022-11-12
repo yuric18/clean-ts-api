@@ -11,7 +11,7 @@ jest.mock('jsonwebtoken', () => ({
 }));
 
 type SutTypes = {
-  sut: JwtAdapter
+  sut: JwtAdapter;
 };
 
 const makeSut = (): SutTypes => {
@@ -29,7 +29,7 @@ describe('JWT Adapter', () => {
       await sut.encrypt('any_id');
       expect(signSpy).toHaveBeenCalledWith({ id: 'any_id' }, 'secret');
     });
-  
+
     test('Should return a token on sign success', async () => {
       const { sut } = makeSut();
       const accessToken = await sut.encrypt('any_id');
@@ -38,8 +38,9 @@ describe('JWT Adapter', () => {
 
     test('Should throw if sign throws', () => {
       const { sut } = makeSut();
-      jest.spyOn(jwt, 'sign')
-        .mockImplementationOnce(() => { throw new Error(); });
+      jest.spyOn(jwt, 'sign').mockImplementationOnce(() => {
+        throw new Error();
+      });
       const promise = sut.encrypt('any_id');
       expect(promise).rejects.toThrow();
     });
@@ -61,8 +62,9 @@ describe('JWT Adapter', () => {
 
     test('Should throw if verify throws', () => {
       const { sut } = makeSut();
-      jest.spyOn(jwt, 'verify')
-        .mockImplementationOnce(() => { throw new Error(); });
+      jest.spyOn(jwt, 'verify').mockImplementationOnce(() => {
+        throw new Error();
+      });
       const promise = sut.decrypt('any_id');
       expect(promise).rejects.toThrow();
     });

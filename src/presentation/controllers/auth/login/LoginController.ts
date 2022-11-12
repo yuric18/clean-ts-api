@@ -1,11 +1,21 @@
-import { Controller, HttpRequest, HttpResponse, Validation, Authentication } from './LoginControllerProtocols';
-import { badRequest, ok, serverError, unauthorized } from '@/presentation/helpers/http/HttpHelper';
+import {
+  Controller,
+  HttpRequest,
+  HttpResponse,
+  Validation,
+  Authentication,
+} from './LoginControllerProtocols';
+import {
+  badRequest,
+  ok,
+  serverError,
+  unauthorized,
+} from '@/presentation/helpers/http/HttpHelper';
 
 export class LoginController implements Controller {
-
   constructor(
     private readonly validation: Validation,
-    private readonly authentication: Authentication,
+    private readonly authentication: Authentication
   ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -28,5 +38,4 @@ export class LoginController implements Controller {
       return serverError(e);
     }
   }
-
 }

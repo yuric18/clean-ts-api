@@ -1,6 +1,7 @@
 # Cadastro
 
 > ## Caso de sucesso
+
 1. ✅ Recebe uma requisição do tipo **POST** na rota **/api/signup**
 2. ✅ Valida dados obrigatórios **name**, **email**, **password** e **passwordConfirmation**
 3. ✅ Valida que **password** e **passwordConfirmation** são iguais
@@ -13,6 +14,7 @@
 10. ✅ Retorna 200 com o token de acesso
 
 > ## Exceções
+
 1. ✅ Retorna erro 404 se a API não existir
 2. ✅ Retorna erro 400 se **name**, **email**, **password** ou **passwordConfirmation** não forem fornecidos pelo client
 3. ✅ Retorna erro 400 se **password** e **passwordConfirmation** não forem iguais

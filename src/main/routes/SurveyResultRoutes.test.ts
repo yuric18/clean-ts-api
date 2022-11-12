@@ -6,22 +6,26 @@ import { sign } from 'jsonwebtoken';
 
 const makeAccessToken = async (): Promise<string> => {
   await MongoHelper.getCollection('accounts');
-  const { id } = MongoHelper.map(await MongoHelper.insert({
-    name: 'Yuri',
-    email: 'yuri.cabral@gmail.com',
-    password: '123',
-    role: 'admin',
-  }));
+  const { id } = MongoHelper.map(
+    await MongoHelper.insert({
+      name: 'Yuri',
+      email: 'yuri.cabral@gmail.com',
+      password: '123',
+      role: 'admin',
+    })
+  );
   const accessToken = sign({ id }, env.jwtSecret);
-  await MongoHelper.collection.updateOne({ _id: id }, {
-    $set: { accessToken },
-  });
+  await MongoHelper.collection.updateOne(
+    { _id: id },
+    {
+      $set: { accessToken },
+    }
+  );
 
   return accessToken;
 };
 
 describe('Survey Result Routes', () => {
-
   beforeAll(async () => {
     await MongoHelper.connect(env.mongoUrl);
   });
@@ -51,14 +55,16 @@ describe('Survey Result Routes', () => {
       await MongoHelper.getCollection('surveys');
       const data = await MongoHelper.insert({
         question: 'Question',
-        answers: [{
-          answer: 'Answer 1',
-          image: 'http://image-name.com',
-        }],
+        answers: [
+          {
+            answer: 'Answer 1',
+            image: 'http://image-name.com',
+          },
+        ],
         date: new Date(),
       });
       const survey = MongoHelper.map(data);
-      
+
       const accessToken = await makeAccessToken();
       await request(app)
         .put(`/api/surveys/${survey.id}/results`)

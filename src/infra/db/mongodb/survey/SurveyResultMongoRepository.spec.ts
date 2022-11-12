@@ -28,7 +28,6 @@ const makeSut = (): SurveyResultMongoRepository => {
 };
 
 describe('Survey Result Mongo Repository', () => {
-
   beforeAll(async () => {
     MockDate.set(new Date());
     await MongoHelper.connect(process.env.MONGO_URL);
@@ -91,10 +90,12 @@ describe('Survey Result Mongo Repository', () => {
         date: new Date(),
       });
 
-      const results = await MongoHelper.collection.find({
-        surveyId,
-        accountId,
-      }).toArray();
+      const results = await MongoHelper.collection
+        .find({
+          surveyId,
+          accountId,
+        })
+        .toArray();
 
       expect(results.length).toBe(1);
     });
@@ -107,27 +108,32 @@ describe('Survey Result Mongo Repository', () => {
       const { id: accountId } = await makeAccount();
 
       await MongoHelper.getCollection('surveyResults');
-      await MongoHelper.collection.insertMany([{
-        surveyId: new ObjectId(surveyId),
-        accountId: new ObjectId(accountId),
-        answer: survey.answers[0].answer,
-        date: new Date(),
-      }, {
-        surveyId: new ObjectId(surveyId),
-        accountId: new ObjectId(accountId),
-        answer: survey.answers[0].answer,
-        date: new Date(),
-      }, {
-        surveyId: new ObjectId(surveyId),
-        accountId: new ObjectId(accountId),
-        answer: survey.answers[1].answer,
-        date: new Date(),
-      }, {
-        surveyId: new ObjectId(surveyId),
-        accountId: new ObjectId(accountId),
-        answer: survey.answers[1].answer,
-        date: new Date(),
-      }]);
+      await MongoHelper.collection.insertMany([
+        {
+          surveyId: new ObjectId(surveyId),
+          accountId: new ObjectId(accountId),
+          answer: survey.answers[0].answer,
+          date: new Date(),
+        },
+        {
+          surveyId: new ObjectId(surveyId),
+          accountId: new ObjectId(accountId),
+          answer: survey.answers[0].answer,
+          date: new Date(),
+        },
+        {
+          surveyId: new ObjectId(surveyId),
+          accountId: new ObjectId(accountId),
+          answer: survey.answers[1].answer,
+          date: new Date(),
+        },
+        {
+          surveyId: new ObjectId(surveyId),
+          accountId: new ObjectId(accountId),
+          answer: survey.answers[1].answer,
+          date: new Date(),
+        },
+      ]);
 
       const surveyResult = await sut.loadBySurveyId(surveyId);
       expect(surveyResult).toBeTruthy();

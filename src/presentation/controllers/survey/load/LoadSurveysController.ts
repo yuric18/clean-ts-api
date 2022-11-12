@@ -1,10 +1,17 @@
-import { noContent, ok, serverError } from '@/presentation/helpers/http/HttpHelper';
-import { Controller, HttpResponse, HttpRequest, LoadSurveys } from './LoadSurveysControllerProtocols';
+import {
+  noContent,
+  ok,
+  serverError,
+} from '@/presentation/helpers/http/HttpHelper';
+import {
+  Controller,
+  HttpResponse,
+  HttpRequest,
+  LoadSurveys,
+} from './LoadSurveysControllerProtocols';
 
 export class LoadSurveysController implements Controller {
-  constructor(
-    private readonly loadSurveys: LoadSurveys,
-  ) {}
+  constructor(private readonly loadSurveys: LoadSurveys) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
@@ -14,5 +21,4 @@ export class LoadSurveysController implements Controller {
       return serverError(e);
     }
   }
-
 }

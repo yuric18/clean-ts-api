@@ -11,8 +11,8 @@ const makeFakeHttpRequest = (): HttpRequest => ({
 });
 
 type SutTypes = {
-  sut: AuthMiddleware,
-  loadAccountByTokenStub: LoadAccountByToken
+  sut: AuthMiddleware;
+  loadAccountByTokenStub: LoadAccountByToken;
 };
 
 const makeSut = (role?: string): SutTypes => {
@@ -41,15 +41,15 @@ describe('Auth Middleware', () => {
 
   test('should return 403 if LoadAccountByToken returns null', async () => {
     const { sut, loadAccountByTokenStub } = makeSut();
-    jest.spyOn(loadAccountByTokenStub, 'load')
-      .mockResolvedValueOnce(null);
+    jest.spyOn(loadAccountByTokenStub, 'load').mockResolvedValueOnce(null);
     const httpResponse = await sut.handle(makeFakeHttpRequest());
     expect(httpResponse).toEqual(forbidden(new AccessDeniedError()));
   });
 
   test('should return 500 if LoadAccountByToken returns throws', async () => {
     const { sut, loadAccountByTokenStub } = makeSut();
-    jest.spyOn(loadAccountByTokenStub, 'load')
+    jest
+      .spyOn(loadAccountByTokenStub, 'load')
       .mockRejectedValueOnce(new Error());
     const httpResponse = await sut.handle(makeFakeHttpRequest());
     expect(httpResponse).toEqual(serverError(new Error()));

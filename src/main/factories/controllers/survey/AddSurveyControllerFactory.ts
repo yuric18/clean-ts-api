@@ -5,6 +5,9 @@ import { makeLogControllerDecorator } from '../../decorators/LogControllerDecora
 import { makeDbAddSurveyFactory } from '../../usecases/survey/addSurvey/AddSurveyFactory';
 
 export const makeAddSurveyController = (): Controller => {
-  const addSurveyController = new AddSurveyController(makeAddSurveyValidation(), makeDbAddSurveyFactory());
+  const addSurveyController = new AddSurveyController(
+    makeAddSurveyValidation(),
+    makeDbAddSurveyFactory()
+  );
   return makeLogControllerDecorator(addSurveyController);
 };

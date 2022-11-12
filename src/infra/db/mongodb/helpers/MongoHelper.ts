@@ -21,7 +21,7 @@ export const MongoHelper = {
     const { value: document } = await this.collection.findOneAndUpdate(
       { _id: new ObjectId() },
       { $setOnInsert: data },
-      options,
+      options
     );
     return document;
   },
@@ -30,6 +30,6 @@ export const MongoHelper = {
     return { ...rest, id };
   },
   mapArray(documentList) {
-    return documentList.map(d => MongoHelper.map(d));
+    return documentList.map((d) => MongoHelper.map(d));
   },
 };

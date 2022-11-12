@@ -6,8 +6,7 @@ import { Validation } from '@/presentation/protocols/Validation';
 
 export const makeAddSurveyValidation = (): ValidationComposite => {
   const validations: Validation[] = [
-    ...['answers', 'question']
-      .map(f => new RequiredFieldValidation(f)),
+    ...['answers', 'question'].map((f) => new RequiredFieldValidation(f)),
   ];
   return new ValidationComposite(validations);
 };

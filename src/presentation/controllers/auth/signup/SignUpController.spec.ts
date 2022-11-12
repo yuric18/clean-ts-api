@@ -1,4 +1,8 @@
-import { EmailAlreadyExists, MissingParamError, ServerError } from '@/presentation/errors';
+import {
+  EmailAlreadyExists,
+  MissingParamError,
+  ServerError,
+} from '@/presentation/errors';
 import { SignUpController } from './SignUpController';
 import {
   HttpResponse,
@@ -7,16 +11,21 @@ import {
   Validation,
   Authentication,
 } from './SignUpControllerProtocols';
-import { ok, serverError, badRequest, forbidden } from '@/presentation/helpers/http/HttpHelper';
+import {
+  ok,
+  serverError,
+  badRequest,
+  forbidden,
+} from '@/presentation/helpers/http/HttpHelper';
 import { mockAddAccount } from '@/presentation/test';
 import { mockValidation } from '@/validation/test';
 import { mockAuthentication } from '@/presentation/test';
 
 type SutTypes = {
-  sut: SignUpController
-  addAccountStub: AddAccount
-  validationStub: Validation
-  authenticationStub: Authentication
+  sut: SignUpController;
+  addAccountStub: AddAccount;
+  validationStub: Validation;
+  authenticationStub: Authentication;
 };
 
 const makeFakeRequest = (): HttpRequest => ({
@@ -32,7 +41,11 @@ const makeSut = (): SutTypes => {
   const addAccountStub = mockAddAccount();
   const validationStub = mockValidation();
   const authenticationStub = mockAuthentication();
-  const sut = new SignUpController(addAccountStub, validationStub, authenticationStub);
+  const sut = new SignUpController(
+    addAccountStub,
+    validationStub,
+    authenticationStub
+  );
   return {
     sut,
     addAccountStub,
@@ -52,10 +65,13 @@ describe('SignUp Controller', () => {
 
   test('Should return 400 if Validation returns an error', async () => {
     const { sut, validationStub } = makeSut();
-    jest.spyOn(validationStub, 'validate')
+    jest
+      .spyOn(validationStub, 'validate')
       .mockReturnValueOnce(new MissingParamError('any_field'));
     const httpResponse = await sut.handle(makeFakeRequest());
-    expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')));
+    expect(httpResponse).toEqual(
+      badRequest(new MissingParamError('any_field'))
+    );
   });
 
   test('Should call Authentication with correct values', async () => {
@@ -70,8 +86,9 @@ describe('SignUp Controller', () => {
 
   test('Should return 500 if Authentication throws', async () => {
     const { sut, authenticationStub } = makeSut();
-    jest.spyOn(authenticationStub, 'auth')
-      .mockImplementationOnce(() => { throw new Error(); });
+    jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(() => {
+      throw new Error();
+    });
     const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(serverError(new Error()));
   });
@@ -90,8 +107,7 @@ describe('SignUp Controller', () => {
 
   test('Should return 500 if AddAccount throws', async () => {
     const { sut, addAccountStub } = makeSut();
-    jest.spyOn(addAccountStub, 'add')
-      .mockRejectedValueOnce(new Error());
+    jest.spyOn(addAccountStub, 'add').mockRejectedValueOnce(new Error());
     const httpResponse: HttpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
   });
@@ -108,5 +124,4 @@ describe('SignUp Controller', () => {
     const httpResponse: HttpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual(ok({ accessToken: 'any_token' }));
   });
-
 });

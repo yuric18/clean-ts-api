@@ -5,8 +5,8 @@ import { mockAddSurveyRepository } from '@/data/test';
 import { mockAddSurveyParams, mockSurvey } from '@/domain/tests/MockSurvey';
 
 type SutTypes = {
-  sut: DbAddSurvey
-  addSurveyRepositoryStub: AddSurveyRepository
+  sut: DbAddSurvey;
+  addSurveyRepositoryStub: AddSurveyRepository;
 };
 
 const makeSut = (): SutTypes => {
@@ -36,10 +36,10 @@ describe('Db Add Survey Use Case', () => {
 
   test('Should throw if AddSurveyRepository throws', () => {
     const { sut, addSurveyRepositoryStub } = makeSut();
-    jest.spyOn(addSurveyRepositoryStub, 'add')
+    jest
+      .spyOn(addSurveyRepositoryStub, 'add')
       .mockRejectedValueOnce(new Error());
     const promise = sut.add(mockAddSurveyParams());
     expect(promise).rejects.toThrow();
   });
-
 });

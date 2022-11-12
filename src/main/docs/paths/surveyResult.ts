@@ -1,17 +1,21 @@
 export const surveyResultPath = {
   put: {
-    security: [{
-      apiKeyAuth: [],
-    }],
-    parameters: [{
-      in: 'path',
-      name: 'surveyId',
-      required: true,
-      schema: {
-        type: 'string',
+    security: [
+      {
+        apiKeyAuth: [],
       },
-      description: 'Id de uma enquete já criada anteriormente',
-    }],
+    ],
+    parameters: [
+      {
+        in: 'path',
+        name: 'surveyId',
+        required: true,
+        schema: {
+          type: 'string',
+        },
+        description: 'Id de uma enquete já criada anteriormente',
+      },
+    ],
     tags: ['Enquete'],
     summary: 'API para criar a resposta de uma enquete',
     requestBody: {

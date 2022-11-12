@@ -1,26 +1,35 @@
 import MockDate from 'mockdate';
-import { Validation, HttpRequest, AddSurvey } from './AddSurveyControllerProtocols';
+import {
+  Validation,
+  HttpRequest,
+  AddSurvey,
+} from './AddSurveyControllerProtocols';
 import { AddSurveyController } from './AddSurveyController';
-import { badRequest, noContent, serverError } from '../../../helpers/http/HttpHelper';
+import {
+  badRequest,
+  noContent,
+  serverError,
+} from '../../../helpers/http/HttpHelper';
 import { mockValidation } from '@/validation/test';
 import { mockAddSurvey } from '@/presentation/test';
 
 const makeFakeHttpRequest = (): HttpRequest => ({
   body: {
     question: 'any_question',
-    answers: [{
-      image: 'any_image',
-      answer: 'any_answer',
-    }],
+    answers: [
+      {
+        image: 'any_image',
+        answer: 'any_answer',
+      },
+    ],
     date: new Date(),
   },
 });
 
-
 type SutTypes = {
-  sut: AddSurveyController
-  validationStub: Validation
-  addSurveyStub: AddSurvey
+  sut: AddSurveyController;
+  validationStub: Validation;
+  addSurveyStub: AddSurvey;
 };
 
 const makeSut = (): SutTypes => {
@@ -34,9 +43,7 @@ const makeSut = (): SutTypes => {
   };
 };
 
-
 describe('Add Survey Controller', () => {
-
   beforeAll(() => {
     MockDate.set(new Date());
   });
@@ -54,8 +61,9 @@ describe('Add Survey Controller', () => {
 
   test('should return 400 if validation fails', async () => {
     const { sut, validationStub } = makeSut();
-    jest.spyOn(validationStub, 'validate')
-      .mockImplementationOnce(() => new Error() );
+    jest
+      .spyOn(validationStub, 'validate')
+      .mockImplementationOnce(() => new Error());
     const httpResponse = await sut.handle(makeFakeHttpRequest());
     expect(httpResponse).toEqual(badRequest(new Error()));
   });
@@ -69,8 +77,9 @@ describe('Add Survey Controller', () => {
 
   test('should return 500 if AddSurvey throws', async () => {
     const { sut, addSurveyStub } = makeSut();
-    jest.spyOn(addSurveyStub, 'add')
-      .mockImplementationOnce(() => { throw new Error(); });
+    jest.spyOn(addSurveyStub, 'add').mockImplementationOnce(() => {
+      throw new Error();
+    });
     const httpResponse = await sut.handle(makeFakeHttpRequest());
     expect(httpResponse).toEqual(serverError(new Error()));
   });

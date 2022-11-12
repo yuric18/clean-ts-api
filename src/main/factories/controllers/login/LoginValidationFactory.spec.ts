@@ -22,8 +22,7 @@ describe('LoginValidation Factory', () => {
   test('Should call ValidationComposite with all validations', async () => {
     makeLoginValidation();
     const validations: Validation[] = [
-      ...['email', 'password']
-        .map(f => new RequiredFieldValidation(f)),
+      ...['email', 'password'].map((f) => new RequiredFieldValidation(f)),
       new EmailValidation('email', makeEmailValidator()),
     ];
 

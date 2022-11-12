@@ -1,13 +1,11 @@
 import { MongoHelper } from '../helpers/MongoHelper';
 import { LogMongoRepository } from './LogMongoRepository';
 
-
 const makeSut = (): LogMongoRepository => {
   return new LogMongoRepository();
 };
 
 describe('Log Mongo Repository', () => {
-
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL);
   });

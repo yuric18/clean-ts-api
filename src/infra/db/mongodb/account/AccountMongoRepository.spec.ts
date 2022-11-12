@@ -6,7 +6,6 @@ const makeSut = (): AccountMongoRepository => {
 };
 
 describe('Account Mongo Repository', () => {
-
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL);
   });
@@ -51,7 +50,7 @@ describe('Account Mongo Repository', () => {
       expect(account.email).toBe('any_email@mail.com');
       expect(account.password).toBe('any_password');
     });
-  
+
     test('Should return null if loadByEmail fails', async () => {
       const sut = makeSut();
       const account = await sut.loadByEmail('any_email@mail.com');
@@ -121,7 +120,7 @@ describe('Account Mongo Repository', () => {
       const account = await sut.loadByToken('any_token', 'admin');
       expect(account).toBeFalsy();
     });
-  
+
     test('Should return null if loadByToken fails', async () => {
       const sut = makeSut();
       const account = await sut.loadByToken('any_email@mail.com');
@@ -140,7 +139,9 @@ describe('Account Mongo Repository', () => {
       const newAccount = MongoHelper.map(fakeAccount);
       expect(newAccount.accessToken).toBeFalsy();
       await sut.updateAccessToken(newAccount.id, 'any_token');
-      const account = await MongoHelper.collection.findOne({ _id: newAccount.id });
+      const account = await MongoHelper.collection.findOne({
+        _id: newAccount.id,
+      });
       const updatedTokenAccount = MongoHelper.map(account);
       expect(updatedTokenAccount).toBeTruthy();
       expect(updatedTokenAccount.accessToken).toBe('any_token');
