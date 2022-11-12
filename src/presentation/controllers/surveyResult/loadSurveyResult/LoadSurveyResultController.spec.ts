@@ -12,20 +12,32 @@ const makeFakeRequest = (): HttpRequest => ({
   },
 });
 
-class LoadSurveyResultStub implements LoadSurveyResult {
-  load(surveyId: string): Promise<SurveyResultModel> {
-    return Promise.resolve(mockSurveyResult());
-  }
-}
-
 const mockLoadSurveyResult = () => {
+  class LoadSurveyResultStub implements LoadSurveyResult {
+    load(surveyId: string): Promise<SurveyResultModel> {
+      return Promise.resolve(mockSurveyResult());
+    }
+  }
   return new LoadSurveyResultStub();
+};
+
+type SutTypes = {
+  sut: LoadSurveyResultController;
+  loadSurveyResultStub: LoadSurveyResult;
+};
+
+const makeSut = (): SutTypes => {
+  const loadSurveyResultStub = mockLoadSurveyResult();
+  const sut = new LoadSurveyResultController(loadSurveyResultStub);
+  return {
+    sut,
+    loadSurveyResultStub,
+  };
 };
 
 describe('Load Survey Controller', () => {
   test('should call LoadSurveyResult with correct values', async () => {
-    const loadSurveyResultStub = mockLoadSurveyResult();
-    const sut = new LoadSurveyResultController(loadSurveyResultStub);
+    const { sut, loadSurveyResultStub } = makeSut();
     const loadSpy = jest.spyOn(loadSurveyResultStub, 'load');
     await sut.handle(makeFakeRequest());
     expect(loadSpy).toHaveBeenCalledWith('any_id');
