@@ -1,13 +1,17 @@
-import MockDate from 'mockdate';
-import { LoadSurveysController } from './LoadSurveysController';
-import { LoadSurveys, SurveyModel } from './LoadSurveysControllerProtocols';
+import { mockSurveys } from '@/domain/tests/MockSurvey';
 import {
   noContent,
   ok,
   serverError,
 } from '@/presentation/helpers/http/HttpHelper';
-import { mockSurveys } from '@/domain/tests/MockSurvey';
 import { mockLoadSurveys } from '@/presentation/test';
+import MockDate from 'mockdate';
+import { LoadSurveysController } from './LoadSurveysController';
+import { HttpRequest, LoadSurveys } from './LoadSurveysControllerProtocols';
+
+const mockRequest = (): HttpRequest => ({
+  accountId: 'any_accountId',
+});
 
 type SutTypes = {
   sut: LoadSurveysController;
@@ -32,23 +36,23 @@ describe('Load Surveys Controller', () => {
     MockDate.reset();
   });
 
-  test('Should call LoadSurveys', async () => {
+  test('Should call LoadSurveys with correct values', async () => {
     const { sut, loadSurveysStub } = makeSut();
     const loadSpy = jest.spyOn(loadSurveysStub, 'load');
-    await sut.handle({});
-    expect(loadSpy).toHaveBeenCalled();
+    await sut.handle(mockRequest());
+    expect(loadSpy).toHaveBeenCalledWith('any_accountId');
   });
 
   test('Should return 200 on success', async () => {
     const { sut } = makeSut();
-    const httpResponse = await sut.handle({});
+    const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(ok(mockSurveys()));
   });
 
   test('Should return 204 if LoadSurveys returns empty', async () => {
     const { sut, loadSurveysStub } = makeSut();
     jest.spyOn(loadSurveysStub, 'load').mockResolvedValue([]);
-    const httpResponse = await sut.handle({});
+    const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(noContent());
   });
 
@@ -57,7 +61,7 @@ describe('Load Surveys Controller', () => {
     jest.spyOn(loadSurveysStub, 'load').mockImplementationOnce(() => {
       throw new Error();
     });
-    const httpResponse = await sut.handle({});
+    const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(serverError(new Error()));
   });
 });

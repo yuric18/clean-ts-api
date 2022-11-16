@@ -2,6 +2,7 @@ import MockDate from 'mockdate';
 import { MongoHelper } from '../helpers/MongoHelper';
 import { SurveyMongoRepository } from './SurveyMongoRepository';
 import { mockSurvey } from '@/domain/tests/MockSurvey';
+import { ObjectId } from 'mongodb';
 
 const makeSut = (): SurveyMongoRepository => {
   return new SurveyMongoRepository();
@@ -37,16 +38,36 @@ describe('Survey Mongo Repository', () => {
 
   describe('loadAll()', () => {
     test('should load all surveys on success', async () => {
-      await MongoHelper.collection.insertMany([mockSurvey(), mockSurvey()]);
+      const surveysToAdd = [mockSurvey(), mockSurvey()];
+      const {
+        insertedIds: { 0: surveyId },
+      } = await MongoHelper.collection.insertMany(surveysToAdd);
+
+      await MongoHelper.getCollection('surveyResults');
+      const inserted = await MongoHelper.insert({
+        surveyId,
+        accountId: new ObjectId('6336e1f27292da6d2d9fc718'),
+        answer: surveysToAdd[0].answers[0].answer,
+        date: new Date(),
+      });
+
+      console.log('inserted', inserted);
+
+      console.log(await MongoHelper.collection.find({}).toArray());
+
       const sut = makeSut();
-      const surveys = await sut.loadAll();
+      const surveys = await sut.loadAll('6336e1f27292da6d2d9fc718');
+      console.log(surveys);
       expect(surveys.length).toBe(2);
       expect(surveys[0].id).toBeTruthy();
+      expect(surveys[0].didAnswer).toBe(true);
+      expect(surveys[1].id).toBeTruthy();
+      expect(surveys[1].didAnswer).toBe(false);
     });
 
     test('should return empty list when no content', async () => {
       const sut = makeSut();
-      const surveys = await sut.loadAll();
+      const surveys = await sut.loadAll('6336e1f27292da6d2d9fc718');
       expect(surveys.length).toBe(0);
     });
   });
