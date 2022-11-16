@@ -81,28 +81,25 @@ describe('Survey Result Routes', () => {
       await request(app).get('/api/surveys/any_id/results').expect(403);
     });
 
-    // test('Should return 200 on save survey result with an valid accessToken', async () => {
-    //   await MongoHelper.getCollection('surveys');
-    //   const data = await MongoHelper.insert({
-    //     question: 'Question',
-    //     answers: [
-    //       {
-    //         answer: 'Answer 1',
-    //         image: 'http://image-name.com',
-    //       },
-    //     ],
-    //     date: new Date(),
-    //   });
-    //   const survey = MongoHelper.map(data);
+    test('Should return 200 on load survey result with an valid accessToken', async () => {
+      await MongoHelper.getCollection('surveys');
+      const data = await MongoHelper.insert({
+        question: 'Question',
+        answers: [
+          {
+            answer: 'Answer 1',
+            image: 'http://image-name.com',
+          },
+        ],
+        date: new Date(),
+      });
+      const survey = MongoHelper.map(data);
 
-    //   const accessToken = await makeAccessToken();
-    //   await request(app)
-    //     .put(`/api/surveys/${survey.id}/results`)
-    //     .set('x-access-token', accessToken)
-    //     .send({
-    //       answer: 'Answer 1',
-    //     })
-    //     .expect(200);
-    // });
+      const accessToken = await makeAccessToken();
+      await request(app)
+        .get(`/api/surveys/${survey.id}/results`)
+        .set('x-access-token', accessToken)
+        .expect(200);
+    });
   });
 });
