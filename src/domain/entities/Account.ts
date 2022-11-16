@@ -5,3 +5,7 @@ export interface AccountModel {
   password: string;
   role?: string;
 }
+
+export type AuthenticatedAccountModel = Pick<AccountModel, 'name'> & {
+  accessToken: string;
+};

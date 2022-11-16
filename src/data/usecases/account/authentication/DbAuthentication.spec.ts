@@ -4,7 +4,7 @@ import {
   mockLoadAccountByEmailRepository,
   mockUpdateAccessTokenRepository,
 } from '@/data/test';
-import { mockAuthentication } from '@/domain/tests';
+import { mockAuthenticatedAccount, mockAuthentication } from '@/domain/tests';
 import { DbAuthentication } from './DbAuthentication';
 import {
   Authentication,
@@ -122,9 +122,9 @@ describe('DbAuthentication UseCase', () => {
     expect(promise).rejects.toThrow(new Error());
   });
 
-  test('Should return generated token if success', async () => {
+  test('Should return authenticated account if success', async () => {
     const { sut } = makeSut();
-    const accessToken = await sut.auth(mockAuthentication());
-    expect(accessToken).toBe('any_token');
+    const account = await sut.auth(mockAuthentication());
+    expect(account).toEqual(mockAuthenticatedAccount());
   });
 });

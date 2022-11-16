@@ -13,6 +13,7 @@ import {
   Validation,
 } from './LoginControllerProtocols';
 import { mockValidation } from '@/validation/test';
+import { mockAuthenticatedAccount } from '@/domain/tests';
 
 const mockRequest = (): HttpRequest => ({
   body: {
@@ -68,7 +69,7 @@ describe('Login Controller', () => {
   test('Should return 200 if valid credentials are provided', async () => {
     const { sut } = makeSut();
     const httpResponse = await sut.handle(mockRequest());
-    expect(httpResponse).toEqual(ok({ accessToken: 'any_token' }));
+    expect(httpResponse).toEqual(ok(mockAuthenticatedAccount()));
   });
 
   test('Should call Validation with correct values', async () => {

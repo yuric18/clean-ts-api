@@ -1,4 +1,4 @@
-import { AccountModel } from '../entities/Account';
+import { AccountModel, AuthenticatedAccountModel } from '../entities/Account';
 import { AddAccountParams } from '../usecases/account/AddAccount';
 import { AuthenticationParams } from '../usecases/account/Authentication';
 
@@ -7,6 +7,11 @@ export const mockAccountModel = (): AccountModel => ({
   name: 'any_name',
   email: 'any_email@mail.com',
   password: 'any_password',
+});
+
+export const mockAuthenticatedAccount = (): AuthenticatedAccountModel => ({
+  name: 'any_name',
+  accessToken: 'any_token',
 });
 
 export const mockAddAccountParams = (): AddAccountParams => ({

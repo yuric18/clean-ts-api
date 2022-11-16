@@ -20,6 +20,7 @@ import {
 import { mockAddAccount } from '@/presentation/test';
 import { mockValidation } from '@/validation/test';
 import { mockAuthentication } from '@/presentation/test';
+import { mockAuthenticatedAccount } from '@/domain/tests';
 
 type SutTypes = {
   sut: SignUpController;
@@ -122,6 +123,6 @@ describe('SignUp Controller', () => {
   test('Should returns 200 if valid data is provided', async () => {
     const { sut } = makeSut();
     const httpResponse: HttpResponse = await sut.handle(makeRequest());
-    expect(httpResponse).toEqual(ok({ accessToken: 'any_token' }));
+    expect(httpResponse).toEqual(ok(mockAuthenticatedAccount()));
   });
 });
