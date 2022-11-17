@@ -26,7 +26,10 @@ export class SurveyResultMongoRepository
     );
   }
 
-  async loadBySurveyId(surveyId: string): Promise<SurveyResultModel> {
+  async loadBySurveyId(
+    surveyId: string,
+    accountId: string
+  ): Promise<SurveyResultModel> {
     await MongoHelper.getCollection('surveyResults');
 
     const aggregate = new QueryBuilder()
@@ -59,6 +62,15 @@ export class SurveyResultMongoRepository
         },
         count: {
           $sum: 1,
+        },
+        currentAccountAnswer: {
+          $push: {
+            $cond: [
+              { $eq: ['$data.accountId', new ObjectId(accountId)] },
+              '$data.answer',
+              null,
+            ],
+          },
         },
       })
       .project({
@@ -93,6 +105,12 @@ export class SurveyResultMongoRepository
                       },
                       else: 0,
                     },
+                  },
+                  isCurrentAccountAnswer: {
+                    $eq: [
+                      '$$item.answer',
+                      { $arrayElemAt: ['$currentAccountAnswer', 0] },
+                    ],
                   },
                 },
               ],
@@ -136,6 +154,7 @@ export class SurveyResultMongoRepository
           date: '$date',
           answer: '$answers.answer',
           image: '$answers.image',
+          isCurrentAccountAnswer: '$answers.isCurrentAccountAnswer',
         },
         count: {
           $sum: '$answers.count',
@@ -153,7 +172,8 @@ export class SurveyResultMongoRepository
           answer: '$_id.answer',
           image: '$_id.image',
           count: '$count',
-          percent: '$percent',
+          percent: { $round: ['$percent', 2] },
+          isCurrentAccountAnswer: '$_id.isCurrentAccountAnswer',
         },
       })
       .sort({ 'answer.count': -1 })
@@ -179,6 +199,6 @@ export class SurveyResultMongoRepository
     const surveyResult = await MongoHelper.collection
       .aggregate(aggregate)
       .toArray();
-    return surveyResult.length && MongoHelper.map(surveyResult[0]);
+    return (surveyResult.length && MongoHelper.map(surveyResult[0])) || null;
   }
 }

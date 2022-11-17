@@ -4,8 +4,9 @@ import { AccountModel } from '@/domain/entities/Account';
 import { MongoHelper } from '../helpers/MongoHelper';
 import { SurveyResultMongoRepository } from './SurveyResultMongoRepository';
 import { ObjectId } from 'mongodb';
-import { mockAddSurveyParams } from '@/domain/tests/MockSurvey';
+import { mockAddSurveyParams, mockSurvey } from '@/domain/tests/MockSurvey';
 import { LoadSurveyResultRepository } from '@/data/protocols/db/surveyResult/LoadSurveyResultRepository';
+import { mockAccountModel } from '@/domain/tests';
 
 const makeSurvey = async (): Promise<SurveyModel> => {
   await MongoHelper.getCollection('surveys');
@@ -106,6 +107,7 @@ describe('Survey Result Mongo Repository', () => {
       const sut = makeSut();
       const { id: surveyId, ...survey } = await makeSurvey();
       const { id: accountId } = await makeAccount();
+      const { id: accountId2 } = await makeAccount();
 
       await MongoHelper.getCollection('surveyResults');
       await MongoHelper.collection.insertMany([
@@ -117,33 +119,34 @@ describe('Survey Result Mongo Repository', () => {
         },
         {
           surveyId: new ObjectId(surveyId),
-          accountId: new ObjectId(accountId),
-          answer: survey.answers[0].answer,
-          date: new Date(),
-        },
-        {
-          surveyId: new ObjectId(surveyId),
-          accountId: new ObjectId(accountId),
-          answer: survey.answers[1].answer,
-          date: new Date(),
-        },
-        {
-          surveyId: new ObjectId(surveyId),
-          accountId: new ObjectId(accountId),
+          accountId: new ObjectId(accountId2),
           answer: survey.answers[1].answer,
           date: new Date(),
         },
       ]);
 
-      const surveyResult = await sut.loadBySurveyId(surveyId);
+      const surveyResult = await sut.loadBySurveyId(surveyId, accountId);
       expect(surveyResult).toBeTruthy();
       expect(surveyResult.surveyId).toEqual(surveyId);
-      expect(surveyResult.answers[0].count).toBe(2);
+      expect(surveyResult.answers[0].count).toBe(1);
       expect(surveyResult.answers[0].percent).toBe(50);
-      expect(surveyResult.answers[1].count).toBe(2);
+      expect(surveyResult.answers[0].isCurrentAccountAnswer).toBe(true);
+      expect(surveyResult.answers[1].count).toBe(1);
       expect(surveyResult.answers[1].percent).toBe(50);
+      expect(surveyResult.answers[1].isCurrentAccountAnswer).toBe(false);
       expect(surveyResult.answers[2].count).toBe(0);
       expect(surveyResult.answers[2].percent).toBe(0);
+      expect(surveyResult.answers[2].isCurrentAccountAnswer).toBe(false);
+    });
+
+    test('should return null if there is no survey result', async () => {
+      const account = mockAccountModel();
+      const sut = makeSut();
+      const surveyResults = await sut.loadBySurveyId(
+        '6336e1f27292da6d2d9fc718',
+        '6336e1f27292da6d2d9fc718'
+      );
+      expect(surveyResults).toBeNull();
     });
   });
 });

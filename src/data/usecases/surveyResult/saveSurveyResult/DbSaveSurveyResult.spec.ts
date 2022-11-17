@@ -63,7 +63,7 @@ describe('Db Save Survey Result Use Case', () => {
       'loadBySurveyId'
     );
     await sut.save(mockSurveyResultParams());
-    expect(loadSpy).toHaveBeenCalledWith('any_surveyId');
+    expect(loadSpy).toHaveBeenCalledWith('any_surveyId', 'any_accountId');
   });
 
   test('Should throw if LoadSurveyResultRepository throws', () => {

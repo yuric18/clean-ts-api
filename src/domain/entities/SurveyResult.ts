@@ -10,4 +10,5 @@ export interface SurveyResultAnswerModel {
   count: number;
   percent: number;
   image?: string;
+  isCurrentAccountAnswer: boolean;
 }

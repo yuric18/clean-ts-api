@@ -9,9 +9,9 @@ export class DbLoadSurveyResult implements LoadSurveyResult {
     private readonly loadSurveyByIdRepository: LoadSurveyByIdRepository
   ) {}
 
-  async load(surveyId: string): Promise<SurveyResultModel> {
+  async load(surveyId: string, accountId: string): Promise<SurveyResultModel> {
     const surveyResultFound =
-      await this.loadSurveyResultRepository.loadBySurveyId(surveyId);
+      await this.loadSurveyResultRepository.loadBySurveyId(surveyId, accountId);
 
     if (!surveyResultFound) {
       const survey = await this.loadSurveyByIdRepository.loadById(surveyId);
@@ -23,6 +23,7 @@ export class DbLoadSurveyResult implements LoadSurveyResult {
           Object.assign({}, a, {
             count: 0,
             percent: 0,
+            isCurrentAccountAnswer: false,
           })
         ),
       };
