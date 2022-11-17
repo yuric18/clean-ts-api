@@ -15,6 +15,7 @@ import { LoadSurveyResultController } from './LoadSurveyResultController';
 import { mockSurveyResult } from '@/domain/tests/MockSurveyResult';
 
 const makeRequest = (): HttpRequest => ({
+  accountId: 'any_accountId',
   params: {
     surveyId: 'any_id',
   },
@@ -72,11 +73,11 @@ describe('Load Survey Controller', () => {
     expect(response).toEqual(serverError(new Error()));
   });
 
-  test('should call LoadSurveyById with correct values', async () => {
+  test('should call LoadSurveyResult with correct values', async () => {
     const { sut, loadSurveyResultStub } = makeSut();
     const loadSpy = jest.spyOn(loadSurveyResultStub, 'load');
     await sut.handle(makeRequest());
-    expect(loadSpy).toHaveBeenCalledWith('any_id');
+    expect(loadSpy).toHaveBeenCalledWith('any_id', 'any_accountId');
   });
 
   test('should return 500 if LoadSurveyById throws', async () => {

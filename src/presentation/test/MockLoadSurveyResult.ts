@@ -4,7 +4,7 @@ import { LoadSurveyResult } from '@/domain/usecases/surveyResult/LoadSurveyResul
 
 export const mockLoadSurveyResult = () => {
   class LoadSurveyResultStub implements LoadSurveyResult {
-    load(surveyId: string): Promise<SurveyResultModel> {
+    load(surveyId: string, accountId: string): Promise<SurveyResultModel> {
       return Promise.resolve(mockSurveyResult());
     }
   }
