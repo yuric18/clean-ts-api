@@ -1,7 +1,6 @@
 import MockDate from 'mockdate';
 
 import {
-  HttpRequest,
   LoadSurveyById,
   InvalidParamError,
   forbidden,
@@ -17,13 +16,9 @@ import {
   mockSurveyResult,
 } from 'test/domain';
 
-const makeRequest = (): HttpRequest => ({
-  params: {
-    surveyId: 'any_survey_id',
-  },
-  body: {
-    answer: 'any_answer',
-  },
+const makeInput = (): SaveSurveyResultController.Input => ({
+  surveyId: 'any_survey_id',
+  answer: 'any_answer',
   accountId: 'any_account_id',
 });
 
@@ -59,14 +54,14 @@ describe('Save Survey Result Controller', () => {
   test('should call LoadSurveyById with correct values', async () => {
     const { sut, loadSurveyByIdStub } = makeSut();
     const validateSpy = jest.spyOn(loadSurveyByIdStub, 'loadById');
-    await sut.handle(makeRequest());
+    await sut.handle(makeInput());
     expect(validateSpy).toHaveBeenCalledWith('any_survey_id');
   });
 
   test('should call SaveSurveyResult with correct values', async () => {
     const { sut, saveSurveyResultStub } = makeSut();
     const validateSpy = jest.spyOn(saveSurveyResultStub, 'save');
-    await sut.handle(makeRequest());
+    await sut.handle(makeInput());
     expect(validateSpy).toHaveBeenCalledWith({
       surveyId: 'any_survey_id',
       accountId: 'any_account_id',
@@ -78,19 +73,16 @@ describe('Save Survey Result Controller', () => {
   test('should return 403 if LoadSurveyById returns null', async () => {
     const { sut, loadSurveyByIdStub } = makeSut();
     jest.spyOn(loadSurveyByIdStub, 'loadById').mockResolvedValueOnce(null);
-    const response = await sut.handle(makeRequest());
+    const response = await sut.handle(makeInput());
     expect(response).toEqual(forbidden(new InvalidParamError('surveyId')));
   });
 
   test('should return 403 if an invalid answer is provided', async () => {
     const { sut } = makeSut();
     const response = await sut.handle({
-      params: {
-        surveyId: 'any_survey_id',
-      },
-      body: {
-        answer: 'wrong_answer',
-      },
+      surveyId: 'any_survey_id',
+      answer: 'wrong_answer',
+      accountId: 'any_accountId',
     });
     expect(response).toEqual(forbidden(new InvalidParamError('answer')));
   });
@@ -100,20 +92,20 @@ describe('Save Survey Result Controller', () => {
     jest
       .spyOn(loadSurveyByIdStub, 'loadById')
       .mockRejectedValueOnce(new Error());
-    const response = await sut.handle(makeRequest());
+    const response = await sut.handle(makeInput());
     expect(response).toEqual(serverError(new Error()));
   });
 
   test('should return 500 if SaveSurveyResult throws', async () => {
     const { sut, saveSurveyResultStub } = makeSut();
     jest.spyOn(saveSurveyResultStub, 'save').mockRejectedValueOnce(new Error());
-    const response = await sut.handle(makeRequest());
+    const response = await sut.handle(makeInput());
     expect(response).toEqual(serverError(new Error()));
   });
 
   test('should return 200 on success', async () => {
     const { sut } = makeSut();
-    const response = await sut.handle(makeRequest());
+    const response = await sut.handle(makeInput());
     expect(response).toEqual(ok(mockSurveyResult()));
   });
 });

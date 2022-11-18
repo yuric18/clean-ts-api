@@ -1,10 +1,11 @@
-import { HttpRequest, Middleware } from '@/presentation';
+import { Middleware } from '@/presentation';
 import { NextFunction, Request, Response } from 'express';
 
 export const ExpressMiddlewareAdapter = (middleware: Middleware) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const httpRequest: HttpRequest = {
-      headers: req.headers,
+    const httpRequest = {
+      accessToken: req.headers?.['x-access-token'],
+      ...(req.headers || {}),
     };
     const httpResponse = await middleware.handle(httpRequest);
     if (httpResponse.statusCode == 200) {

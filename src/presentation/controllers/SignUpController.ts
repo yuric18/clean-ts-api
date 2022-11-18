@@ -5,7 +5,6 @@ import {
   Controller,
   EmailAlreadyExists,
   forbidden,
-  HttpRequest,
   HttpResponse,
   ok,
   serverError,
@@ -19,12 +18,12 @@ export class SignUpController implements Controller {
     private readonly authentication: Authentication
   ) {}
 
-  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle(input: SignUpController.Input): Promise<HttpResponse> {
     try {
-      const validationError = this.validation.validate(httpRequest.body);
+      const validationError = this.validation.validate(input);
       if (validationError) return badRequest(validationError);
 
-      const { name, email, password, role } = httpRequest.body;
+      const { name, email, password, role } = input;
 
       const account = await this.addAccount.add({
         name,
@@ -44,4 +43,14 @@ export class SignUpController implements Controller {
       return serverError(e);
     }
   }
+}
+
+export namespace SignUpController {
+  export type Input = {
+    name: string;
+    email: string;
+    password: string;
+    passwordConfirmation: string;
+    role?: string;
+  };
 }

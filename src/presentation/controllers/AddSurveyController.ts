@@ -1,8 +1,7 @@
-import { AddSurvey } from '@/domain';
+import { AddSurvey, SurveyAnswerModel } from '@/domain';
 
 import {
   Controller,
-  HttpRequest,
   HttpResponse,
   Validation,
   badRequest,
@@ -16,15 +15,15 @@ export class AddSurveyController implements Controller {
     private readonly addSurvey: AddSurvey
   ) {}
 
-  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle(input: AddSurveyController.Input): Promise<HttpResponse> {
     try {
-      const error = await this.validation.validate(httpRequest.body);
+      const error = await this.validation.validate(input);
 
       if (error) {
         return badRequest(error);
       }
 
-      const { answers, question } = httpRequest.body;
+      const { answers, question } = input;
 
       await this.addSurvey.add({
         answers,
@@ -37,4 +36,11 @@ export class AddSurveyController implements Controller {
       return serverError(e);
     }
   }
+}
+
+export namespace AddSurveyController {
+  export type Input = {
+    question: string;
+    answers: SurveyAnswerModel[];
+  };
 }

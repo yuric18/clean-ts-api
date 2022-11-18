@@ -2,7 +2,6 @@ import { LoadSurveyById, SaveSurveyResult } from '@/domain';
 
 import {
   Controller,
-  HttpRequest,
   HttpResponse,
   forbidden,
   serverError,
@@ -16,11 +15,9 @@ export class SaveSurveyResultController implements Controller {
     private readonly saveSurveyResult: SaveSurveyResult
   ) {}
 
-  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle(input: SaveSurveyResultController.Input): Promise<HttpResponse> {
     try {
-      const { accountId } = httpRequest;
-      const { surveyId } = httpRequest.params;
-      const { answer } = httpRequest.body;
+      const { accountId, surveyId, answer } = input;
       const survey = await this.loadSurveyById.loadById(surveyId);
 
       if (!survey) {
@@ -44,4 +41,12 @@ export class SaveSurveyResultController implements Controller {
       return serverError(e);
     }
   }
+}
+
+export namespace SaveSurveyResultController {
+  export type Input = {
+    accountId: string;
+    surveyId: string;
+    answer: string;
+  };
 }

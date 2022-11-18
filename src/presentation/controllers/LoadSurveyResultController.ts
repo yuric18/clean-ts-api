@@ -2,7 +2,6 @@ import { LoadSurveyResult, LoadSurveyById } from '@/domain';
 
 import {
   Controller,
-  HttpRequest,
   HttpResponse,
   forbidden,
   ok,
@@ -16,13 +15,11 @@ export class LoadSurveyResultController implements Controller {
     private readonly loadSurveyResult: LoadSurveyResult
   ) {}
 
-  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle({
+    accountId,
+    surveyId,
+  }: LoadSurveyResultController.Input): Promise<HttpResponse> {
     try {
-      const {
-        accountId,
-        params: { surveyId },
-      } = httpRequest;
-
       const survey = await this.loadSurveyById.loadById(surveyId);
 
       if (!survey) return forbidden(new InvalidParamError('surveyId'));
@@ -33,4 +30,11 @@ export class LoadSurveyResultController implements Controller {
       return serverError(e);
     }
   }
+}
+
+export namespace LoadSurveyResultController {
+  export type Input = {
+    accountId: string;
+    surveyId: string;
+  };
 }
