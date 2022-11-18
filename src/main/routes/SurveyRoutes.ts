@@ -1,8 +1,10 @@
+import { ExpressRouteAdapter } from '@/main/adapters/ExpressRouteAdapter';
+import {
+  makeAddSurveyController,
+  makeLoadSurveysController,
+} from '@/main/factories';
+import { adminAuth } from '@/main/middlewares';
 import { Router } from 'express';
-import { adminAuth, auth } from '../middlewares';
-import { ExpressRouteAdapter } from '../adapters/ExpressRouteAdapter';
-import { makeAddSurveyController } from '../factories/controllers/survey/AddSurveyControllerFactory';
-import { makeLoadSurveysController } from '../factories/controllers/survey/LoadSurveysControllerFactory';
 
 export default (router: Router): void => {
   router.post(

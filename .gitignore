@@ -7,3 +7,4 @@ yarn.lock
 globalConfig.json
 data
 !src/data
+!test/data
