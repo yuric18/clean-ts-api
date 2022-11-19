@@ -8,11 +8,11 @@ import {
   SurveyResultMongoRepository,
 } from '@/index';
 
-import { mockAddSurveyParams, mockAccountModel } from 'test/domain';
+import { mockAddSurveyInput } from 'test/domain';
 
 const makeSurvey = async (): Promise<SurveyModel> => {
   await MongoHelper.getCollection('surveys');
-  const survey = await MongoHelper.insert(mockAddSurveyParams());
+  const survey = await MongoHelper.insert(mockAddSurveyInput());
   return MongoHelper.map(survey);
 };
 
@@ -141,7 +141,6 @@ describe('Survey Result Mongo Repository', () => {
     });
 
     test('should return null if there is no survey result', async () => {
-      const account = mockAccountModel();
       const sut = makeSut();
       const surveyResults = await sut.loadBySurveyId(
         '6336e1f27292da6d2d9fc718',

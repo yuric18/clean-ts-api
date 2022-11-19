@@ -5,7 +5,7 @@ import {
 } from '@/data';
 import { MongoHelper, QueryBuilder } from './helpers';
 
-import { AddSurveyParams, SurveyModel } from '@/domain';
+import { SurveyModel } from '@/domain';
 import { ObjectId } from 'mongodb';
 
 export class SurveyMongoRepository
@@ -14,7 +14,9 @@ export class SurveyMongoRepository
     LoadSurveysRepository,
     LoadSurveyByIdRepository
 {
-  async add(survey: AddSurveyParams): Promise<void> {
+  async add(
+    survey: AddSurveyRepository.Input
+  ): Promise<AddSurveyRepository.Output> {
     await MongoHelper.getCollection('surveys');
     await MongoHelper.insert(survey);
     return null;
