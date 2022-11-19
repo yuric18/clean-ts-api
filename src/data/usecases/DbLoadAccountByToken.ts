@@ -1,4 +1,4 @@
-import { LoadAccountByToken, AccountModel } from '@/domain';
+import { LoadAccountByToken } from '@/domain';
 
 import { Decrypter, LoadAccountByTokenRepository } from '@/data';
 
@@ -8,7 +8,10 @@ export class DbLoadAccountByToken implements LoadAccountByToken {
     private readonly loadAccountByTokenRepository: LoadAccountByTokenRepository
   ) {}
 
-  async load(accessToken: string, role?: string): Promise<AccountModel> {
+  async load(
+    accessToken: string,
+    role?: string
+  ): Promise<LoadAccountByToken.Output> {
     let token: string;
 
     try {

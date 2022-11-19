@@ -1,4 +1,4 @@
-import { LoadAccountByTokenRepository, AccountModel } from '@/index';
+import { LoadAccountByTokenRepository } from '@/index';
 
 import { mockAccountModel } from 'test/domain';
 
@@ -10,7 +10,7 @@ export const mockLoadAccountByTokenRepository =
       async loadByToken(
         token: string,
         role?: string | undefined
-      ): Promise<AccountModel> {
+      ): Promise<LoadAccountByTokenRepository.Output> {
         return Promise.resolve(mockAccountModel());
       }
     }
