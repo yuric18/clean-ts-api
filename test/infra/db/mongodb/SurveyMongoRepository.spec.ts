@@ -44,20 +44,15 @@ describe('Survey Mongo Repository', () => {
       } = await MongoHelper.collection.insertMany(surveysToAdd);
 
       await MongoHelper.getCollection('surveyResults');
-      const inserted = await MongoHelper.insert({
+      await MongoHelper.insert({
         surveyId,
         accountId: new ObjectId('6336e1f27292da6d2d9fc718'),
         answer: surveysToAdd[0].answers[0].answer,
         date: new Date(),
       });
 
-      console.log('inserted', inserted);
-
-      console.log(await MongoHelper.collection.find({}).toArray());
-
       const sut = makeSut();
       const surveys = await sut.loadAll('6336e1f27292da6d2d9fc718');
-      console.log(surveys);
       expect(surveys.length).toBe(2);
       expect(surveys[0].id).toBeTruthy();
       expect(surveys[0].didAnswer).toBe(true);
