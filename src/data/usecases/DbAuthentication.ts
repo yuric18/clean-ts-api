@@ -1,8 +1,4 @@
-import {
-  Authentication,
-  AuthenticationParams,
-  AuthenticatedAccountModel,
-} from '@/domain';
+import { Authentication } from '@/domain';
 
 import {
   HashComparer,
@@ -20,8 +16,8 @@ export class DbAuthentication implements Authentication {
   ) {}
 
   async auth(
-    authentication: AuthenticationParams
-  ): Promise<AuthenticatedAccountModel> {
+    authentication: Authentication.Input
+  ): Promise<Authentication.Output> {
     const { email, password } = authentication;
     const account = await this.loadAccountByEmailRepository.loadByEmail(email);
 
