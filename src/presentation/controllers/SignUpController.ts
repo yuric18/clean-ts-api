@@ -25,14 +25,14 @@ export class SignUpController implements Controller {
 
       const { name, email, password, role } = input;
 
-      const account = await this.addAccount.add({
+      const success = await this.addAccount.add({
         name,
         email,
         password,
         role,
       });
 
-      if (!account) return forbidden(new EmailAlreadyExists());
+      if (!success) return forbidden(new EmailAlreadyExists());
 
       const authenticatedAccount = await this.authentication.auth({
         email,

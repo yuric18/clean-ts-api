@@ -4,7 +4,7 @@ import {
   UpdateAccessTokenRepository,
   LoadAccountByTokenRepository,
 } from '@/data';
-import { AccountModel, AddAccountParams } from '@/domain';
+import { AccountModel } from '@/domain';
 import { MongoHelper } from './helpers/MongoHelper';
 
 export class AccountMongoRepository
@@ -14,7 +14,9 @@ export class AccountMongoRepository
     UpdateAccessTokenRepository,
     LoadAccountByTokenRepository
 {
-  async add(accountData: AddAccountParams): Promise<AccountModel> {
+  async add(
+    accountData: AddAccountRepository.Input
+  ): Promise<AddAccountRepository.Output> {
     await MongoHelper.getCollection('accounts');
     const account = await MongoHelper.insert(accountData);
     return MongoHelper.map(account);

@@ -1,8 +1,6 @@
-import { AddAccount, AddAccountParams, AccountModel } from '@/index';
+import { AddAccount } from '@/index';
 
-import { mockAccountModel } from '../entities/Account';
-
-export const mockAddAccountParams = (): AddAccountParams => ({
+export const mockAddAccountInput = (): AddAccount.Input => ({
   name: 'any_name',
   email: 'any_email@mail.com',
   password: 'any_password',
@@ -10,8 +8,8 @@ export const mockAddAccountParams = (): AddAccountParams => ({
 
 export const mockAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
-    async add(account: AddAccountParams): Promise<AccountModel> {
-      return Promise.resolve(mockAccountModel());
+    async add(account: AddAccount.Input): Promise<AddAccount.Output> {
+      return Promise.resolve(true);
     }
   }
   return new AddAccountStub();

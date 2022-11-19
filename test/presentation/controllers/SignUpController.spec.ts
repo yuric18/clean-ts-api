@@ -110,9 +110,9 @@ describe('SignUp Controller', () => {
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
   });
 
-  test('Should returns 403 if AddAccount returns null', async () => {
+  test('Should returns 403 if AddAccount returns false', async () => {
     const { sut, addAccountStub } = makeSut();
-    jest.spyOn(addAccountStub, 'add').mockResolvedValueOnce(null);
+    jest.spyOn(addAccountStub, 'add').mockResolvedValueOnce(false);
     const httpResponse: HttpResponse = await sut.handle(makeInput());
     expect(httpResponse).toEqual(forbidden(new EmailAlreadyExists()));
   });
