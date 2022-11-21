@@ -10,15 +10,17 @@ import {
 
 import { mockAddSurveyInput } from 'test/domain';
 
+let surveysCollection;
+let surveyResultsCollection;
+let accountsCollection;
+
 const makeSurvey = async (): Promise<SurveyModel> => {
-  await MongoHelper.getCollection('surveys');
-  const survey = await MongoHelper.insert(mockAddSurveyInput());
+  const survey = await MongoHelper.insertOne('surveys', mockAddSurveyInput());
   return MongoHelper.map(survey);
 };
 
 const makeAccount = async (): Promise<AccountModel> => {
-  await MongoHelper.getCollection('accounts');
-  const account = await MongoHelper.insert({
+  const account = await MongoHelper.insertOne('accounts', {
     name: 'any_name',
     email: 'any_email',
     password: 'any_password',
@@ -34,6 +36,9 @@ describe('Survey Result Mongo Repository', () => {
   beforeAll(async () => {
     MockDate.set(new Date());
     await MongoHelper.connect(process.env.MONGO_URL);
+    surveysCollection = MongoHelper.getCollection('surveys');
+    surveyResultsCollection = MongoHelper.getCollection('surveyResults');
+    accountsCollection = MongoHelper.getCollection('accounts');
   });
 
   afterAll(async () => {
@@ -42,12 +47,9 @@ describe('Survey Result Mongo Repository', () => {
   });
 
   beforeEach(async () => {
-    await MongoHelper.getCollection('surveys');
-    await MongoHelper.collection.deleteMany({});
-    await MongoHelper.getCollection('surveyResults');
-    await MongoHelper.collection.deleteMany({});
-    await MongoHelper.getCollection('accounts');
-    await MongoHelper.collection.deleteMany({});
+    await surveysCollection.deleteMany({});
+    await surveyResultsCollection.deleteMany({});
+    await accountsCollection.deleteMany({});
   });
 
   describe('save()', () => {
@@ -63,8 +65,7 @@ describe('Survey Result Mongo Repository', () => {
         date: new Date(),
       });
 
-      await MongoHelper.getCollection('surveyResults');
-      const surveys = await MongoHelper.collection.findOne({
+      const surveys = await surveyResultsCollection.findOne({
         surveyId,
         accountId,
       });
@@ -78,8 +79,7 @@ describe('Survey Result Mongo Repository', () => {
       const { id: surveyId, ...survey } = await makeSurvey();
       const { id: accountId } = await makeAccount();
 
-      await MongoHelper.getCollection('surveyResults');
-      await MongoHelper.insert({
+      await MongoHelper.insertOne('surveyResults', {
         surveyId: new ObjectId(surveyId),
         accountId: new ObjectId(accountId),
         answer: survey.answers[0].answer,
@@ -93,7 +93,7 @@ describe('Survey Result Mongo Repository', () => {
         date: new Date(),
       });
 
-      const results = await MongoHelper.collection
+      const results = await surveyResultsCollection
         .find({
           surveyId,
           accountId,
@@ -111,8 +111,7 @@ describe('Survey Result Mongo Repository', () => {
       const { id: accountId } = await makeAccount();
       const { id: accountId2 } = await makeAccount();
 
-      await MongoHelper.getCollection('surveyResults');
-      await MongoHelper.collection.insertMany([
+      await surveyResultsCollection.insertMany([
         {
           surveyId: new ObjectId(surveyId),
           accountId: new ObjectId(accountId),

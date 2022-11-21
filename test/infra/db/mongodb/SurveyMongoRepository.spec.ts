@@ -8,10 +8,15 @@ const makeSut = (): SurveyMongoRepository => {
   return new SurveyMongoRepository();
 };
 
+let surveysCollection;
+let surveyResultCollection;
+
 describe('Survey Mongo Repository', () => {
   beforeAll(async () => {
     MockDate.set(new Date());
     await MongoHelper.connect(process.env.MONGO_URL);
+    surveysCollection = MongoHelper.getCollection('surveys');
+    surveyResultCollection = MongoHelper.getCollection('surveyResults');
   });
 
   afterAll(async () => {
@@ -20,15 +25,15 @@ describe('Survey Mongo Repository', () => {
   });
 
   beforeEach(async () => {
-    await MongoHelper.getCollection('surveys');
-    await MongoHelper.collection.deleteMany({});
+    await surveysCollection.deleteMany({});
+    await surveyResultCollection.deleteMany({});
   });
 
   describe('add()', () => {
     test('Should return null on add success', async () => {
       const sut = makeSut();
       const addResult = await sut.add(mockSurvey());
-      const survey = await MongoHelper.collection.findOne({
+      const survey = await surveysCollection.findOne({
         question: 'any_question',
       });
       expect(addResult).toBeNull();
@@ -41,10 +46,9 @@ describe('Survey Mongo Repository', () => {
       const surveysToAdd = [mockSurvey(), mockSurvey()];
       const {
         insertedIds: { 0: surveyId },
-      } = await MongoHelper.collection.insertMany(surveysToAdd);
+      } = await surveysCollection.insertMany(surveysToAdd);
 
-      await MongoHelper.getCollection('surveyResults');
-      await MongoHelper.insert({
+      await MongoHelper.insertOne('surveyResults', {
         surveyId,
         accountId: new ObjectId('6336e1f27292da6d2d9fc718'),
         answer: surveysToAdd[0].answers[0].answer,
@@ -69,7 +73,7 @@ describe('Survey Mongo Repository', () => {
 
   describe('loadById()', () => {
     test('should load survey by id on success', async () => {
-      const res = await MongoHelper.insert(mockSurvey());
+      const res = await MongoHelper.insertOne('surveys', mockSurvey());
       const { id } = await MongoHelper.map(res);
       const sut = makeSut();
       const survey = await sut.loadById(id);

@@ -9,8 +9,8 @@ export class SurveyResultMongoRepository
   implements SaveSurveyResultRepository, LoadSurveyResultRepository
 {
   async save(data: SaveSurveyResultModel): Promise<void> {
-    await MongoHelper.getCollection('surveyResults');
-    await MongoHelper.collection.findOneAndUpdate(
+    const collection = MongoHelper.getCollection('surveyResults');
+    await collection.findOneAndUpdate(
       {
         surveyId: new ObjectId(data.surveyId),
         accountId: new ObjectId(data.accountId),
@@ -28,8 +28,6 @@ export class SurveyResultMongoRepository
     surveyId: string,
     accountId: string
   ): Promise<SurveyResultModel> {
-    await MongoHelper.getCollection('surveyResults');
-
     const aggregate = new QueryBuilder()
       .match({
         surveyId: new ObjectId(surveyId),
@@ -220,9 +218,8 @@ export class SurveyResultMongoRepository
       })
       .build();
 
-    const surveyResult = await MongoHelper.collection
-      .aggregate(aggregate)
-      .toArray();
+    const collection = MongoHelper.getCollection('surveyResults');
+    const surveyResult = await collection.aggregate(aggregate).toArray();
     return (surveyResult.length && MongoHelper.map(surveyResult[0])) || null;
   }
 }

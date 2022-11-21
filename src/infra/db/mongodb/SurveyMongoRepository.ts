@@ -17,14 +17,11 @@ export class SurveyMongoRepository
   async add(
     survey: AddSurveyRepository.Input
   ): Promise<AddSurveyRepository.Output> {
-    await MongoHelper.getCollection('surveys');
-    await MongoHelper.insert(survey);
+    await MongoHelper.insertOne('surveys', survey);
     return null;
   }
 
   async loadAll(accountId: string): Promise<SurveyModel[]> {
-    await MongoHelper.getCollection('surveys');
-
     const query = new QueryBuilder()
       .lookup({
         from: 'surveyResults',
@@ -56,13 +53,14 @@ export class SurveyMongoRepository
       })
       .build();
 
-    const surveys = await MongoHelper.collection.aggregate(query).toArray();
+    const collection = MongoHelper.getCollection('surveys');
+    const surveys = await collection.aggregate(query).toArray();
     return MongoHelper.mapArray(surveys);
   }
 
   async loadById(id: string): Promise<SurveyModel> {
-    await MongoHelper.getCollection('surveys');
-    const survey = await MongoHelper.collection.findOne({
+    const collection = MongoHelper.getCollection('surveys');
+    const survey = await collection.findOne({
       _id: new ObjectId(id),
     });
     return survey && MongoHelper.map(survey);
