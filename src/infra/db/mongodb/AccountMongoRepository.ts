@@ -4,7 +4,6 @@ import {
   UpdateAccessTokenRepository,
   LoadAccountByTokenRepository,
 } from '@/data';
-import { AccountModel } from '@/domain';
 import { MongoHelper } from './helpers/MongoHelper';
 
 export class AccountMongoRepository
@@ -21,7 +20,9 @@ export class AccountMongoRepository
     return MongoHelper.map(account);
   }
 
-  async loadByEmail(email: string): Promise<AccountModel> {
+  async loadByEmail(
+    email: string
+  ): Promise<LoadAccountByEmailRepository.Output> {
     const collection = MongoHelper.getCollection('accounts');
     const account = await collection.findOne({ email });
     return account && MongoHelper.map(account);

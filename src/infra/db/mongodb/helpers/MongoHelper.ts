@@ -19,7 +19,6 @@ export const MongoHelper = {
   },
 
   getCollection(name: string): Collection {
-    // if (this.client) return this.client.db().collection(name);
     return this.client.db().collection(name);
   },
 
