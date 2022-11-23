@@ -36,6 +36,25 @@ describe('Account Mongo Repository', () => {
     });
   });
 
+  describe('checkByEmail', () => {
+    test('Should return true on checkByEmail if already exists', async () => {
+      const sut = makeSut();
+      await accountCollection.insertOne({
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      });
+      const exists = await sut.checkByEmail('any_email@mail.com');
+      expect(exists).toBe(true);
+    });
+
+    test('Should return false on checkByEmail if not exists', async () => {
+      const sut = makeSut();
+      const exists = await sut.checkByEmail('any_email@mail.com');
+      expect(exists).toBe(false);
+    });
+  });
+
   describe('loadByEmail', () => {
     test('Should return an Account on loadByEmail success', async () => {
       const sut = makeSut();

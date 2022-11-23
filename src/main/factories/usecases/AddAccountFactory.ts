@@ -5,6 +5,10 @@ import { DbAddAccount } from '@/data';
 
 export const makeAddAccount = (): AddAccount => {
   const hasher = new BcryptAdapter(parseInt(env.salt));
-  const addAccountRepository = new AccountMongoRepository();
-  return new DbAddAccount(hasher, addAccountRepository, addAccountRepository);
+  const accountMongoRepository = new AccountMongoRepository();
+  return new DbAddAccount(
+    hasher,
+    accountMongoRepository,
+    accountMongoRepository
+  );
 };
