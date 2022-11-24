@@ -1,6 +1,7 @@
 export * from './AddAccount';
 export * from './AddSurvey';
 export * from './Authentication';
+export * from './CheckSurveyById';
 export * from './LoadAccountByToken';
 export * from './LoadSurveyById';
 export * from './LoadSurveyResult';

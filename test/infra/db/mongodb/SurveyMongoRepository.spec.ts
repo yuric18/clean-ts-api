@@ -87,4 +87,20 @@ describe('Survey Mongo Repository', () => {
       expect(survey).toBeNull();
     });
   });
+
+  describe('checkById()', () => {
+    test('should return true if survey exists', async () => {
+      const res = await MongoHelper.insertOne('surveys', mockSurvey());
+      const { id } = await MongoHelper.map(res);
+      const sut = makeSut();
+      const exists = await sut.checkById(id);
+      expect(exists).toBe(true);
+    });
+
+    test('should return null when survey does not exists', async () => {
+      const sut = makeSut();
+      const survey = await sut.loadById('6336e1f27292da6d2d9fc718');
+      expect(survey).toBe(null);
+    });
+  });
 });

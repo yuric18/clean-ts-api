@@ -1,6 +1,7 @@
 export * from './AddAccountRepository';
 export * from './AddSurveyRepository';
 export * from './CheckAccountByEmailRepository';
+export * from './CheckSurveyByIdRepository';
 export * from './LoadAccountByEmailRepository';
 export * from './LoadAccountByTokenRepository';
 export * from './LoadSurveyByIdRepository';

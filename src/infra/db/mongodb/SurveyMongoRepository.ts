@@ -1,5 +1,6 @@
 import {
   AddSurveyRepository,
+  CheckSurveyByIdRepository,
   LoadSurveyByIdRepository,
   LoadSurveysRepository,
 } from '@/data';
@@ -11,6 +12,7 @@ import { ObjectId } from 'mongodb';
 export class SurveyMongoRepository
   implements
     AddSurveyRepository,
+    CheckSurveyByIdRepository,
     LoadSurveysRepository,
     LoadSurveyByIdRepository
 {
@@ -19,6 +21,12 @@ export class SurveyMongoRepository
   ): Promise<AddSurveyRepository.Output> {
     await MongoHelper.insertOne('surveys', survey);
     return null;
+  }
+
+  async checkById(id: string): Promise<boolean> {
+    return !!MongoHelper.getCollection('surveys').findOne({
+      _id: new ObjectId(id),
+    });
   }
 
   async loadAll(accountId: string): Promise<SurveyModel[]> {
