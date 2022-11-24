@@ -1,4 +1,4 @@
-import { LoadSurveyResult, LoadSurveyById, CheckSurveyById } from '@/domain';
+import { LoadSurveyResult, CheckSurveyById } from '@/domain';
 
 import {
   Controller,

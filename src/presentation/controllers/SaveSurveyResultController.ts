@@ -1,4 +1,4 @@
-import { LoadSurveyById, SaveSurveyResult } from '@/domain';
+import { LoadAnswersBySurvey, SaveSurveyResult } from '@/domain';
 
 import {
   Controller,
@@ -11,20 +11,19 @@ import {
 
 export class SaveSurveyResultController implements Controller {
   constructor(
-    private readonly loadSurveyById: LoadSurveyById,
+    private readonly loadAnswersBySurvey: LoadAnswersBySurvey,
     private readonly saveSurveyResult: SaveSurveyResult
   ) {}
 
   async handle(input: SaveSurveyResultController.Input): Promise<HttpResponse> {
     try {
       const { accountId, surveyId, answer } = input;
-      const survey = await this.loadSurveyById.loadById(surveyId);
+      const answers = await this.loadAnswersBySurvey.loadBySurvey(surveyId);
 
-      if (!survey) {
+      if (!answers) {
         return forbidden(new InvalidParamError('surveyId'));
       }
 
-      const answers = survey.answers.map((a) => a.answer);
       if (!answers.includes(answer)) {
         return forbidden(new InvalidParamError('answer'));
       }

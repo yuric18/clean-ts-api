@@ -23,19 +23,10 @@ describe('Db Check Survey By Id', () => {
     expect(checkByIdSpy).toHaveBeenCalledWith('any_id');
   });
 
-  test('Should return a true on success', async () => {
+  test('Should return true on success', async () => {
     const { sut } = makeSut();
     const surveys = await sut.checkById('any_id');
     expect(surveys).toBe(true);
-  });
-
-  test('Should return a false if dont exists', async () => {
-    const { sut, checkSurveyByIdRepositoryStub } = makeSut();
-    const surveys = await sut.checkById('any_id');
-    jest
-      .spyOn(checkSurveyByIdRepositoryStub, 'checkById')
-      .mockResolvedValueOnce(false);
-    expect(surveys).toBe(false);
   });
 
   test('Should throw if CheckSurveyByIdRepository throws', () => {

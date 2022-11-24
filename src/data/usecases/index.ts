@@ -3,7 +3,7 @@ export * from './DbAddSurvey';
 export * from './DbAuthentication';
 export * from './DbCheckSurvey';
 export * from './DbLoadAccountByToken';
-export * from './DbLoadSurveyById';
+export * from './DbLoadAnswersBySurvey';
 export * from './DbLoadSurveyResult';
 export * from './DbLoadSurveys';
 export * from './DbSaveSurveyResult';

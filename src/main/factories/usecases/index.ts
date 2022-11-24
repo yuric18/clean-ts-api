@@ -2,7 +2,7 @@ export * from './AddAccountFactory';
 export * from './AddSurveyFactory';
 export * from './AuthenticationFactory';
 export * from './DbCheckSurveyById';
-export * from './DbLoadSurvesByIdFactory';
+export * from './DbLoadAnswersBySurvey';
 export * from './DbLoadSurveyResultFactory';
 export * from './DbLoadSurveysFactory';
 export * from './DbSaveSurveyResultFactory';
