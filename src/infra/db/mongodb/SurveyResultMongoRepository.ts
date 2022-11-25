@@ -1,6 +1,6 @@
 import { LoadSurveyResultRepository, SaveSurveyResultRepository } from '@/data';
 
-import { SaveSurveyResultModel, SurveyResultModel } from '@/domain';
+import { SaveSurveyResultModel } from '@/domain';
 
 import { ObjectId } from 'mongodb';
 import { MongoHelper, QueryBuilder } from './helpers';
@@ -27,7 +27,7 @@ export class SurveyResultMongoRepository
   async loadBySurveyId(
     surveyId: string,
     accountId: string
-  ): Promise<SurveyResultModel> {
+  ): Promise<LoadSurveyResultRepository.Output> {
     const aggregate = new QueryBuilder()
       .match({
         surveyId: new ObjectId(surveyId),
