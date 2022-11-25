@@ -7,7 +7,6 @@ import {
 } from '@/data';
 import { MongoHelper, QueryBuilder } from './helpers';
 
-import { SurveyModel } from '@/domain';
 import { ObjectId } from 'mongodb';
 
 export class SurveyMongoRepository
@@ -31,7 +30,7 @@ export class SurveyMongoRepository
     });
   }
 
-  async loadAll(accountId: string): Promise<SurveyModel[]> {
+  async loadAll(accountId: string): Promise<LoadSurveysRepository.Output> {
     const query = new QueryBuilder()
       .lookup({
         from: 'surveyResults',
