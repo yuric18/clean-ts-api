@@ -1,14 +1,12 @@
 import { LoadSurveyResultRepository, SaveSurveyResultRepository } from '@/data';
 
-import { SaveSurveyResultModel } from '@/domain';
-
 import { ObjectId } from 'mongodb';
 import { MongoHelper, QueryBuilder } from './helpers';
 
 export class SurveyResultMongoRepository
   implements SaveSurveyResultRepository, LoadSurveyResultRepository
 {
-  async save(data: SaveSurveyResultModel): Promise<void> {
+  async save(data: SaveSurveyResultRepository.Input): Promise<void> {
     const collection = MongoHelper.getCollection('surveyResults');
     await collection.findOneAndUpdate(
       {

@@ -1,5 +1,9 @@
-import { SaveSurveyResultModel } from '@/domain';
+import { SaveSurveyResult } from '@/domain';
 
 export interface SaveSurveyResultRepository {
-  save(data: SaveSurveyResultModel): Promise<void>;
+  save(data: SaveSurveyResultRepository.Input): Promise<void>;
+}
+
+export namespace SaveSurveyResultRepository {
+  export type Input = SaveSurveyResult.Input;
 }
