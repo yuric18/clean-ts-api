@@ -4,9 +4,12 @@ import env from '@/main/config/env';
 import { hash } from 'bcrypt';
 import request from 'supertest';
 
+let accountsCollection;
+
 describe('Login Routes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(env.mongoUrl);
+    accountsCollection = MongoHelper.getCollection('accounts');
   });
 
   afterAll(async () => {
@@ -14,8 +17,7 @@ describe('Login Routes', () => {
   });
 
   beforeEach(async () => {
-    await MongoHelper.getCollection('accounts');
-    await MongoHelper.collection.deleteMany({});
+    await accountsCollection.deleteMany({});
   });
 
   describe('POST /signup', () => {
@@ -35,7 +37,7 @@ describe('Login Routes', () => {
   describe('POST /login', () => {
     test('Should return 200 on login', async () => {
       const password = await hash('123', 12);
-      await MongoHelper.insert({
+      await MongoHelper.insertOne('accounts', {
         name: 'Yuri',
         email: 'y.cabral18@mail.com',
         password: password,

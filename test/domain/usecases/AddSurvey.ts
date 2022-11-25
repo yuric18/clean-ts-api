@@ -1,6 +1,6 @@
-import { AddSurvey, AddSurveyParams } from '@/index';
+import { AddSurvey } from '@/index';
 
-export const mockAddSurveyParams = (): AddSurveyParams => ({
+export const mockAddSurveyInput = (): AddSurvey.Input => ({
   question: 'any_question',
   answers: [
     {
@@ -21,7 +21,7 @@ export const mockAddSurveyParams = (): AddSurveyParams => ({
 
 export const mockAddSurvey = (): AddSurvey => {
   class AddSurveyStub implements AddSurvey {
-    async add(survey: AddSurveyParams): Promise<void> {
+    async add(survey: AddSurvey.Input): Promise<AddSurvey.Output> {
       return Promise.resolve();
     }
   }

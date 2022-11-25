@@ -1,7 +1,6 @@
 import { LoadSurveys } from '@/domain';
 import {
   Controller,
-  HttpRequest,
   HttpResponse,
   noContent,
   ok,
@@ -11,12 +10,20 @@ import {
 export class LoadSurveysController implements Controller {
   constructor(private readonly loadSurveys: LoadSurveys) {}
 
-  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle({
+    accountId,
+  }: LoadSurveysController.Input): Promise<HttpResponse> {
     try {
-      const surveys = await this.loadSurveys.load(httpRequest.accountId);
+      const surveys = await this.loadSurveys.load(accountId);
       return surveys.length ? ok(surveys) : noContent();
     } catch (e) {
       return serverError(e);
     }
   }
+}
+
+export namespace LoadSurveysController {
+  export type Input = {
+    accountId: string;
+  };
 }

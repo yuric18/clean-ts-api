@@ -1,5 +1,5 @@
 import {
-  makeDbLoadSurveyById,
+  makeDbLoadAnswersBySurvey,
   makeDbSaveSurveyResult,
   makeLogControllerDecorator,
 } from '@/main/factories';
@@ -7,7 +7,7 @@ import { Controller, SaveSurveyResultController } from '@/presentation';
 
 export const makeSaveSurveyResultController = (): Controller => {
   const controller = new SaveSurveyResultController(
-    makeDbLoadSurveyById(),
+    makeDbLoadAnswersBySurvey(),
     makeDbSaveSurveyResult()
   );
   return makeLogControllerDecorator(controller);

@@ -1,8 +1,7 @@
-import { LoadSurveyResult, LoadSurveyById } from '@/domain';
+import { LoadSurveyResult, CheckSurveyById } from '@/domain';
 
 import {
   Controller,
-  HttpRequest,
   HttpResponse,
   forbidden,
   ok,
@@ -12,18 +11,16 @@ import {
 
 export class LoadSurveyResultController implements Controller {
   constructor(
-    private readonly loadSurveyById: LoadSurveyById,
+    private readonly checkSurveyById: CheckSurveyById,
     private readonly loadSurveyResult: LoadSurveyResult
   ) {}
 
-  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle({
+    accountId,
+    surveyId,
+  }: LoadSurveyResultController.Input): Promise<HttpResponse> {
     try {
-      const {
-        accountId,
-        params: { surveyId },
-      } = httpRequest;
-
-      const survey = await this.loadSurveyById.loadById(surveyId);
+      const survey = await this.checkSurveyById.checkById(surveyId);
 
       if (!survey) return forbidden(new InvalidParamError('surveyId'));
 
@@ -33,4 +30,11 @@ export class LoadSurveyResultController implements Controller {
       return serverError(e);
     }
   }
+}
+
+export namespace LoadSurveyResultController {
+  export type Input = {
+    accountId: string;
+    surveyId: string;
+  };
 }

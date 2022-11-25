@@ -1,7 +1,10 @@
 import { AccountModel } from '@/domain';
 
-export type AddAccountParams = Omit<AccountModel, 'id'>;
-
 export interface AddAccount {
-  add(account: AddAccountParams): Promise<AccountModel>;
+  add(account: AddAccount.Input): Promise<AddAccount.Output>;
+}
+
+export namespace AddAccount {
+  export type Input = Omit<AccountModel, 'id'>;
+  export type Output = boolean;
 }

@@ -1,7 +1,6 @@
 import MockDate from 'mockdate';
 
 import {
-  HttpRequest,
   AddSurveyController,
   Validation,
   AddSurvey,
@@ -13,17 +12,14 @@ import {
 import { mockValidation } from 'test/validation';
 import { mockAddSurvey } from 'test/domain';
 
-const makeRequest = (): HttpRequest => ({
-  body: {
-    question: 'any_question',
-    answers: [
-      {
-        image: 'any_image',
-        answer: 'any_answer',
-      },
-    ],
-    date: new Date(),
-  },
+const mockInput = (): AddSurveyController.Input => ({
+  question: 'any_question',
+  answers: [
+    {
+      image: 'any_image',
+      answer: 'any_answer',
+    },
+  ],
 });
 
 type SutTypes = {
@@ -55,8 +51,8 @@ describe('Add Survey Controller', () => {
   test('should call Validation with correct values', async () => {
     const { sut, validationStub } = makeSut();
     const validateSpy = jest.spyOn(validationStub, 'validate');
-    await sut.handle(makeRequest());
-    expect(validateSpy).toHaveBeenCalledWith(makeRequest().body);
+    await sut.handle(mockInput());
+    expect(validateSpy).toHaveBeenCalledWith(mockInput());
   });
 
   test('should return 400 if validation fails', async () => {
@@ -64,15 +60,15 @@ describe('Add Survey Controller', () => {
     jest
       .spyOn(validationStub, 'validate')
       .mockImplementationOnce(() => new Error());
-    const httpResponse = await sut.handle(makeRequest());
+    const httpResponse = await sut.handle(mockInput());
     expect(httpResponse).toEqual(badRequest(new Error()));
   });
 
   test('should call AddSurvey with correct values', async () => {
     const { sut, addSurveyStub } = makeSut();
     const addSpy = jest.spyOn(addSurveyStub, 'add');
-    await sut.handle(makeRequest());
-    expect(addSpy).toHaveBeenCalledWith(makeRequest().body);
+    await sut.handle(mockInput());
+    expect(addSpy).toHaveBeenCalledWith({ ...mockInput(), date: new Date() });
   });
 
   test('should return 500 if AddSurvey throws', async () => {
@@ -80,13 +76,13 @@ describe('Add Survey Controller', () => {
     jest.spyOn(addSurveyStub, 'add').mockImplementationOnce(() => {
       throw new Error();
     });
-    const httpResponse = await sut.handle(makeRequest());
+    const httpResponse = await sut.handle(mockInput());
     expect(httpResponse).toEqual(serverError(new Error()));
   });
 
   test('should return 204 on success', async () => {
     const { sut } = makeSut();
-    const httpResponse = await sut.handle(makeRequest());
+    const httpResponse = await sut.handle(mockInput());
     expect(httpResponse).toEqual(noContent());
   });
 });

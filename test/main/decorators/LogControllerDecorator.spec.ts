@@ -1,5 +1,4 @@
 import {
-  HttpRequest,
   HttpResponse,
   serverError,
   ok,
@@ -11,7 +10,7 @@ import {
 import { mockAccountModel } from 'test/domain';
 import { mockLogErrorRepository } from 'test/data';
 
-const makeRequest = (): HttpRequest => ({
+const makeRequest = () => ({
   body: {
     name: 'any_name',
     email: 'any_email@mail.com',
@@ -28,7 +27,7 @@ const mockServerError = (): HttpResponse => {
 
 const makeController = (): Controller => {
   class ControllerStub implements Controller {
-    handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+    handle(httpRequest): Promise<HttpResponse> {
       return Promise.resolve(ok(mockAccountModel()));
     }
   }

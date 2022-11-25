@@ -1,10 +1,13 @@
-import { LoadSurveyResult, SurveyResultModel } from '@/index';
+import { LoadSurveyResult } from '@/index';
 
 import { mockSurveyResult } from '../entities';
 
 export const mockLoadSurveyResult = () => {
   class LoadSurveyResultStub implements LoadSurveyResult {
-    load(surveyId: string, accountId: string): Promise<SurveyResultModel> {
+    load(
+      surveyId: string,
+      accountId: string
+    ): Promise<LoadSurveyResult.Output> {
       return Promise.resolve(mockSurveyResult());
     }
   }

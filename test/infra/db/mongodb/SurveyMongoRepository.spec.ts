@@ -8,10 +8,15 @@ const makeSut = (): SurveyMongoRepository => {
   return new SurveyMongoRepository();
 };
 
+let surveysCollection;
+let surveyResultCollection;
+
 describe('Survey Mongo Repository', () => {
   beforeAll(async () => {
     MockDate.set(new Date());
     await MongoHelper.connect(process.env.MONGO_URL);
+    surveysCollection = MongoHelper.getCollection('surveys');
+    surveyResultCollection = MongoHelper.getCollection('surveyResults');
   });
 
   afterAll(async () => {
@@ -20,15 +25,15 @@ describe('Survey Mongo Repository', () => {
   });
 
   beforeEach(async () => {
-    await MongoHelper.getCollection('surveys');
-    await MongoHelper.collection.deleteMany({});
+    await surveysCollection.deleteMany({});
+    await surveyResultCollection.deleteMany({});
   });
 
   describe('add()', () => {
     test('Should return null on add success', async () => {
       const sut = makeSut();
       const addResult = await sut.add(mockSurvey());
-      const survey = await MongoHelper.collection.findOne({
+      const survey = await surveysCollection.findOne({
         question: 'any_question',
       });
       expect(addResult).toBeNull();
@@ -41,23 +46,17 @@ describe('Survey Mongo Repository', () => {
       const surveysToAdd = [mockSurvey(), mockSurvey()];
       const {
         insertedIds: { 0: surveyId },
-      } = await MongoHelper.collection.insertMany(surveysToAdd);
+      } = await surveysCollection.insertMany(surveysToAdd);
 
-      await MongoHelper.getCollection('surveyResults');
-      const inserted = await MongoHelper.insert({
+      await MongoHelper.insertOne('surveyResults', {
         surveyId,
         accountId: new ObjectId('6336e1f27292da6d2d9fc718'),
         answer: surveysToAdd[0].answers[0].answer,
         date: new Date(),
       });
 
-      console.log('inserted', inserted);
-
-      console.log(await MongoHelper.collection.find({}).toArray());
-
       const sut = makeSut();
       const surveys = await sut.loadAll('6336e1f27292da6d2d9fc718');
-      console.log(surveys);
       expect(surveys.length).toBe(2);
       expect(surveys[0].id).toBeTruthy();
       expect(surveys[0].didAnswer).toBe(true);
@@ -72,9 +71,28 @@ describe('Survey Mongo Repository', () => {
     });
   });
 
+  describe('loadBySurvey()', () => {
+    test('should load answers on success', async () => {
+      const res = await MongoHelper.insertOne('surveys', mockSurvey());
+      const survey = await MongoHelper.map(res);
+      const sut = makeSut();
+      const answers = await sut.loadBySurvey(survey.id);
+      expect(answers).toEqual([
+        survey.answers[0].answer,
+        survey.answers[1].answer,
+      ]);
+    });
+
+    test('should return empty list when no content', async () => {
+      const sut = makeSut();
+      const survey = await sut.loadBySurvey('6336e1f27292da6d2d9fc718');
+      expect(survey).toEqual([]);
+    });
+  });
+
   describe('loadById()', () => {
     test('should load survey by id on success', async () => {
-      const res = await MongoHelper.insert(mockSurvey());
+      const res = await MongoHelper.insertOne('surveys', mockSurvey());
       const { id } = await MongoHelper.map(res);
       const sut = makeSut();
       const survey = await sut.loadById(id);
@@ -86,6 +104,22 @@ describe('Survey Mongo Repository', () => {
       const sut = makeSut();
       const survey = await sut.loadById('6336e1f27292da6d2d9fc718');
       expect(survey).toBeNull();
+    });
+  });
+
+  describe('checkById()', () => {
+    test('should return true if survey exists', async () => {
+      const res = await MongoHelper.insertOne('surveys', mockSurvey());
+      const { id } = await MongoHelper.map(res);
+      const sut = makeSut();
+      const exists = await sut.checkById(id);
+      expect(exists).toBe(true);
+    });
+
+    test('should return null when survey does not exists', async () => {
+      const sut = makeSut();
+      const survey = await sut.loadById('6336e1f27292da6d2d9fc718');
+      expect(survey).toBe(null);
     });
   });
 });

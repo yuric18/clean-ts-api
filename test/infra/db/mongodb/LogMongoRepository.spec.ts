@@ -4,9 +4,12 @@ const makeSut = (): LogMongoRepository => {
   return new LogMongoRepository();
 };
 
+let errorCollection;
+
 describe('Log Mongo Repository', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL);
+    errorCollection = MongoHelper.getCollection('errors');
   });
 
   afterAll(async () => {
@@ -14,14 +17,13 @@ describe('Log Mongo Repository', () => {
   });
 
   beforeEach(async () => {
-    await MongoHelper.getCollection('errors');
-    await MongoHelper.collection.deleteMany({});
+    await errorCollection.deleteMany({});
   });
 
   test('Should create an error log on success', async () => {
     const sut = makeSut();
     await sut.logError('any_error');
-    const count = await MongoHelper.collection.countDocuments();
+    const count = await errorCollection.countDocuments();
     expect(count).toBe(1);
   });
 });

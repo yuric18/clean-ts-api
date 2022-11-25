@@ -1,8 +1,7 @@
-import { LoadSurveyById, SaveSurveyResult } from '@/domain';
+import { LoadAnswersBySurvey, SaveSurveyResult } from '@/domain';
 
 import {
   Controller,
-  HttpRequest,
   HttpResponse,
   forbidden,
   serverError,
@@ -12,22 +11,19 @@ import {
 
 export class SaveSurveyResultController implements Controller {
   constructor(
-    private readonly loadSurveyById: LoadSurveyById,
+    private readonly loadAnswersBySurvey: LoadAnswersBySurvey,
     private readonly saveSurveyResult: SaveSurveyResult
   ) {}
 
-  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle(input: SaveSurveyResultController.Input): Promise<HttpResponse> {
     try {
-      const { accountId } = httpRequest;
-      const { surveyId } = httpRequest.params;
-      const { answer } = httpRequest.body;
-      const survey = await this.loadSurveyById.loadById(surveyId);
+      const { accountId, surveyId, answer } = input;
+      const answers = await this.loadAnswersBySurvey.loadBySurvey(surveyId);
 
-      if (!survey) {
+      if (!answers) {
         return forbidden(new InvalidParamError('surveyId'));
       }
 
-      const answers = survey.answers.map((a) => a.answer);
       if (!answers.includes(answer)) {
         return forbidden(new InvalidParamError('answer'));
       }
@@ -44,4 +40,12 @@ export class SaveSurveyResultController implements Controller {
       return serverError(e);
     }
   }
+}
+
+export namespace SaveSurveyResultController {
+  export type Input = {
+    accountId: string;
+    surveyId: string;
+    answer: string;
+  };
 }

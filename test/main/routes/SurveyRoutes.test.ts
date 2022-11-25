@@ -4,10 +4,12 @@ import env from '@/main/config/env';
 import { sign } from 'jsonwebtoken';
 import request from 'supertest';
 
+let surveysCollection;
+let accountsCollection;
+
 const makeAccessToken = async (): Promise<string> => {
-  await MongoHelper.getCollection('accounts');
   const { id } = MongoHelper.map(
-    await MongoHelper.insert({
+    await MongoHelper.insertOne('accounts', {
       name: 'Yuri',
       email: 'yuri.cabral@gmail.com',
       password: '123',
@@ -15,7 +17,7 @@ const makeAccessToken = async (): Promise<string> => {
     })
   );
   const accessToken = sign({ id }, env.jwtSecret);
-  await MongoHelper.collection.updateOne(
+  await accountsCollection.updateOne(
     { _id: id },
     {
       $set: { accessToken },
@@ -28,6 +30,8 @@ const makeAccessToken = async (): Promise<string> => {
 describe('Survey Routes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(env.mongoUrl);
+    surveysCollection = MongoHelper.getCollection('surveys');
+    accountsCollection = MongoHelper.getCollection('accounts');
   });
 
   afterAll(async () => {
@@ -35,10 +39,8 @@ describe('Survey Routes', () => {
   });
 
   beforeEach(async () => {
-    await MongoHelper.getCollection('surveys');
-    await MongoHelper.collection.deleteMany({});
-    await MongoHelper.getCollection('accounts');
-    await MongoHelper.collection.deleteMany({});
+    await accountsCollection.deleteMany({});
+    await surveysCollection.deleteMany({});
   });
 
   describe('POST /surveys', () => {

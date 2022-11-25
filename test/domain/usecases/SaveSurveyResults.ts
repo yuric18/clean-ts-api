@@ -1,12 +1,8 @@
-import {
-  SaveSurveyResult,
-  SurveyResultModel,
-  SaveSurveyResultModel,
-} from '@/index';
+import { SaveSurveyResult, SurveyResultModel } from '@/index';
 
 import { mockSurveyResult } from '../entities';
 
-export const mockSaveSurveyResultParams = (): SaveSurveyResultModel => ({
+export const mockSaveSurveyResultParams = (): SaveSurveyResult.Input => ({
   accountId: 'any_accountId',
   surveyId: 'any_surveyId',
   answer: 'any_answer',

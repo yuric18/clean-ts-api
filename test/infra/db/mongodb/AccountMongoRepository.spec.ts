@@ -4,9 +4,12 @@ const makeSut = (): AccountMongoRepository => {
   return new AccountMongoRepository();
 };
 
+let accountCollection;
+
 describe('Account Mongo Repository', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL);
+    accountCollection = MongoHelper.getCollection('accounts');
   });
 
   afterAll(async () => {
@@ -14,8 +17,7 @@ describe('Account Mongo Repository', () => {
   });
 
   beforeEach(async () => {
-    await MongoHelper.getCollection('accounts');
-    await MongoHelper.collection.deleteMany({});
+    await accountCollection.deleteMany({});
   });
 
   describe('add', () => {
@@ -34,10 +36,29 @@ describe('Account Mongo Repository', () => {
     });
   });
 
+  describe('checkByEmail', () => {
+    test('Should return true on checkByEmail if already exists', async () => {
+      const sut = makeSut();
+      await accountCollection.insertOne({
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      });
+      const exists = await sut.checkByEmail('any_email@mail.com');
+      expect(exists).toBe(true);
+    });
+
+    test('Should return false on checkByEmail if not exists', async () => {
+      const sut = makeSut();
+      const exists = await sut.checkByEmail('any_email@mail.com');
+      expect(exists).toBe(false);
+    });
+  });
+
   describe('loadByEmail', () => {
     test('Should return an Account on loadByEmail success', async () => {
       const sut = makeSut();
-      await MongoHelper.collection.insertOne({
+      await accountCollection.insertOne({
         name: 'any_name',
         email: 'any_email@mail.com',
         password: 'any_password',
@@ -60,7 +81,7 @@ describe('Account Mongo Repository', () => {
   describe('loadByToken', () => {
     test('Should return an Account on loadByToken without role success', async () => {
       const sut = makeSut();
-      await MongoHelper.collection.insertOne({
+      await accountCollection.insertOne({
         name: 'any_name',
         email: 'any_email@mail.com',
         password: 'any_password',
@@ -76,7 +97,7 @@ describe('Account Mongo Repository', () => {
 
     test('Should return an Account on loadByToken with admin role', async () => {
       const sut = makeSut();
-      await MongoHelper.collection.insertOne({
+      await accountCollection.insertOne({
         name: 'any_name',
         email: 'any_email@mail.com',
         password: 'any_password',
@@ -93,7 +114,7 @@ describe('Account Mongo Repository', () => {
 
     test('Should return an Account on loadByToken if user is admin', async () => {
       const sut = makeSut();
-      await MongoHelper.collection.insertOne({
+      await accountCollection.insertOne({
         name: 'any_name',
         email: 'any_email@mail.com',
         password: 'any_password',
@@ -110,7 +131,7 @@ describe('Account Mongo Repository', () => {
 
     test('Should return null on loadByToken with invalid role', async () => {
       const sut = makeSut();
-      await MongoHelper.collection.insertOne({
+      await accountCollection.insertOne({
         name: 'any_name',
         email: 'any_email@mail.com',
         password: 'any_password',
@@ -130,18 +151,20 @@ describe('Account Mongo Repository', () => {
   describe('updateAccessToken', () => {
     test('Should update the account accessToken on updateAccessToken success', async () => {
       const sut = makeSut();
-      const fakeAccount = await MongoHelper.insert({
+      const fakeAccount = await MongoHelper.insertOne('accounts', {
         name: 'any_name',
         email: 'any_email@mail.com',
         password: 'any_password',
       });
       const newAccount = MongoHelper.map(fakeAccount);
       expect(newAccount.accessToken).toBeFalsy();
+
       await sut.updateAccessToken(newAccount.id, 'any_token');
-      const account = await MongoHelper.collection.findOne({
+      const account = await accountCollection.findOne({
         _id: newAccount.id,
       });
       const updatedTokenAccount = MongoHelper.map(account);
+
       expect(updatedTokenAccount).toBeTruthy();
       expect(updatedTokenAccount.accessToken).toBe('any_token');
     });

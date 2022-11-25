@@ -4,10 +4,12 @@ import env from '@/main/config/env';
 import { sign } from 'jsonwebtoken';
 import request from 'supertest';
 
+let surveysCollection;
+let accountsCollection;
+
 const makeAccessToken = async (): Promise<string> => {
-  await MongoHelper.getCollection('accounts');
   const { id } = MongoHelper.map(
-    await MongoHelper.insert({
+    await MongoHelper.insertOne('accounts', {
       name: 'Yuri',
       email: 'yuri.cabral@gmail.com',
       password: '123',
@@ -15,7 +17,7 @@ const makeAccessToken = async (): Promise<string> => {
     })
   );
   const accessToken = sign({ id }, env.jwtSecret);
-  await MongoHelper.collection.updateOne(
+  await accountsCollection.updateOne(
     { _id: id },
     {
       $set: { accessToken },
@@ -28,6 +30,8 @@ const makeAccessToken = async (): Promise<string> => {
 describe('Survey Result Routes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(env.mongoUrl);
+    surveysCollection = MongoHelper.getCollection('surveys');
+    accountsCollection = MongoHelper.getCollection('accounts');
   });
 
   afterAll(async () => {
@@ -35,10 +39,8 @@ describe('Survey Result Routes', () => {
   });
 
   beforeEach(async () => {
-    await MongoHelper.getCollection('surveys');
-    await MongoHelper.collection.deleteMany({});
-    await MongoHelper.getCollection('accounts');
-    await MongoHelper.collection.deleteMany({});
+    await surveysCollection.deleteMany({});
+    await accountsCollection.deleteMany({});
   });
 
   describe('PUT /surveys/:surveyId/results', () => {
@@ -52,8 +54,7 @@ describe('Survey Result Routes', () => {
     });
 
     test('Should return 200 on save survey result with an valid accessToken', async () => {
-      await MongoHelper.getCollection('surveys');
-      const data = await MongoHelper.insert({
+      const data = await MongoHelper.insertOne('surveys', {
         question: 'Question',
         answers: [
           {
@@ -82,8 +83,7 @@ describe('Survey Result Routes', () => {
     });
 
     test('Should return 200 on load survey result with an valid accessToken', async () => {
-      await MongoHelper.getCollection('surveys');
-      const data = await MongoHelper.insert({
+      const data = await MongoHelper.insertOne('surveys', {
         question: 'Question',
         answers: [
           {

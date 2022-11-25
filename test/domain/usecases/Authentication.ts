@@ -1,12 +1,8 @@
-import {
-  Authentication,
-  AuthenticationParams,
-  AuthenticatedAccountModel,
-} from '@/index';
+import { Authentication } from '@/index';
 
 import { mockAuthenticatedAccount } from '../entities/AuthenticatedAccount';
 
-export const mockAuthenticationParams = (): AuthenticationParams => ({
+export const mockAuthenticationInput = (): Authentication.Input => ({
   email: 'any_email@mail.com',
   password: 'any_password',
 });
@@ -14,8 +10,8 @@ export const mockAuthenticationParams = (): AuthenticationParams => ({
 export const mockAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
     async auth(
-      authentication: AuthenticationParams
-    ): Promise<AuthenticatedAccountModel> {
+      authentication: Authentication.Input
+    ): Promise<Authentication.Output> {
       return Promise.resolve(mockAuthenticatedAccount());
     }
   }

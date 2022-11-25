@@ -5,13 +5,12 @@ import {
   serverError,
   ok,
   LoadSurveysController,
-  HttpRequest,
   LoadSurveys,
 } from '@/index';
 
 import { mockSurvey, mockLoadSurveys } from 'test/domain';
 
-const mockRequest = (): HttpRequest => ({
+const mockInput = (): LoadSurveysController.Input => ({
   accountId: 'any_accountId',
 });
 
@@ -41,20 +40,20 @@ describe('Load Surveys Controller', () => {
   test('Should call LoadSurveys with correct values', async () => {
     const { sut, loadSurveysStub } = makeSut();
     const loadSpy = jest.spyOn(loadSurveysStub, 'load');
-    await sut.handle(mockRequest());
+    await sut.handle(mockInput());
     expect(loadSpy).toHaveBeenCalledWith('any_accountId');
   });
 
   test('Should return 200 on success', async () => {
     const { sut } = makeSut();
-    const httpResponse = await sut.handle(mockRequest());
+    const httpResponse = await sut.handle(mockInput());
     expect(httpResponse).toEqual(ok([mockSurvey()]));
   });
 
   test('Should return 204 if LoadSurveys returns empty', async () => {
     const { sut, loadSurveysStub } = makeSut();
     jest.spyOn(loadSurveysStub, 'load').mockResolvedValue([]);
-    const httpResponse = await sut.handle(mockRequest());
+    const httpResponse = await sut.handle(mockInput());
     expect(httpResponse).toEqual(noContent());
   });
 
@@ -63,7 +62,7 @@ describe('Load Surveys Controller', () => {
     jest.spyOn(loadSurveysStub, 'load').mockImplementationOnce(() => {
       throw new Error();
     });
-    const httpResponse = await sut.handle(mockRequest());
+    const httpResponse = await sut.handle(mockInput());
     expect(httpResponse).toEqual(serverError(new Error()));
   });
 });

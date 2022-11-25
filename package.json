@@ -10,8 +10,8 @@
     "up": "npm run build && docker-compose up -d",
     "down": "docker-compose down",
     "start": "node dist/main/server.js",
-    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand --forceExit",
-    "test:verbose": "jest --passWithNoTests --runInBand",
+    "test": "jest --passWithNoTests --silent --noStackTrace",
+    "test:verbose": "jest --passWithNoTests",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:integration": "npm test -- --watch -c jest-integration-config.js",
     "test:staged": "npm test -- --findRelatedTests",
@@ -49,7 +49,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "git-commit-msg-linter": "^4.1.3",
     "husky": "^8.0.1",
-    "jest": "^29.0.1",
+    "jest": "^28.1.8",
     "lint-staged": "^13.0.3",
     "mockdate": "^3.0.5",
     "prettier": "^2.7.1",
@@ -70,7 +70,7 @@
     "validator": "^13.7.0"
   },
   "engines": {
-    "node": "14.x"
+    "node": ">= 14.x"
   },
   "_moduleAliases": {
     "@": "dist"
