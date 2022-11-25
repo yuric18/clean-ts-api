@@ -4,6 +4,7 @@ export * from './CheckAccountByEmailRepository';
 export * from './CheckSurveyByIdRepository';
 export * from './LoadAccountByEmailRepository';
 export * from './LoadAccountByTokenRepository';
+export * from './LoadAnswersBySurveyRepository';
 export * from './LoadSurveyByIdRepository';
 export * from './LoadSurveyResultRepository';
 export * from './LoadSurveysRepository';

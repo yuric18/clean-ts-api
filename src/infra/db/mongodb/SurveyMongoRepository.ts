@@ -1,6 +1,7 @@
 import {
   AddSurveyRepository,
   CheckSurveyByIdRepository,
+  LoadAnswersBySurveyRepository,
   LoadSurveyByIdRepository,
   LoadSurveysRepository,
 } from '@/data';
@@ -13,6 +14,7 @@ export class SurveyMongoRepository
   implements
     AddSurveyRepository,
     CheckSurveyByIdRepository,
+    LoadAnswersBySurveyRepository,
     LoadSurveysRepository,
     LoadSurveyByIdRepository
 {
@@ -72,5 +74,17 @@ export class SurveyMongoRepository
       _id: new ObjectId(id),
     });
     return survey && MongoHelper.map(survey);
+  }
+
+  async loadBySurvey(
+    id: string
+  ): Promise<LoadAnswersBySurveyRepository.Output> {
+    const collection = MongoHelper.getCollection('surveys');
+    const aggregate = new QueryBuilder()
+      .match({ _id: new ObjectId(id) })
+      .project({ _id: 0, answers: '$answers.answer' })
+      .build();
+    const surveys = await collection.aggregate(aggregate).toArray();
+    return surveys[0]?.answers ?? [];
   }
 }

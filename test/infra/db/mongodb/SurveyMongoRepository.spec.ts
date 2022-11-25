@@ -71,6 +71,25 @@ describe('Survey Mongo Repository', () => {
     });
   });
 
+  describe('loadBySurvey()', () => {
+    test('should load answers on success', async () => {
+      const res = await MongoHelper.insertOne('surveys', mockSurvey());
+      const survey = await MongoHelper.map(res);
+      const sut = makeSut();
+      const answers = await sut.loadBySurvey(survey.id);
+      expect(answers).toEqual([
+        survey.answers[0].answer,
+        survey.answers[1].answer,
+      ]);
+    });
+
+    test('should return empty list when no content', async () => {
+      const sut = makeSut();
+      const survey = await sut.loadBySurvey('6336e1f27292da6d2d9fc718');
+      expect(survey).toEqual([]);
+    });
+  });
+
   describe('loadById()', () => {
     test('should load survey by id on success', async () => {
       const res = await MongoHelper.insertOne('surveys', mockSurvey());
