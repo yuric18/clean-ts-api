@@ -9,4 +9,14 @@ export default gql`
     accessToken: String!
     name: String!
   }
+
+  extend type Mutation {
+    signUp(
+      name: String!
+      email: String!
+      password: String!
+      passwordConfirmation: String!
+      role: String
+    ): Account!
+  }
 `;
