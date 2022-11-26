@@ -8,9 +8,12 @@ import {
 
 export const ApolloServerResolverAdapter = async (
   controller: Controller,
-  args: any
+  args?: any
 ) => {
-  const response = await controller.handle(args);
+  const request = {
+    ...(args || {}),
+  };
+  const response = await controller.handle(request);
   switch (response.statusCode) {
     case 200:
       return response.body;
