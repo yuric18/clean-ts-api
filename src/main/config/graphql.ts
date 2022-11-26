@@ -5,21 +5,23 @@ import resolvers from '@/main/graphql/resolvers';
 import typeDefs from '@/main/graphql/typedefs';
 import { GraphQLError } from 'graphql';
 
-const handleErrors = (response, errors: GraphQLError[]) => {
-  if (
-    errors.some(
-      (e) =>
-        e.name === 'AuthenticationError' ||
-        e.originalError.name === 'AuthenticationError'
-    )
-  ) {
-    response.data = undefined;
-    response.http.status = 401;
-  }
-};
-
 const checkError = (error: GraphQLError, errorName: string): boolean =>
-  error.name === errorName || error.originalError.name === errorName;
+  [error.name, error.originalError?.name].some((n) => n === errorName);
+
+const errorMappings = [
+  { name: 'UserInputError', code: 400 },
+  { name: 'AuthenticationError', code: 401 },
+  { name: 'ForbiddenError', code: 403 },
+];
+
+const getStatus = (e) => errorMappings.find((m) => checkError(e, m.name));
+
+const handleErrors = (response, errors: readonly GraphQLError[]): void => {
+  const errorFound = errors?.map(getStatus).filter((s) => !!s)[0].code;
+  const hasError = errors?.some(getStatus);
+  response.data = hasError ? undefined : response.data;
+  response.http.status = hasError ? errorFound : response.http.status;
+};
 
 export default async (app: Express): Promise<void> => {
   const server = new ApolloServer({
@@ -27,8 +29,9 @@ export default async (app: Express): Promise<void> => {
     resolvers,
     plugins: [
       {
-        requestDidStart: () => ({
-          willSendResponse: ({ response, errors }) => {},
+        requestDidStart: async () => ({
+          willSendResponse: async ({ response, errors }) =>
+            handleErrors(response, errors),
         }),
       },
     ],
