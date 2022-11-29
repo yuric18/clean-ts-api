@@ -218,6 +218,10 @@ export class SurveyResultMongoRepository
 
     const collection = MongoHelper.getCollection('surveyResults');
     const surveyResult = await collection.aggregate(aggregate).toArray();
-    return (surveyResult.length && MongoHelper.map(surveyResult[0])) || null;
+    return (
+      (surveyResult.length &&
+        (surveyResult[0] as LoadSurveyResultRepository.Output)) ||
+      null
+    );
   }
 }
