@@ -2,7 +2,6 @@ import { MongoHelper } from '@/index';
 import { setupApp } from '@/main/config/app';
 import env from '@/main/config/env';
 import { Express } from 'express';
-import { access } from 'fs';
 import { sign } from 'jsonwebtoken';
 import request from 'supertest';
 
@@ -66,6 +65,32 @@ describe('Surveys Query', () => {
     });
 
     test('Should return 204 on load surveys with an valid accessToken', async () => {
+      const accessToken = await makeAccessToken();
+      request(app)
+        .post('/graphql')
+        .set('x-access-token', accessToken)
+        .send({ query })
+        .expect(204);
+    });
+  });
+
+  describe('Surveys Mutation', () => {
+    const query = `mutation {
+      addSurvey(question: "Question 1", answers: 
+        [
+          { answer: "Answer 1", image: "image.com" },
+          { answer: "Answer 2" }
+        ]
+      ) {
+        id
+      }
+    }`;
+
+    test('Should return 403 on add survey without accessToken', async () => {
+      await request(app).post('/graphql').send({ query }).expect(403);
+    });
+
+    test('Should return 204 on add survey with an valid accessToken', async () => {
       const accessToken = await makeAccessToken();
       request(app)
         .post('/graphql')
