@@ -7,9 +7,7 @@
     "prepare": "husky install",
     "build": "rimraf dist && npm run compile",
     "compile": "tsc -p tsconfig.build.json",
-    "build:watch": "npm run compile -- --watch",
-    "dev:watch": "nodemon --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
-    "dev": "concurrently 'npm run build:watch' 'npm run dev:watch'",
+    "dev": "tsc-watch -p tsconfig.build.json --onSuccess 'node --inspect dist/main/server.js '",
     "up": "npm run build && docker-compose up -d",
     "down": "docker-compose down",
     "start": "node dist/main/server.js",
@@ -62,6 +60,7 @@
     "sucrase": "^3.25.0",
     "supertest": "^6.2.4",
     "ts-jest": "^28.0.8",
+    "tsc-watch": "^5.0.3",
     "typescript": "^4.8.2"
   },
   "dependencies": {
@@ -75,7 +74,6 @@
     "jsonwebtoken": "^8.5.1",
     "module-alias": "^2.2.2",
     "mongodb": "^4.9.1",
-    "nodemon": "^2.0.19",
     "swagger-ui-express": "^4.6.0",
     "validator": "^13.7.0"
   },
