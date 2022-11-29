@@ -1,11 +1,14 @@
 import { MongoHelper } from '@/index';
-import app from '@/main/config/app';
+import { setupApp } from '@/main/config/app';
 import env from '@/main/config/env';
+import { Express } from 'express';
 import { sign } from 'jsonwebtoken';
 import request from 'supertest';
 
 let surveysCollection;
 let accountsCollection;
+
+let app: Express;
 
 const makeAccessToken = async (): Promise<string> => {
   const { id } = MongoHelper.map(
@@ -29,6 +32,7 @@ const makeAccessToken = async (): Promise<string> => {
 
 describe('Survey Result Routes', () => {
   beforeAll(async () => {
+    app = await setupApp();
     await MongoHelper.connect(env.mongoUrl);
     surveysCollection = MongoHelper.getCollection('surveys');
     accountsCollection = MongoHelper.getCollection('accounts');

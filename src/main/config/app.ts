@@ -1,13 +1,18 @@
-import express from 'express';
-import setupGraphQl from './graphql';
+import express, { Express } from 'express';
+import { setupApolloServer } from '../graphql';
 import setupMiddlewares from './middlewares';
 import setupRoutes from './routes';
 import setupSwagger from './swagger';
 
-const app = express();
-setupGraphQl(app);
-setupSwagger(app);
-setupMiddlewares(app);
-setupRoutes(app);
+export const setupApp = async (): Promise<Express> => {
+  const app = express();
+  setupSwagger(app);
+  setupMiddlewares(app);
+  setupRoutes(app);
 
-export default app;
+  const apolloServer = setupApolloServer();
+  await apolloServer.start();
+  apolloServer.applyMiddleware({ app });
+
+  return app;
+};
