@@ -48,8 +48,6 @@ describe('Survey Result Query', () => {
   beforeAll(async () => {
     app = await setupApp();
     await MongoHelper.connect(env.mongoUrl);
-    surveysCollection = MongoHelper.getCollection('surveys');
-    accountsCollection = MongoHelper.getCollection('accounts');
   });
 
   afterAll(async () => {
@@ -57,7 +55,9 @@ describe('Survey Result Query', () => {
   });
 
   beforeEach(async () => {
+    surveysCollection = MongoHelper.getCollection('surveys');
     await surveysCollection.deleteMany({});
+    accountsCollection = MongoHelper.getCollection('accounts');
     await accountsCollection.deleteMany({});
   });
 

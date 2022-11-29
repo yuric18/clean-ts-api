@@ -15,8 +15,6 @@ describe('Survey Mongo Repository', () => {
   beforeAll(async () => {
     MockDate.set(new Date());
     await MongoHelper.connect(process.env.MONGO_URL);
-    surveysCollection = MongoHelper.getCollection('surveys');
-    surveyResultCollection = MongoHelper.getCollection('surveyResults');
   });
 
   afterAll(async () => {
@@ -25,7 +23,9 @@ describe('Survey Mongo Repository', () => {
   });
 
   beforeEach(async () => {
+    surveysCollection = MongoHelper.getCollection('surveys');
     await surveysCollection.deleteMany({});
+    surveyResultCollection = MongoHelper.getCollection('surveyResults');
     await surveyResultCollection.deleteMany({});
   });
 

@@ -9,7 +9,6 @@ let accountCollection;
 describe('Account Mongo Repository', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL);
-    accountCollection = MongoHelper.getCollection('accounts');
   });
 
   afterAll(async () => {
@@ -17,6 +16,7 @@ describe('Account Mongo Repository', () => {
   });
 
   beforeEach(async () => {
+    accountCollection = MongoHelper.getCollection('accounts');
     await accountCollection.deleteMany({});
   });
 

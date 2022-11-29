@@ -12,7 +12,6 @@ describe('Login Routes', () => {
   beforeAll(async () => {
     app = await setupApp();
     await MongoHelper.connect(env.mongoUrl);
-    accountsCollection = MongoHelper.getCollection('accounts');
   });
 
   afterAll(async () => {
@@ -20,6 +19,7 @@ describe('Login Routes', () => {
   });
 
   beforeEach(async () => {
+    accountsCollection = MongoHelper.getCollection('accounts');
     await accountsCollection.deleteMany({});
   });
 

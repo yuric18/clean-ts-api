@@ -9,7 +9,6 @@ let errorCollection;
 describe('Log Mongo Repository', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL);
-    errorCollection = MongoHelper.getCollection('errors');
   });
 
   afterAll(async () => {
@@ -17,6 +16,7 @@ describe('Log Mongo Repository', () => {
   });
 
   beforeEach(async () => {
+    errorCollection = MongoHelper.getCollection('errors');
     await errorCollection.deleteMany({});
   });
 
